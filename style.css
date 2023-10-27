@@ -7,16 +7,25 @@
     font-size: large;
 }
 .nav{
-    margin: auto;
-    width: 50%;
+    margin:auto;
+    width: fit-content;
     align-items: center;
     align-content: center;
+    text-align: center;
 }
 
 .body{
     margin-top: 20px;
-    margin-left: 40px;
-    margin-right: 40px;
     float: left; 
     width: 100%;
+}
+
+.title{
+    text-align: center;
+    font-size: larger;
+}
+
+.section{
+    margin-left: 50px;
+    margin-right: 50px;
 }
