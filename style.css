@@ -1,0 +1,22 @@
+
+.a{
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: large;
+}
+.nav{
+    margin: auto;
+    width: 50%;
+    align-items: center;
+    align-content: center;
+}
+
+.body{
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    float: left; 
+    width: 100%;
+}
