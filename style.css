@@ -1,4 +1,9 @@
 
+.page{
+    border: 1in; 
+    background-color: rgb(228, 222, 222);
+}
+
 .a{
     float: left;
     text-align: center;
@@ -6,6 +11,7 @@
     text-decoration: none;
     font-size: large;
 }
+
 .nav{
     margin:auto;
     width: fit-content;
