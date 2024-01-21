@@ -29,7 +29,10 @@
     float: left; 
     width: 100%;
 }
-
+h2, p {
+    margin: 0;
+ }
+ 
 .title{
     text-align: center;
     font-size: larger;
