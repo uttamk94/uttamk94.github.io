@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "ostream": "cpp",
+        "xtree": "cpp"
+    }
+}
