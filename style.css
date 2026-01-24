@@ -1,6 +1,7 @@
 *{
     margin:0;
     padding:0;
+    font-family: Museo Sans, Arial, Helvetica, sans-serif;
 }
 .page{
     border: 1in; 
@@ -24,6 +25,7 @@
 }
 
 .body{
+    font-family: Museo Sans, Arial, Helvetica, sans-serif;
     margin-top: 20px;
     padding-left: 20px;
     float: left; 
