@@ -24,6 +24,29 @@
                 <li>Linux</li>
                 <li>Windows</li>
             </ul>
+        <div class="code-container">
+        <pre class="pre"><code class="code">
+        #include &lt;iostream&gt;
+        #include &lt;vector&gt;
+        #include &lt;algorithm&gt;
+        using namespace std;
+
+        int& get_median(vector&lt;int&gt; values) {
+            auto* temp = new vector&lt;int&gt;();
+            for (auto x : values) temp-&gt;push_back(x);
+            sort(temp-&gt;begin(), temp-&gt;end());
+            return (*temp)[(temp-&gt;size() - 1) / 2];
+        }
+
+        int main() {
+            cout &lt;&lt; "median: " &lt;&lt; get_median({ 4,5,6,3 }) &lt;&lt; endl;
+            cout &lt;&lt; "median: " &lt;&lt; get_median({ 6,3 }) &lt;&lt; endl;
+            cout &lt;&lt; "median: " &lt;&lt; get_median({ 5,3,6 }) &lt;&lt; endl;
+            return EXIT_SUCCESS;
+        }
+        </code></pre>
+        </div>
+
         </div>
     </body>
     <footer>

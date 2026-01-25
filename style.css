@@ -62,4 +62,24 @@ h2, h4, p {
     padding-left: 30px;
     padding-right: 40px;
     border: 1px;
-  }
+}
+.code-container {
+  max-width: 100%;
+  margin: none;
+}
+
+.pre {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.code {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  display: block;
+  white-space: pre;
+  margin: 0;
+}
