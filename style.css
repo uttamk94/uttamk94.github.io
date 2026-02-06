@@ -88,3 +88,18 @@ h2, h4, p {
   white-space: pre;
   margin: 0;
 }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.icon img {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
