@@ -1,29 +1,161 @@
-<html class="page">
-    <head>
-        <head>
-            <link rel="stylesheet" href="../style.css">
-        </head>
-    </head>
-    <body class="body">
-        <div class="nav">
-            <a href="../index.html" class="a"> Home </a>
-            <a href="publications.html" class="a"> Publications </a>
-            <a href="courses.html" class="a"> Courses </a>
-            <a href="projects.html" class="a"> Projects </a>
-            <a href="about.html" class="a"> About </a>
-        </div>
-        <div>
-            </br>
-            </br>
-            <p> </br>Welcome to publications</p>
-            <h3> Topics </h3>
-            <ul>
-                <li> <a href="../publications/cpp_in_depth.html"> C++ in depth</a></li>
-                <li> <a href="../publications/simple_cmake.html"> Build project with Cmake</a></li>
-            </ul>
-        </div>
-    </body>
-    <footer>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications | Uttam Kumar Mondol</title>
+  <meta name="description" content="Publications and articles by Uttam Kumar Mondol covering C++, CMake, and other technical topics." />
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="publications.html" class="active">Publications</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    </footer>
+  <main>
+    <!-- Header Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>Publications</h1>
+        <p class="subtitle">Technical Articles & Tutorials</p>
+        <p style="max-width: 600px; margin: 0 auto; color: var(--text-light);">
+          A collection of technical articles, tutorials, and resources on programming, 
+          embedded systems, and software engineering.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Publications List -->
+      <section class="section">
+        <div class="grid grid-2">
+          <div class="card">
+            <div style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: var(--primary-color); color: white; padding: 0.75rem; border-radius: var(--radius); font-weight: bold; font-size: 1.5rem; flex-shrink: 0;">
+                C++
+              </div>
+              <div>
+                <h3 class="card-title" style="margin-top: 0;">C++ in Depth</h3>
+                <p class="card-meta">Programming · Advanced Concepts</p>
+              </div>
+            </div>
+            <p class="card-content">
+              Comprehensive guide covering advanced C++ programming concepts including memory management, 
+              templates, STL, and best practices for writing efficient and maintainable code.
+            </p>
+            <div class="skills-list" style="margin-bottom: 1rem;">
+              <span class="skill-tag">C++</span>
+              <span class="skill-tag">Advanced Programming</span>
+              <span class="skill-tag">Best Practices</span>
+            </div>
+            <a href="../publications/cpp_in_depth.html" class="btn" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Read Article →</a>
+          </div>
+
+          <div class="card">
+            <div style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: var(--primary-color); color: white; padding: 0.75rem; border-radius: var(--radius); font-weight: bold; font-size: 1.5rem; flex-shrink: 0;">
+                CM
+              </div>
+              <div>
+                <h3 class="card-title" style="margin-top: 0;">Build Project with CMake</h3>
+                <p class="card-meta">Build Tools · Tutorial</p>
+              </div>
+            </div>
+            <p class="card-content">
+              Step-by-step tutorial on building projects using CMake. Learn project structure, 
+              CMakeLists.txt configuration, and best practices for cross-platform builds.
+            </p>
+            <div class="skills-list" style="margin-bottom: 1rem;">
+              <span class="skill-tag">CMake</span>
+              <span class="skill-tag">Build Systems</span>
+              <span class="skill-tag">C/C++</span>
+            </div>
+            <a href="../publications/simple_cmake.html" class="btn" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Read Article →</a>
+          </div>
+
+          <div class="card">
+            <div style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1rem;">
+              <div style="background: var(--primary-color); color: white; padding: 0.75rem; border-radius: var(--radius); font-weight: bold; font-size: 1.5rem; flex-shrink: 0;">
+                GRE
+              </div>
+              <div>
+                <h3 class="card-title" style="margin-top: 0;">GRE Word List</h3>
+                <p class="card-meta">Vocabulary · Test Preparation</p>
+              </div>
+            </div>
+            <p class="card-content">
+              Comprehensive GRE vocabulary list with meanings, examples, synonyms, and antonyms. 
+              Perfect for students preparing for the GRE examination.
+            </p>
+            <div class="skills-list" style="margin-bottom: 1rem;">
+              <span class="skill-tag">Vocabulary</span>
+              <span class="skill-tag">GRE</span>
+              <span class="skill-tag">English</span>
+            </div>
+            <a href="../publications/gre_word_list.html" class="btn" style="padding: 0.5rem 1rem; font-size: 0.875rem;">View Word List →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="section">
+        <div class="grid grid-3">
+          <div class="card text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">3</h3>
+            <p style="margin: 0; color: var(--text-light);">Published Articles</p>
+          </div>
+          <div class="card text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">50+</h3>
+            <p style="margin: 0; color: var(--text-light);">GRE Words</p>
+          </div>
+          <div class="card text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">100%</h3>
+            <p style="margin: 0; color: var(--text-light);">Free Access</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple mobile menu toggle
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
 </html>

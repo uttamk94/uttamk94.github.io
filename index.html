@@ -1,24 +1,232 @@
-<html class="page">
-    <head>
-        <head>
-            <link rel="stylesheet" href="style.css">
-        </head>
-    </head>
-    <body class="body">
-        <div class="nav">
-            <a href="index.html" class="a"> Home </a>
-            <a href="./pages/publications.html" class="a"> Publications </a>
-            <a href="./pages/courses.html" class="a"> Courses </a>
-            <a href="./pages/projects.html" class="a"> Projects </a>
-            <a href="./pages/about.html" class="a"> About </a>
-        </div>
-        <div>
-            </br>
-            </br>
-            <p> </br>Welcome to home</p>
-        </div>
-    </body>
-    <footer>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Uttam Kumar Mondol - Technical Lead, Embedded Systems and Software Engineer. Specializing in RTOS, C/C++, and wearable device development." />
+  <title>Uttam Kumar Mondol | Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="pages/publications.html">Publications</a></li>
+        <li><a href="pages/courses.html">Courses</a></li>
+        <li><a href="pages/projects.html">Projects</a></li>
+        <li><a href="pages/about.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    </footer>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>Uttam Kumar Mondol</h1>
+        <p class="subtitle">Technical Lead · Samsung R&D Institute Bangladesh</p>
+        <p style="max-width: 700px; margin: 0 auto 2rem; color: var(--text-light);">
+          Forward-looking engineer with 8+ years of experience in C/C++, Java, Android, and Python, 
+          specializing in developing high-performance applications for RTOS and memory-constrained devices.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="pages/about.html" class="btn">Learn More</a>
+          <a href="pages/projects.html" class="btn btn-secondary">View Projects</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Quick Stats -->
+      <section class="section">
+        <div class="grid grid-3">
+          <div class="card text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">8+</h3>
+            <p style="margin: 0; color: var(--text-light);">Years Experience</p>
+          </div>
+          <div class="card text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">10+</h3>
+            <p style="margin: 0; color: var(--text-light);">Projects Completed</p>
+          </div>
+          <div class="card text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;">5+</h3>
+            <p style="margin: 0; color: var(--text-light);">Awards & Certifications</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section class="section">
+        <h2 class="section-title">Core Skills</h2>
+        <div class="card">
+          <div class="skills-list">
+            <span class="skill-tag">C</span>
+            <span class="skill-tag">C++</span>
+            <span class="skill-tag">Java</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Zephyr RTOS</span>
+            <span class="skill-tag">FreeRTOS</span>
+            <span class="skill-tag">Android</span>
+            <span class="skill-tag">Tizen</span>
+            <span class="skill-tag">CMake</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">BLE</span>
+            <span class="skill-tag">Embedded Systems</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Projects -->
+      <section class="section">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="grid grid-2">
+          <div class="card">
+            <h3 class="card-title">Galaxy Ring</h3>
+            <p class="card-meta">Zephyr RTOS, C, CMake | 2022 - Present</p>
+            <p class="card-content">
+              Project Lead for Galaxy Ring wearable health tracking device with sleep monitoring, 
+              heart rate tracking, SpO₂ support, and BLE communication.
+            </p>
+            <a href="pages/projects.html" class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.875rem;">View Details →</a>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Galaxy Ring Plugin</h3>
+            <p class="card-meta">Android, Java, Gson</p>
+            <p class="card-content">
+              Bridge between Galaxy Ring wearable and Samsung Health app. Handles heavy health data 
+              processing, reliable BLE communication, and seamless synchronization.
+            </p>
+            <a href="pages/projects.html" class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.875rem;">View Details →</a>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Galaxy Fit3 Plugin</h3>
+            <p class="card-meta">Android, Java, Gson</p>
+            <p class="card-content">
+              Enables seamless collection of health and activity data from Fit3 wearable with reliable 
+              BLE communication and smooth synchronization with Samsung Health.
+            </p>
+            <a href="pages/projects.html" class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.875rem;">View Details →</a>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Wearable Weather App</h3>
+            <p class="card-meta">Tizen, C/C++, EFL, Curl</p>
+            <p class="card-content">
+              Samsung Weather application for Galaxy wearable devices with real-time weather updates, 
+              interactive widgets, and optimized performance for limited resources.
+            </p>
+            <a href="pages/projects.html" class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.875rem;">View Details →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Publications -->
+      <section class="section">
+        <h2 class="section-title">Recent Publications</h2>
+        <div class="card">
+          <div class="publication-item">
+            <h3 class="publication-title">C++ in Depth</h3>
+            <p class="publication-meta">Programming · Advanced C++ Concepts</p>
+            <p class="card-content">Comprehensive guide covering advanced C++ programming concepts and best practices.</p>
+            <a href="../publications/cpp_in_depth.html" class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.875rem;">Read More →</a>
+          </div>
+          <div class="publication-item">
+            <h3 class="publication-title">Build Project with CMake</h3>
+            <p class="publication-meta">Build Tools · CMake Tutorial</p>
+            <p class="card-content">Step-by-step guide to building projects using CMake build system.</p>
+            <a href="../publications/simple_cmake.html" class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.875rem;">Read More →</a>
+          </div>
+          <div class="publication-item">
+            <h3 class="publication-title">GRE Word List</h3>
+            <p class="publication-meta">Vocabulary · GRE Preparation</p>
+            <p class="card-content">Comprehensive GRE vocabulary list with meanings, examples, synonyms, and antonyms.</p>
+            <a href="../publications/gre_word_list.html" class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.875rem;">Read More →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="section">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="grid grid-2">
+          <div class="card">
+            <h3 class="card-title">Contact Information</h3>
+            <div class="contact-item">
+              <span class="icon">
+                <img src="res/icon/email.png" alt="Email" width="20" height="20">
+              </span>
+              <a href="mailto:uttam.cuet@gmail.com">uttam.cuet@gmail.com</a>
+            </div>
+            <div class="contact-item">
+              <span class="icon">
+                <img src="res/icon/call.png" alt="Phone" width="20" height="20">
+              </span>
+              <span>+8801740250558</span>
+            </div>
+            <div class="contact-item">
+              <span class="icon">
+                <img src="res/icon/linkedin.png" alt="LinkedIn" width="20" height="20">
+              </span>
+              <a href="https://linkedin.com/in/uttamk94">linkedin.com/in/uttamk94</a>
+            </div>
+            <div class="contact-item">
+              <span class="icon">
+                <img src="res/icon/github.png" alt="GitHub" width="20" height="20">
+              </span>
+              <a href="https://github.com/uttamk94">github.com/uttamk94</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Location</h3>
+            <p class="card-content" style="margin-top: 1rem;">
+              <strong>Address:</strong><br>
+              44/27 Dhaka-1205, Bangladesh
+            </p>
+            <p class="card-content">
+              <strong>Current Role:</strong><br>
+              Technical Lead at Samsung R&D Institute Bangladesh
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple mobile menu toggle
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
 </html>

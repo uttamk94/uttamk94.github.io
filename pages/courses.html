@@ -1,24 +1,265 @@
-<html class="page">
-    <head>
-        <head>
-            <link rel="stylesheet" href="../style.css">
-        </head>
-    </head>
-    <body class="body">
-        <div class="nav">
-            <a href="../index.html" class="a"> Home </a>
-            <a href="publications.html" class="a"> Publications </a>
-            <a href="courses.html" class="a"> Courses </a>
-            <a href="projects.html" class="a"> Projects </a>
-            <a href="about.html" class="a"> About </a>
-        </div>
-        <div>
-            </br>
-            </br>
-            <p> </br>Welcome to Courses</p>
-        </div>
-    </body>
-    <footer>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Courses | Uttam Kumar Mondol</title>
+  <meta name="description" content="Courses and learning resources by Uttam Kumar Mondol covering programming, embedded systems, and software engineering." />
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="courses.html" class="active">Courses</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    </footer>
+  <main>
+    <!-- Header Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>Courses</h1>
+        <p class="subtitle">Learning Resources & Tutorials</p>
+        <p style="max-width: 600px; margin: 0 auto; color: var(--text-light);">
+          Educational content and learning resources focused on embedded systems, 
+          programming languages, and software engineering best practices.
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Course Categories -->
+      <section class="section">
+        <h2 class="section-title">Learning Paths</h2>
+        <div class="grid grid-3">
+          <div class="card text-center">
+            <h3 style="font-size: 3rem; margin-bottom: 1rem;">💻</h3>
+            <h3 class="card-title">Programming Languages</h3>
+            <p class="card-content">Master C, C++, Java, and Python with hands-on projects and best practices</p>
+          </div>
+          <div class="card text-center">
+            <h3 style="font-size: 3rem; margin-bottom: 1rem;">🔧</h3>
+            <h3 class="card-title">Embedded Systems</h3>
+            <p class="card-content">Learn RTOS, firmware development, and embedded software engineering</p>
+          </div>
+          <div class="card text-center">
+            <h3 style="font-size: 3rem; margin-bottom: 1rem;">🛠️</h3>
+            <h3 class="card-title">Build Tools</h3>
+            <p class="card-content">Master CMake, Make, West, and other essential build systems</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Courses -->
+      <section class="section">
+        <h2 class="section-title">Featured Courses</h2>
+        <div class="grid grid-2">
+          <div class="course-card">
+            <div class="course-header">
+              <h3 class="course-title">Advanced C++ Programming</h3>
+              <span class="course-badge">Popular</span>
+            </div>
+            <p class="course-description">
+              Deep dive into advanced C++ concepts including templates, STL, memory management, 
+              and modern C++ features for writing efficient and maintainable code.
+            </p>
+            <ul class="course-topics">
+              <li>Templates and Generic Programming</li>
+              <li>Smart Pointers and Memory Management</li>
+              <li>STL Algorithms and Data Structures</li>
+              <li>Move Semantics and Perfect Forwarding</li>
+              <li>Concurrency and Multithreading</li>
+            </ul>
+            <div class="skills-list" style="margin-top: 1rem;">
+              <span class="skill-tag">C++</span>
+              <span class="skill-tag">Advanced</span>
+              <span class="skill-tag">11h 30min</span>
+            </ul>
+          </div>
+
+          <div class="course-card">
+            <div class="course-header">
+              <h3 class="course-title">CMake Build System Mastery</h3>
+              <span class="course-badge">New</span>
+            </div>
+            <p class="course-description">
+              Learn to build professional-grade C/C++ projects with CMake. From basics to advanced 
+              techniques for cross-platform development.
+            </p>
+            <ul class="course-topics">
+              <li>CMake Basics and Project Structure</li>
+              <li>CMakeLists.txt Configuration</li>
+              <li>Dependencies and External Libraries</li>
+              <li>Cross-Platform Builds</li>
+              <li>Testing and Installation</li>
+            </ul>
+            <div class="skills-list" style="margin-top: 1rem;">
+              <span class="skill-tag">CMake</span>
+              <span class="skill-tag">Build Tools</span>
+              <span class="skill-tag">6h 45min</span>
+            </ul>
+          </div>
+
+          <div class="course-card">
+            <div class="course-header">
+              <h3 class="course-title">RTOS Fundamentals</h3>
+              <span class="course-badge">Popular</span>
+            </div>
+            <p class="course-description">
+              Understand Real-Time Operating Systems concepts with focus on Zephyr RTOS, 
+              task scheduling, and embedded system design.
+            </p>
+            <ul class="course-topics">
+              <li>RTOS Concepts and Architecture</li>
+              <li>Task Scheduling and Management</li>
+              <li>Interrupt Handling</li>
+              <li>Inter-Process Communication</li>
+              <li>Memory Management in RTOS</li>
+            </ul>
+            <div class="skills-list" style="margin-top: 1rem;">
+              <span class="skill-tag">Zephyr RTOS</span>
+              <span class="skill-tag">FreeRTOS</span>
+              <span class="skill-tag">14h 20min</span>
+            </ul>
+          </div>
+
+          <div class="course-card">
+            <div class="course-header">
+              <h3 class="course-title">Python for Embedded Engineers</h3>
+              <span class="course-badge">Beginner</span>
+            </div>
+            <p class="course-description">
+              Learn Python programming from an embedded systems perspective. Perfect for 
+              embedded engineers looking to add Python to their toolkit.
+            </p>
+            <ul class="course-topics">
+              <li>Python Basics and Syntax</li>
+              <li>Data Structures and Algorithms</li>
+              <li>File I/O and Data Processing</li>
+              <li>Automation Scripts for Embedded Development</li>
+              <li>Working with Serial Communication</li>
+            </ul>
+            <div class="skills-list" style="margin-top: 1rem;">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">Scripting</span>
+              <span class="skill-tag">8h 15min</span>
+            </ul>
+          </div>
+
+          <div class="course-card">
+            <div class="course-header">
+              <h3 class="course-title">Android Development with Java</h3>
+              <span class="course-badge">Intermediate</span>
+            </div>
+            <p class="course-description">
+              Build Android applications with Java. Focus on BLE communication, background 
+              services, and data synchronization.
+            </p>
+            <ul class="course-topics">
+              <li>Android Fundamentals</li>
+              <li>BLE Communication</li>
+              <li>Background Services and Broadcast Receivers</li>
+              <li>Data Persistence with Gson</li>
+              <li>UI/UX Best Practices</li>
+            </ul>
+            <div class="skills-list" style="margin-top: 1rem;">
+              <span class="skill-tag">Android</span>
+              <span class="skill-tag">Java</span>
+              <span class="skill-tag">12h 40min</span>
+            </ul>
+          </div>
+
+          <div class="course-card">
+            <div class="course-header">
+              <h3 class="course-title">Embedded C Programming</h3>
+              <span class="course-badge">Essential</span>
+            </div>
+            <p class="course-description">
+              Master embedded C programming for microcontrollers. Learn low-level programming, 
+              memory optimization, and hardware interfacing.
+            </p>
+            <ul class="course-topics">
+              <li>C Programming Fundamentals</li>
+              <li>Memory Management and Pointers</li>
+              <li>Bit Manipulation and Register Programming</li>
+              <li>Interrupt Service Routines</li>
+              <li>Low-Power Design Techniques</li>
+            </ul>
+            <div class="skills-list" style="margin-top: 1rem;">
+              <span class="skill-tag">C</span>
+              <span class="skill-tag">Embedded</span>
+              <span class="skill-tag">10h 50min</span>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Learning Resources -->
+      <section class="section">
+        <h2 class="section-title">Learning Resources</h2>
+        <div class="card">
+          <div class="grid grid-2">
+            <div>
+              <h3 class="card-title">📚 Recommended Books</h3>
+              <ul class="course-topics" style="margin-top: 1rem;">
+                <li>"The C++ Programming Language" - Bjarne Stroustrup</li>
+                <li>"Effective Modern C++" - Scott Meyers</li>
+                <li>"CMake Cookbook" - Radovan Bast</li>
+                <li>"Embedded Systems: Real-Time Operating Systems" - Qing Li</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="card-title">🌐 Online Platforms</h3>
+              <ul class="course-topics" style="margin-top: 1rem;">
+                <li>Zephyr Project Documentation</li>
+                <li>CMake Official Documentation</li>
+                <li>Android Developer Documentation</li>
+                <li>Embedded Artistry Blog</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple mobile menu toggle
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
 </html>
