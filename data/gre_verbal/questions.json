@@ -1,0 +1,443 @@
+{
+  "version": "1.0",
+  "description": "Hand-authored GRE Verbal Reasoning question bank powering full-length timed mock tests.",
+  "test_config": {
+    "duration_minutes": 30,
+    "composition": {
+      "text_completion_single": 3,
+      "text_completion_double": 2,
+      "text_completion_triple": 1,
+      "sentence_equivalence": 4,
+      "reading_comprehension_questions": 10
+    }
+  },
+  "text_completion": [
+    {
+      "id": "tc001",
+      "difficulty": "medium",
+      "blanks": 1,
+      "passage": "Although the biochemist's claims were initially greeted with {1} by her peers, independent replication of her results soon silenced even the most obstinate skeptics.",
+      "option_sets": [
+        ["derision", "approbation", "indifference", "corroboration", "veneration"]
+      ],
+      "answers": [0],
+      "explanation": "The shift marker 'Although' sets up a contrast between the initial reception and eventual acceptance, and 'silenced even the most obstinate skeptics' tells us the peers first reacted with scorn: derision. Approbation and veneration are praise words that contradict the contrast; corroboration is what the replications provided, not the initial reaction; indifference clashes with 'obstinate skeptics,' who were anything but indifferent."
+    },
+    {
+      "id": "tc002",
+      "difficulty": "medium",
+      "blanks": 1,
+      "passage": "The novelist declines to moralize: she renders her characters' follies with such {1} that readers feel compelled to judge them for themselves.",
+      "option_sets": [
+        ["reticence", "fidelity", "bombast", "equivocation", "pedantry"]
+      ],
+      "answers": [1],
+      "explanation": "The colon signals that the blank explains the absence of moralizing: because she depicts the follies truthfully (with fidelity), judgment is left to the reader. Reticence (deliberate reserve) contradicts 'she renders'; bombast and pedantry describe intrusive authorial voices that would moralize; equivocation implies deliberate vagueness rather than honest portrayal."
+    },
+    {
+      "id": "tc003",
+      "difficulty": "hard",
+      "blanks": 1,
+      "passage": "The commission's final report was decidedly {1}: despite cataloging the city's infrastructural failures in exhaustive detail, it advanced no proposals for remedying them.",
+      "option_sets": [
+        ["efficacious", "carping", "sanguine", "redolent", "quiescent"]
+      ],
+      "answers": [1],
+      "explanation": "The colon elaborates the blank: exhaustive complaint with zero remedy is petty fault-finding, or carping. Efficacious (producing effect) and sanguine (hopeful) clash with the refusal to propose fixes; redolent (suggestive/aromatic) and quiescent (inactive) do not fit the critique-without-construction structure."
+    },
+    {
+      "id": "tc004",
+      "difficulty": "medium",
+      "blanks": 1,
+      "passage": "Far from being {1}, the early suffragist pamphlets proved inflammatory enough that several distributors feared prosecution.",
+      "option_sets": [
+        ["incendiary", "innocuous", "eloquent", "clandestine", "provocative"]
+      ],
+      "answers": [1],
+      "explanation": "'Far from being' demands the opposite of what follows: if the pamphlets were inflammatory, the blank must mean harmless — innocuous. Incendiary and provocative are synonym traps that reverse the required direction; clandestine concerns secrecy rather than harmlessness; eloquent does not oppose inflammatory."
+    },
+    {
+      "id": "tc005",
+      "difficulty": "hard",
+      "blanks": 1,
+      "passage": "Because the archaeologist spent four decades excavating this lone site, her conclusions about its chronology, however {1}, cannot be lightly dismissed.",
+      "option_sets": [
+        ["idiosyncratic", "cursory", "meticulous", "derivative", "spurious"]
+      ],
+      "answers": [0],
+      "explanation": "'However X, cannot be dismissed' concedes a flaw-like quality while insisting on the conclusions' weight: idiosyncratic (peculiar to her singular approach) fits perfectly. Cursory and spurious are qualities that would justify dismissal; meticulous praises rather than concedes; derivative (unoriginal) does not connect to decades of solitary site work."
+    },
+    {
+      "id": "tc006",
+      "difficulty": "medium",
+      "blanks": 2,
+      "passage": "The professor's evening lectures proved so {1} that even students habitually {2} academic discourse arrived early to secure seats.",
+      "option_sets": [
+        ["pedestrian", "scintillating", "prolix"],
+        ["enamored of", "inured to", "averse to"]
+      ],
+      "answers": [1, 2],
+      "explanation": "Students arriving early signals genuinely gripping talks, so blank 1 is scintillating. The word 'even' marks a surprising group, so those students are normally hostile to academic discourse: averse to. Enamored of would undercut 'even'; inured to means hardened against hardship rather than hostile; pedestrian (dull) and prolix (wordy) would drive attendance down, not up."
+    },
+    {
+      "id": "tc007",
+      "difficulty": "hard",
+      "blanks": 2,
+      "passage": "Though the corporation publicly extolled transparency, memos circulated internally had been systematically {1} to excise any development that might {2} the quarterly earnings outlook.",
+      "option_sets": [
+        ["expurgated", "augmented", "disseminated"],
+        ["bolster", "depress", "summarize"]
+      ],
+      "answers": [0, 1],
+      "explanation": "'Excise' tells us content was cut out, so blank 1 is expurgated (censored). What was removed was anything that might drag expectations down: depress. Bolster reverses the logic, since damaging news would not lift the outlook; augmented contradicts removal; disseminate and summarize do not involve deletion, and the 'Though ... transparency' contrast flags concealment."
+    },
+    {
+      "id": "tc008",
+      "difficulty": "hard",
+      "blanks": 2,
+      "passage": "The critic argues that the biopic does not simply {1} its subject's correspondence but {2} it wholesale, trading the letters' sly restraint for melodrama.",
+      "option_sets": [
+        ["embellish", "transcribe", "misplace"],
+        ["honors", "travesties", "echoes"]
+      ],
+      "answers": [1, 1],
+      "explanation": "'Not simply X but Y wholesale' escalates from a mild action to an extreme one: merely reproducing the letters (transcribe) escalates to grotesquely distorting them (travesties). Honors and echoes contradict the escalation toward melodrama; embellish and misplace are too mild or irrelevant to pair with 'wholesale' substitution."
+    },
+
+    {
+      "id": "tc009",
+      "difficulty": "hard",
+      "blanks": 2,
+      "passage": "Epidemiologists caution that a sample drawn from a single metropolitan hospital renders the study's conclusions difficult to {1}; nevertheless, the findings are far too consequential to be {2}.",
+      "option_sets": [
+        ["tabulate", "extrapolate", "refute"],
+        ["gainsaid", "amplified", "disregarded"]
+      ],
+      "answers": [1, 2],
+      "explanation": "A sample from one hospital limits how far results can be generalized outward: extrapolate. 'Nevertheless ... consequential' demands the opposite of ignoring: cannot be disregarded. Tabulate (arrange in tables) is trivial and unaffected by sampling; refuted is what critics attempt, not what a narrow sample hinders; gainsaid means contradicted, which the sentence never concerns; amplified is not a warned-against response."
+    },
+    {
+      "id": "tc010",
+      "difficulty": "medium",
+      "blanks": 2,
+      "passage": "Her candor in the memoir is nothing if not {1}: she recounts humiliations that most autobiographers would quietly {2}, wagering that readers reward frankness over self-flattery.",
+      "option_sets": [
+        ["oblique", "unflinching", "calculated"],
+        ["relish", "publicize", "suppress"]
+      ],
+      "answers": [1, 2],
+      "explanation": "'Nothing if not' intensifies: candor that spares nothing is unflinching. Humiliations most writers would hide are ones they would suppress. Relish and publicize contradict 'most autobiographers'; oblique (indirect) contradicts candor itself; calculated clashes with the sincere wager on frankness."
+    },
+    {
+      "id": "tc011",
+      "difficulty": "hard",
+      "blanks": 3,
+      "passage": "The populists' rhetoric was {1}: they denounced entrenched privilege in ferocious terms, yet the remedies they proposed were so {2} that observers suspected the speeches aimed to {3} discontent rather than to redress it.",
+      "option_sets": [
+        ["fervid", "lukewarm", "ponderous"],
+        ["draconian", "ingenious", "tentative"],
+        ["appease", "antagonize", "galvanize"]
+      ],
+      "answers": [0, 2, 0],
+      "explanation": "Ferocious denunciations mean the rhetoric was fervid (intensely passionate). Remedies so mild — tentative — that speeches seem designed to soothe rather than fix: appease discontent. Lukewarm wrongly cools the rhetoric itself; draconian opposes tentative; antagonizing or galvanizing discontent would inflame it, the opposite of defusing it."
+    },
+    {
+      "id": "tc012",
+      "difficulty": "hard",
+      "blanks": 3,
+      "passage": "Scientific orthodoxy tends toward the {1}: genuinely novel paradigms are first {2}, then grudgingly examined, and finally {3} by an establishment that once ridiculed them as fantasy.",
+      "option_sets": [
+        ["ossified", "ephemeral", "eclectic"],
+        ["celebrated", "codified", "rebuffed"],
+        ["reviled", "appropriated", "retracted"]
+      ],
+      "answers": [0, 2, 1],
+      "explanation": "Orthodoxy resistant to novelty is ossified (hardened in position). Novel paradigms first meet rejection: rebuffed. Once evidence prevails, the establishment quietly adopts the ideas as its own: appropriated. Celebrated and codified skip the initial hostility central to the sentence; reviled merely repeats the earlier ridicule; retracted describes withdrawing one's own claims, not absorbing others'."
+    }
+  ],
+  "sentence_equivalence": [
+    {
+      "id": "se001",
+      "difficulty": "medium",
+      "sentence": "Although the film received glowing reviews, audiences found its pacing glacial and its plot utterly |BLANK|.",
+      "options": ["riveting", "banal", "concise", "insipid", "original", "labyrinthine"],
+      "answers": [1, 3],
+      "explanation": "Glacial pacing and an 'utterly' negative verdict point to dullness: banal (devoid of freshness) and insipid (lacking flavor or vigor) both fit and produce sentences alike in meaning. Riveting and original contradict the criticism; concise addresses length rather than dullness; labyrinthine means convoluted, which is not the flaw described."
+    },
+    {
+      "id": "se002",
+      "difficulty": "medium",
+      "sentence": "The manager's instructions were so |BLANK| that even veteran employees, let alone new hires, misinterpreted the procedure.",
+      "options": ["meticulous", "equivocal", "authoritative", "nebulous", "terse", "candid"],
+      "answers": [1, 3],
+      "explanation": "Instructions everyone misreads are unclear: equivocal (open to multiple interpretations) and nebulous (vague, ill-defined) both work and keep the meaning constant. Meticulous, authoritative, and candid describe virtues opposite to the failure; terse means brief, and brevity alone would not force misinterpretation."
+    },
+    {
+      "id": "se003",
+      "difficulty": "hard",
+      "sentence": "Long rumored to be retiring, the justice remained notably |BLANK|, offering neither confirmation nor denial when pressed by reporters.",
+      "options": ["forthright", "taciturn", "evasive", "garrulous", "cagey", "voluble"],
+      "answers": [2, 4],
+      "explanation": "'Neither confirmation nor denial' defines dodging the question: evasive and cagey (reluctant to give direct answers) both complete the sense and yield equivalent sentences. Forthright is the direct opposite; garrulous and voluble mean talkative, yet she gives non-answers rather than no answer; taciturn describes habitual silence generally, not evasiveness about one topic."
+    },
+    {
+      "id": "se004",
+      "difficulty": "medium",
+      "sentence": "The startup's meteoric rise was attributed partly to luck, but mostly to its founders' |BLANK| pursuit of every available market opportunity.",
+      "options": ["desultory", "assiduous", "sporadic", "indefatigable", "languid", "perfunctory"],
+      "answers": [1, 3],
+      "explanation": "'Mostly to' credits the founders' effort: assiduous (diligent and persistent) and indefatigable (tireless) both explain chasing every opportunity and keep the sentence's meaning intact. Desultory, sporadic, languid, and perfunctory all denote half-hearted or intermittent effort, which contradicts the credited cause of success."
+    },
+    {
+      "id": "se005",
+      "difficulty": "hard",
+      "sentence": "Critics praised the translation for its |BLANK|, noting that it conveyed the original's wit without sacrificing accuracy.",
+      "options": ["turgidity", "felicity", "opacity", "facility", "brevity", "pomposity"],
+      "answers": [1, 3],
+      "explanation": "Conveying wit while preserving accuracy is skillful expression: felicity (aptness of phrasing) and facility (effortless skill) both earn the praise and produce equivalent sentences. Turgidity (pompous swollen style), opacity (unclearness), and pomposity are faults critics would condemn; brevity concerns shortness, which the sentence never raises."
+    },
+    {
+      "id": "se006",
+      "difficulty": "medium",
+      "sentence": "Rather than energizing the movement, the scandal left it |BLANK|, its members disillusioned and unwilling to recruit others.",
+      "options": ["resurgent", "moribund", "vibrant", "listless", "nascent", "effervescent"],
+      "answers": [1, 3],
+      "explanation": "Disillusioned members who refuse to recruit signal a movement drained of life: moribund (near death, dormant) and listless (lacking energy) both fit and give sentences alike in meaning. Resurgent means reviving — the opposite outcome; vibrant and effervescent describe energy the scandal destroyed; nascent means newly born, incompatible with an existing wounded movement."
+    },
+    {
+      "id": "se007",
+      "difficulty": "medium",
+      "sentence": "The committee chair was known for a |BLANK| management style, consulting every stakeholder before even minor decisions.",
+      "options": ["autocratic", "collegial", "unilateral", "democratic", "imperious", "bureaucratic"],
+      "answers": [1, 3],
+      "explanation": "Consulting every stakeholder defines power-sharing: collegial (cooperative, sharing authority) and democratic (involving everyone's voice) both fit and yield sentences of equal meaning. Autocratic, unilateral, and imperious describe exactly the opposite style; bureaucratic refers to rigid procedure, which is not the same as consulting people."
+    },
+    {
+      "id": "se008",
+      "difficulty": "medium",
+      "sentence": "Physicists once regarded her hypothesis as |BLANK|, but experimental confirmations have gradually lent it an air of legitimacy.",
+      "options": ["empirical", "conjectural", "irrefutable", "speculative", "axiomatic", "verifiable"],
+      "answers": [1, 3],
+      "explanation": "'But confirmations have lent legitimacy' implies the hypothesis previously lacked evidentiary standing: conjectural and speculative both mean based on guesswork rather than proof, and both keep the contrast intact. Empirical, irrefutable, axiomatic, and verifiable all assert established status, which would make the confirmation redundant."
+    }
+  ],
+  "reading_comprehension": [
+    {
+      "id": "rcp1",
+      "difficulty": "medium",
+      "passage": "For decades, biologists assumed that the vivid warning coloration of poison dart frogs evolved solely to deter predators. Recent field studies complicate this picture. Researchers found that in shaded forest environments, the frogs' brilliant hues reflect wavelengths that conspecifics — members of the same species — detect readily, whereas many predators perceive them poorly. Moreover, populations of the same species separated by only a few kilometers display strikingly different color patterns, suggesting that sexual selection, operating locally, shapes coloration at least as strongly as predator avoidance does.",
+      "sentences": [
+        "For decades, biologists assumed that the vivid warning coloration of poison dart frogs evolved solely to deter predators.",
+        "Recent field studies complicate this picture.",
+        "Researchers found that in shaded forest environments, the frogs' brilliant hues reflect wavelengths that conspecifics — members of the same species — detect readily, whereas many predators perceive them poorly.",
+        "Moreover, populations of the same species separated by only a few kilometers display strikingly different color patterns, suggesting that sexual selection, operating locally, shapes coloration at least as strongly as predator avoidance does."
+      ],
+      "questions": [
+        {
+          "id": "rcp1q1",
+          "type": "single",
+          "prompt": "The passage suggests which of the following about warning coloration in poison dart frogs?",
+          "options": [
+            "It is more conspicuous to predators than to members of the same species.",
+            "Its function may vary depending on the environment in which it is displayed.",
+            "It evolved primarily as a mechanism of intraspecific recognition.",
+            "It is absent in populations unaffected by sexual selection.",
+            "It deters predators effectively only in open habitats."
+          ],
+          "answer": [1],
+          "explanation": "The studies show the hues serve dual functions whose salience shifts with context: predator deterrence historically assumed, plus detection by conspecifics in shaded environments. Choice A reverses the finding; C overstates 'primarily'; D and E introduce conditions the passage never mentions."
+        },
+        {
+          "id": "rcp1q2",
+          "type": "multiple",
+          "prompt": "According to the passage, recent field studies found which of the following?",
+          "options": [
+            "Predators in shaded environments tend to perceive the frogs' hues poorly.",
+            "Populations separated by short distances can develop markedly different color patterns.",
+            "Warning coloration fails entirely to deter any predators."
+          ],
+          "answer": [0, 1],
+          "explanation": "Options A and B restate findings stated nearly verbatim ('many predators perceive them poorly'; 'strikingly different color patterns'). Option C overreaches: the passage never claims deterrence fails entirely, only that it may not be the sole force shaping coloration."
+        },
+        {
+          "id": "rcp1q3",
+          "type": "select_in_passage",
+          "prompt": "Select the sentence that provides evidence that factors other than predation influence the frogs' coloration.",
+          "answer": [3],
+          "explanation": "The final sentence attributes patterning differences to sexual selection 'at least as strongly as predator avoidance does' — direct evidence for a non-predation factor. The earlier sentences only set up the traditional view and the conspecific-detection finding; the local-variation sentence supplies the causal claim about an alternative driver."
+        }
+      ]
+    },
+    {
+      "id": "rcp2",
+      "difficulty": "hard",
+      "passage": "Histories of electrification in the United States have traditionally celebrated inventors and entrepreneurs, casting the spread of electric power as a triumph of individual genius. A newer scholarship redirects attention to the ordinary workers who made electrification routine. Chief among them were telephone operators — overwhelmingly young, unmarried women — who staffed the exchanges through which power companies coordinated maintenance and outages. Because operators' labor was oral, ephemeral, and largely absent from record keeping, it left scant traces in corporate archives. Historians attempting to recover it must therefore read against the grain of sources designed to render such workers invisible. This methodological shift matters: how a technology's history is told determines whose contributions a society remembers.",
+      "questions": [
+        {
+          "id": "rcp2q1",
+          "type": "single",
+          "prompt": "The primary purpose of the passage is to",
+          "options": [
+            "explain why telephone operators opposed electrification",
+            "describe a historiographical shift in the study of electrification",
+            "argue that inventors deserve less credit than entrepreneurs do",
+            "document the wages earned by female telephone operators",
+            "compare American electrification with European efforts"
+          ],
+          "answer": [1],
+          "explanation": "The passage moves from traditional histories to 'newer scholarship' and its methods — describing a shift in how electrification's history is written. A invents opposition; C distorts the point about emphasis; D never mentions wages; E introduces an unstated comparison."
+        },
+        {
+          "id": "rcp2q2",
+          "type": "single",
+          "prompt": "According to the passage, which factor best explains the scarcity of archival evidence about telephone operators?",
+          "options": [
+            "Companies deliberately destroyed employment records.",
+            "Operators' work was oral and largely went unrecorded.",
+            "Most operators could not read or write.",
+            "Corporate archives focus exclusively on financial data.",
+            "Labor unions barred operators from membership."
+          ],
+          "answer": [1],
+          "explanation": "The thin archive is attributed directly to labor that was 'oral, ephemeral, and largely absent from record keeping.' Deliberate destruction (A) is not claimed; illiteracy (C) is irrelevant since the issue is record creation; D overstates with 'exclusively'; E is never mentioned."
+        },
+        {
+          "id": "rcp2q3",
+          "type": "single",
+          "prompt": "In context, the phrase 'read against the grain' most nearly means",
+          "options": [
+            "reject archival sources as wholly unreliable",
+            "interpret documents in ways that reveal what they were not intended to convey",
+            "consult only sources produced by the operators themselves",
+            "prioritize financial records over personal correspondence",
+            "reconstruct history exclusively from oral interviews"
+          ],
+          "answer": [1],
+          "explanation": "Reading against the grain means mining official sources for traces of people those sources were designed to omit — interpretation that surfaces unintended information. A abandons the sources rather than exploiting them; C and E reverse the premise that operators left few self-authored records; D contradicts the recovery goal."
+        },
+        {
+          "id": "rcp2q4",
+          "type": "multiple",
+          "prompt": "The passage implies which of the following about the 'newer scholarship'?",
+          "options": [
+            "It questions narratives centered on prominent individuals.",
+            "It relies primarily on corporate payrolls as evidence.",
+            "It treats methodological choices as consequential for collective memory."
+          ],
+          "answer": [0, 2],
+          "explanation": "A follows from redirecting attention away from 'individual genius,' and C paraphrases the closing claim that how history is told determines what society remembers. B contradicts the passage, which says operators barely appear in corporate records at all."
+        }
+      ]
+    },
+    {
+      "id": "rcp3",
+      "difficulty": "medium",
+      "passage": "When economists first proposed congestion pricing — charging drivers for using roads during peak hours — critics derided the idea as regressive, arguing that wealthy motorists would simply pay while poorer commuters endured either the fees or inadequate transit alternatives. Two decades of implementation, however, have complicated this objection. In several cities, bus service funded substantially by congestion revenues improved commute times for low-income riders more than for any other group. Yet equity outcomes depend heavily on design: programs that rebate revenues as flat per-household dividends tend to benefit poorer households, whereas those that fund parking infrastructure may entrench existing disparities. The lesson is not that congestion pricing is inherently equitable or inequitable, but that distributional consequences are policy choices rather than technological inevitabilities.",
+      "questions": [
+        {
+          "id": "rcp3q1",
+          "type": "single",
+          "prompt": "The passage is primarily concerned with",
+          "options": [
+            "refuting every criticism ever made of congestion pricing",
+            "evaluating a criticism of congestion pricing in light of implementation experience",
+            "proposing an optimal revenue-rebate formula for transit agencies",
+            "comparing traffic outcomes across several cities",
+            "explaining why congestion pricing fails to reduce congestion"
+          ],
+          "answer": [1],
+          "explanation": "The passage takes the regressiveness objection and weighs it against two decades of results, concluding outcomes hinge on design. A overstates ('every criticism'); C narrows the point into a formula proposal; D swaps the subject from equity to traffic; E contradicts the passage's report of improved bus commute times."
+        },
+        {
+          "id": "rcp3q2",
+          "type": "single",
+          "prompt": "Critics mentioned in the passage alleged that congestion pricing was 'regressive' because they believed that",
+          "options": [
+            "fees would reduce overall traffic too drastically",
+            "the costs would fall disproportionately on lower-income travelers",
+            "transit agencies would misuse the collected revenues",
+            "wealthy drivers would abandon the roads during peak hours",
+            "flat rebates would unfairly favor large households"
+          ],
+          "answer": [1],
+          "explanation": "The objection as stated is that the wealthy pay easily while poorer commuters bear fees or inferior alternatives — a disproportionate burden on the poor. The other choices either reverse the concern or anticipate design details introduced only later in the passage."
+        },
+        {
+          "id": "rcp3q3",
+          "type": "multiple",
+          "prompt": "According to the passage, the distributional consequences of congestion pricing depend on which of the following?",
+          "options": [
+            "How program revenues are ultimately used",
+            "The structure of any rebates returned to households",
+            "The peak-hour fee levels themselves"
+          ],
+          "answer": [0, 1],
+          "explanation": "The passage ties equity explicitly to revenue use (bus service versus parking infrastructure) and rebate structure (flat per-household dividends). Fee levels are never discussed as an equity determinant."
+        },
+        {
+          "id": "rcp3q4",
+          "type": "single",
+          "prompt": "It can be inferred that the author regards the early criticism of congestion pricing as",
+          "options": [
+            "conclusively disproven in every respect",
+            "an oversimplification, since outcomes vary with program design",
+            "accurate only in cities with weak transit systems",
+            "irrelevant to contemporary policy debates",
+            "morally indefensible regardless of outcomes"
+          ],
+          "answer": [1],
+          "explanation": "'Complicated this objection' plus the design-dependence conclusion means the criticism captured part of the truth but flattened it: results vary with choices policymakers make. A overstates; C adds an unstated condition; D is belied by the author's engagement; E attacks motives, which the passage never does."
+        }
+      ]
+    },
+    {
+      "id": "rcp4",
+      "difficulty": "hard",
+      "passage": "Early biographers of Emily Dickinson faced a formidable problem: the poet deliberately withheld nearly all biographical detail from her correspondence, and family members eager to protect her posthumous reputation supplied accounts now considered unreliable. Rather than conceding that a definitive life was impossible, mid-twentieth-century biographers responded by reading the poems themselves as autobiography — a practice that transformed conjecture into apparent fact. Contemporary scholars have grown skeptical of this circularity: Dickinson imagined speakers and scenarios precisely because she declined to narrate her own life directly. Yet the impulse persists, and even recent biographies slip into treating the lyric 'I' as documentary evidence. What remains genuinely knowable may be modest, but acknowledging those limits, some scholars contend, would finally restore critical attention to the artistry of the poems.",
+      "sentences": [
+        "Early biographers of Emily Dickinson faced a formidable problem: the poet deliberately withheld nearly all biographical detail from her correspondence, and family members eager to protect her posthumous reputation supplied accounts now considered unreliable.",
+        "Rather than conceding that a definitive life was impossible, mid-twentieth-century biographers responded by reading the poems themselves as autobiography — a practice that transformed conjecture into apparent fact.",
+        "Contemporary scholars have grown skeptical of this circularity: Dickinson imagined speakers and scenarios precisely because she declined to narrate her own life directly.",
+        "Yet the impulse persists, and even recent biographies slip into treating the lyric 'I' as documentary evidence.",
+        "What remains genuinely knowable may be modest, but acknowledging those limits, some scholars contend, would finally restore critical attention to the artistry of the poems."
+      ],
+      "questions": [
+        {
+          "id": "rcp4q1",
+          "type": "single",
+          "prompt": "The problem faced by early biographers was formidable primarily because",
+          "options": [
+            "Dickinson's family refused all cooperation with researchers",
+            "reliable firsthand information about her was scarce",
+            "her poems contained no autobiographical content whatsoever",
+            "publishers demanded sensational material they could not supply",
+            "most of her correspondence had been accidentally destroyed"
+          ],
+          "answer": [1],
+          "explanation": "The colon explains the problem: Dickinson withheld detail herself, and the family accounts that exist are unreliable — trustworthy firsthand information was scarce. A contradicts 'family members eager to protect' (they cooperated, unreliably); C overstates what is never claimed; D and E are unsupported inventions."
+        },
+        {
+          "id": "rcp4q2",
+          "type": "single",
+          "prompt": "The author mentions that 'Dickinson imagined speakers and scenarios' primarily in order to",
+          "options": [
+            "concede that her poems contain no biographical information at all",
+            "explain why inferring a life story from the poems is methodologically suspect",
+            "celebrate the imaginative range of her poetry",
+            "account for the popularity of mid-century biographies",
+            "suggest that her letters are equally untrustworthy sources"
+          ],
+          "answer": [1],
+          "explanation": "The sentence grounds scholars' skepticism: if the poems invent personas because she avoided direct narration, then mining them for autobiography is circular — conjecture dressed as fact. A overstates into total absence; C misses the argumentative function; D and E drift from the logical role the clause plays."
+        },
+        {
+          "id": "rcp4q3",
+          "type": "select_in_passage",
+          "prompt": "Select the sentence in which the author identifies a practice still evident in current scholarship.",
+          "answer": [3],
+          "explanation": "'Yet the impulse persists, and even recent biographies slip...' explicitly locates the old practice in recent work. The other sentences describe past behavior, scholarly skepticism generally, or a proposal for future emphasis."
+        }
+      ]
+    }
+  ]
+}

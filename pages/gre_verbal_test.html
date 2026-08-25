@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Full-length GRE Verbal Reasoning mock test - 20 questions, 30 minutes, Text Completion, Sentence Equivalence, Reading Comprehension with score report and explanations." />
+  <title>GRE Verbal Mock Test | 20 Questions · 30 Minutes</title>
+  <link rel="stylesheet" href="../style.css?v=2">
+  <link rel="stylesheet" href="../assets/css/gre_verbal.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gre_vocab.html">GRE Vocab</a></li>
+        <li><a href="gre_verbal_test.html" class="active">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>GRE Verbal Mock Test</h1>
+        <p class="subtitle">A full-length practice section — 20 questions in 30 minutes, just like the real GRE Verbal Reasoning measure</p>
+      </div>
+    </section>
+
+    <div class="container">
+
+      <!-- ============ START SCREEN ============ -->
+      <div id="startScreen">
+        <div id="resumeBanner" class="vt-resume-banner hidden">
+          <p><strong>Incomplete test found.</strong> <span id="resumeInfo"></span></p>
+          <div style="display:flex; gap:0.5rem;">
+            <button id="resumeBtn" class="btn" style="padding:0.5rem 1rem; font-size:0.85rem;">Resume ▸</button>
+            <button id="discardResumeBtn" class="btn btn-secondary" style="padding:0.5rem 1rem; font-size:0.85rem;">Discard</button>
+          </div>
+        </div>
+
+        <div class="vt-info-grid">
+          <div class="vt-info-card">
+            <h3>📝 Text Completion</h3>
+            <p>Passages with 1–3 blanks. Choose one word per blank from the options provided.</p>
+          </div>
+          <div class="vt-info-card">
+            <h3>⚖️ Sentence Equivalence</h3>
+            <p>Select exactly <strong>two</strong> words that both complete the sentence and give it the same meaning.</p>
+          </div>
+          <div class="vt-info-card">
+            <h3>📖 Reading Comprehension</h3>
+            <p>Answer questions about passages — including select-all-that-apply and click-a-sentence formats.</p>
+          </div>
+          <div class="vt-info-card">
+            <h3>⏱️ Scoring &amp; Timing</h3>
+            <p>20 questions, 30 minutes, auto-submit when time runs out. You'll get an estimated 130–170 score.</p>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <button id="startBtn" class="btn btn-vt-start">Start Full-Length Mock →</button>
+        </div>
+
+        <div class="card vt-history-card" style="margin-top:2rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <h3 class="card-title" style="margin:0;">Your Attempt History</h3>
+            <button id="clearHistoryBtn" class="btn btn-secondary" style="padding:0.35rem 0.85rem; font-size:0.78rem;">Clear History</button>
+          </div>
+          <div id="historyBody" style="margin-top:1rem;"></div>
+          <p style="font-size:0.75rem; color:var(--text-light); margin:0.75rem 0 0;">Scores are stored only in your browser. The estimated 130–170 score is an approximation based on percentage correct.</p>
+        </div>
+      </div>
+
+      <!-- ============ TEST SCREEN ============ -->
+      <div id="testScreen" class="hidden">
+        <div class="vt-topbar">
+          <span class="vt-timer" id="timerDisplay">30:00</span>
+          <span class="vt-progress-text" id="progressText">0 of 20 answered</span>
+          <button id="submitBtn" class="btn" style="padding:0.45rem 1.1rem; font-size:0.85rem;">Submit Test</button>
+        </div>
+
+        <div class="vt-palette" id="paletteGrid"></div>
+
+        <div class="qcard" id="questionCard">
+          <div class="loading-message">Loading question…</div>
+        </div>
+
+        <div class="vt-controls">
+          <button id="markBtn" class="btn btn-secondary btn-mark">⚐ Mark for Review</button>
+          <div style="display:flex; gap:0.6rem;">
+            <button id="prevBtn" class="btn btn-secondary">← Previous</button>
+            <button id="nextBtn" class="btn">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ RESULTS SCREEN ============ -->
+      <div id="resultsScreen" class="hidden">
+        <div class="vt-results-head">
+          <div class="score-ring-wrap">
+            <svg width="150" height="150" viewBox="0 0 150 150">
+              <circle class="ring-bg" cx="75" cy="75" r="62"></circle>
+              <circle class="ring-fill" id="ringFill" cx="75" cy="75" r="62"></circle>
+            </svg>
+            <div class="ring-label">
+              <span class="ring-score" id="ringScore">0%</span>
+              <span class="ring-sub">Correct</span>
+            </div>
+          </div>
+          <div class="vt-results-summary">
+            <h2>Test Complete!</h2>
+            <p class="raw-line" id="rawLine">—</p>
+            <p style="margin:0.35rem 0 0;">Estimated Verbal Score: <strong id="estScore" style="font-size:1.4rem; color:var(--primary-color);">160</strong> <span style="color:var(--text-light); font-size:0.85rem;">/ 170</span></p>
+            <p class="note" id="timeLine">—</p>
+            <div class="type-bars" id="typeBars"></div>
+          </div>
+        </div>
+
+        <div class="vt-result-actions">
+          <button id="reviewToggleBtn" class="btn">Review Answers</button>
+          <button id="retakeBtn" class="btn btn-secondary">↺ Retake Test</button>
+          <button id="backHomeBtn" class="btn btn-secondary">Back to Start</button>
+        </div>
+
+        <div id="reviewArea" class="hidden"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Submit confirmation modal -->
+  <div class="modal-overlay" id="submitModal">
+    <div class="modal-card">
+      <h3>Submit your test?</h3>
+      <p id="modalUnanswered">—</p>
+      <div class="modal-actions">
+        <button id="cancelSubmitBtn" class="btn btn-secondary">Keep Working</button>
+        <button id="confirmSubmitBtn" class="btn">Submit &amp; See Score</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> ·
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> ·
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+  <script src="../assets/js/gre_verbal.js?v=1"></script>
+</body>
+</html>
