@@ -1,0 +1,120 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-08-25T18:26:55.259714Z",
+  "description": "3000 most important GRE vocabulary words, ranked by frequency and importance.",
+  "total_words": 3000,
+  "batch_size": 300,
+  "num_batches": 10,
+  "wordnet_augmentation": true,
+  "tiers": {
+    "1": {
+      "name": "Essential",
+      "range": "1-500",
+      "color": "red",
+      "description": "Most important GRE words appearing in recent exams"
+    },
+    "2": {
+      "name": "High Priority",
+      "range": "501-1000",
+      "color": "orange",
+      "description": "Frequently tested words"
+    },
+    "3": {
+      "name": "Medium Priority",
+      "range": "1001-2000",
+      "color": "blue",
+      "description": "Important but less frequent"
+    },
+    "4": {
+      "name": "Review",
+      "range": "2001-3000",
+      "color": "green",
+      "description": "Advanced review words"
+    }
+  },
+  "csv_headers": [
+    "rank",
+    "word",
+    "pos",
+    "definition",
+    "synonyms",
+    "antonyms",
+    "usage_where",
+    "usage_where_not",
+    "example_1",
+    "example_2",
+    "example_3"
+  ],
+  "batches": [
+    {
+      "file": "batch_01.csv",
+      "first_rank": 1,
+      "last_rank": 300,
+      "size": 300,
+      "tier": "Essential"
+    },
+    {
+      "file": "batch_02.csv",
+      "first_rank": 301,
+      "last_rank": 600,
+      "size": 300,
+      "tier": "Essential"
+    },
+    {
+      "file": "batch_03.csv",
+      "first_rank": 601,
+      "last_rank": 900,
+      "size": 300,
+      "tier": "High Priority"
+    },
+    {
+      "file": "batch_04.csv",
+      "first_rank": 901,
+      "last_rank": 1200,
+      "size": 300,
+      "tier": "High Priority"
+    },
+    {
+      "file": "batch_05.csv",
+      "first_rank": 1201,
+      "last_rank": 1500,
+      "size": 300,
+      "tier": "Medium Priority"
+    },
+    {
+      "file": "batch_06.csv",
+      "first_rank": 1501,
+      "last_rank": 1800,
+      "size": 300,
+      "tier": "Medium Priority"
+    },
+    {
+      "file": "batch_07.csv",
+      "first_rank": 1801,
+      "last_rank": 2100,
+      "size": 300,
+      "tier": "Medium Priority"
+    },
+    {
+      "file": "batch_08.csv",
+      "first_rank": 2101,
+      "last_rank": 2400,
+      "size": 300,
+      "tier": "Review"
+    },
+    {
+      "file": "batch_09.csv",
+      "first_rank": 2401,
+      "last_rank": 2700,
+      "size": 300,
+      "tier": "Review"
+    },
+    {
+      "file": "batch_10.csv",
+      "first_rank": 2701,
+      "last_rank": 3000,
+      "size": 300,
+      "tier": "Review"
+    }
+  ]
+}

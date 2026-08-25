@@ -1,0 +1,356 @@
+/* ===== GRE Vocabulary Builder Styles ===== */
+
+.hero-stats {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stat-badge {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.gre-controls {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.search-bar-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.gre-search {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.gre-search:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.gre-filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gre-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  background: var(--bg-color);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.gre-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.mode-toggle .btn {
+  flex: 1;
+}
+
+.mode-active {
+  background: var(--primary-color) !important;
+  color: white !important;
+  border-color: var(--primary-color);
+}
+
+.progress-container {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--bg-color);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.results-info {
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.loading-message {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+/* Word Cards */
+.gre-word-card {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--primary-color);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative;
+}
+
+.gre-word-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateX(4px);
+}
+
+.gre-word-card.learned {
+  border-left-color: #10b981;
+  background: rgba(16, 185, 129, 0.03);
+}
+
+.gre-word-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.gre-word-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0;
+  flex: 1;
+}
+
+.gre-word-pos {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gre-word-rank {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  background: var(--bg-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.gre-tier-badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.tier-essential { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.tier-high { background: rgba(249, 115, 22, 0.15); color: #f97316; }
+.tier-medium { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.tier-review { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+
+.gre-learned-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.gre-learned-btn:hover { background: var(--primary-color); color: white; }
+.gre-learned-btn.learned { background: #10b981; color: white; border-color: #10b981; }
+
+.gre-word-definition {
+  font-size: 1.05rem;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.gre-synonyms, .gre-antonyms {
+  margin: 0.5rem 0;
+  font-size: 0.875rem;
+}
+
+.gre-synonyms strong, .gre-antonyms strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.gre-synonym-list, .gre-antonym-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.gre-synonym-chip, .gre-antonym-chip {
+  background: var(--bg-secondary);
+  padding: 0.15rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.gre-usage {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  border-left: 3px solid var(--primary-color);
+}
+
+.gre-usage-where { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.gre-usage-where::before { content: "✓ "; color: #10b981; font-weight: bold; }
+.gre-usage-where-not { font-size: 0.85rem; }
+.gre-usage-where-not::before { content: "✕ "; color: #ef4444; font-weight: bold; }
+
+.gre-example {
+  font-style: italic;
+  color: var(--text-light);
+  margin: 0.4rem 0;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--border-color);
+}
+
+.gre-examples { margin-top: 0.75rem; }
+
+.gre-quiz-container { max-width: 700px; margin: 0 auto; }
+.gre-quiz-card {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.gre-quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gre-quiz-progress { font-size: 0.875rem; color: var(--text-light); }
+.gre-quiz-question {
+  font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;
+  text-align: center; color: var(--text-color);
+}
+
+.gre-quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.gre-quiz-option {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  font-weight: 500;
+}
+
+.gre-quiz-option:hover {
+  background: var(--primary-color); color: white;
+  border-color: var(--primary-color); transform: translateY(-2px);
+}
+
+.gre-quiz-option.correct { background: rgba(16, 185, 129, 0.2); border-color: #10b981; }
+.gre-quiz-option.incorrect { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; }
+.gre-quiz-option.disabled { cursor: default; }
+.gre-quiz-option.disabled:hover {
+  background: var(--bg-secondary); color: var(--text-color);
+  border-color: var(--border-color); transform: none;
+}
+
+.gre-quiz-answer {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+.gre-quiz-answer strong { color: var(--text-color); }
+.gre-quiz-nav { display: flex; gap: 1rem; justify-content: center; }
+.gre-empty { text-align: center; padding: 3rem; color: var(--text-light); }
+.gre-empty h3 { color: var(--text-color); margin-bottom: 0.5rem; }
+.gre-results { background: var(--bg-color); border: 1px solid var(--border-color);
+  border-radius: var(--radius); padding: 2rem; text-align: center; margin: 2rem 0; }
+.gre-results .stat { font-size: 2rem; font-weight: 700; color: var(--primary-color); }
+.gre-results .label { font-size: 0.875rem; color: var(--text-light); }
+
+@media (max-width: 768px) {
+  .gre-quiz-options { grid-template-columns: 1fr; }
+  .gre-word-title { font-size: 1.25rem; }
+  .gre-controls { padding: 1rem; }
+}
+
+}

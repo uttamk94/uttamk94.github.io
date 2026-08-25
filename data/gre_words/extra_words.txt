@@ -1,0 +1,113 @@
+# Additional GRE words (pipe-delimited: word|pos|definition)
+# These supplement the core curated list in scripts/gre_word_data.py
+abate|verb|To become less intense or to reduce in force
+alacrity|noun|Cheerful readiness, promptness, or willingness
+alleviate|verb|To provide relief or aid
+allude|verb|To make a reference to
+aloof|adjective|Not friendly or forthcoming; distant
+ambiguous|adjective|Open to more than one interpretation
+ambivalent|adjective|Holding two conflicting feelings or beliefs
+ameliorate|verb|To make or become better
+anachronistic|adjective|Belonging to an earlier time
+anemic|adjective|Characterized by a lack of energy or substance
+angelic|adjective|Having or resembling an angel
+animated|adjective|Full of or showing life and vigor
+apic|adjective|Of the topmost petal
+apocalyptic|adjective|Relating to or resembling an apocalypse
+apocryphal|adjective|Of dubious authenticity
+apologetic|adjective|Showing regret for having caused trouble
+applaud|verb|To show approval or give praise
+apprehensive|adjective|Mentally prepared for an unpleasant situation
+apprise|verb|To inform or notify someone
+approbation|noun|Expressing an affirmative and accepting attitude
+apt|adjective|Very good in a skill or talent
+arboreal|adjective|Relating to or resembling a tree
+arbitrary|adjective|Not based on or constrained by reason
+arcane|adjective|Known or understood by a select few
+arch|adjective|A raised or distorted eyebrow
+ardent|adjective|Having or displaying a strong passion
+arduous|adjective|Involving or requiring strenuous effort
+argot|adjective|Of or in the language used by a profession
+aromatic|adjective|Having a pleasant natural odour
+arrogate|verb|To seize or take without justification
+arsenic|noun|A poisonous metal
+artful|adjective|Skillful or adroit in physical matters
+ascetic|adjective|Relating to or characteristic of an ascetic
+ascribe|verb|To attribute something to a cause
+ashen|adjective|Of the pale grey color of ashes
+asphodel|noun|A flower
+asylum|noun|An institution for people who are mentally ill
+asymptomatic|adjective|Showing no symptoms of disease
+asynchronous|adjective|Not existing or happening at the same time
+asymptotic|adjective|Concerning a value that tends to infinity
+asymmetry|noun|The absence of symmetry
+asynchronous|adjective|Not existing at the same time or speed
+asynchronous|adjective|Not existing or happening at the same time
+asylum|adjective|The condition of being an asylee
+asylum|noun|Political asylum
+asylum|noun|Shelter or protection
+asylum-seeker|noun|A person seeking international protection
+asymptotic|adjective|Relating to a state of stability or equilibrium
+asymptotic|verb|To approach (a definite value)
+asymptotic|verb|To approach indefinitely
+atavistic|adjective|Relating to a return to a prior state
+atheist|noun|A person who disbelieves or who insists on proof
+augury|noun|A sign or omen
+aunt|noun|A woman who is an aunt
+author|noun|The creator or compiler of a book
+austere|adjective|Severely simple or strict
+autocrat|noun|A person with complete control
+autocratic|adjective|Having complete control
+autocratical|adjective|Having complete control
+autograph|noun|A person's handwritten signature
+automation|noun|The use of processes
+autonomous|adjective|Having the freedom to self-govern
+autonomy|noun|Independence
+autopsy|noun|A post-mortem examination
+auto|adjective|Of or relating to an automatic mechanism
+autos|adjective|Of or relating to an automatic mechanism
+auxiliary|adjective|Chiefly US: of or relating to an auxiliary
+avail|verb|To help or benefit someone
+avatar|noun|In Hinduism, the incarnation of a deity
+avenge|verb|To inflict hurt or punishment
+aver|verb|To state or assert that something is the case
+averse|adjective|Reluctant to do something
+avert|verb|To turn away or prevent
+aviary|noun|A large cage or enclosure for birds
+awkward|adjective|Making someone feel awkward
+axiom|noun|A statement or proposition from which an argument follows
+azure|noun|A bright blue color
+babble|verb|To talk in a rapid and voluble manner
+backhanded|adjective|simultaneously commendatory and insulting
+backlash|noun|A strong negative reaction
+backroom|noun|A room that is to the rear
+backsliding|noun|Relapse into a former state
+backup|noun|A duplicate
+backward|adjective|Directed toward or originating in the past
+bacterial|noun|Bacterial
+badger|noun|A stout animal
+badge| noun|A mark of recognition
+baffling|adjective|Difficult to understand
+bagged|verb|Taken in by a person
+bailout|noun|The provision of help
+balanced|adjective|Marked by psychological equilibrium
+ballast|noun|Compartment
+balm|noun|A soothing or healing agent
+band|noun|A range of positions
+bandage|noun|A piece of gauze
+bang|noun|An explosive sound
+bankrupt|adjective|Unable to pay debts
+banner|noun|A flag
+bantering|adjective|Cheerful and friendly
+banter|verb|To talk informally
+baptism|noun|A Christian rite
+bar|verb|To prohibit
+barbecue|noun|A method of cooking food
+bare|noun|A short form of bare-knuckled
+bargain|noun|A thing that reduces cost
+barker|noun|A person who stands at the door
+barn| noun|A large farm building
+barrage|noun|A concentrated outpouring or rapid series
+barrel|noun|A cylindrical container
+barrier|noun|A fence or obstacle
+
