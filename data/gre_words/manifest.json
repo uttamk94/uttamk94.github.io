@@ -1,35 +1,41 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "generated_at": "2026-08-25T18:26:55.259714Z",
-  "description": "3000 most important GRE vocabulary words, ranked by frequency and importance.",
-  "total_words": 3000,
+  "last_rebuilt": "2026-08-26",
+  "description": "GRE vocabulary collection: curated canonical core lists (Essential / High Priority) merged over the original dictionary corpus, re-ranked by GRE priority.",
+  "total_words": 3502,
   "batch_size": 300,
   "num_batches": 10,
   "wordnet_augmentation": true,
+  "rebuild_note": "Rebuilt via rebuild_gre_tiers.py using gre_core_list.py: 232 Essential + 270 High Priority words added, 96 existing words promoted (rich fields preserved), remaining originals re-tiered Medium/Review preserving order. Original backup: all_words.backup.json. Batch CSVs below describe the ORIGINAL generation only.",
   "tiers": {
     "1": {
       "name": "Essential",
-      "range": "1-500",
+      "range": "1-290",
+      "words": 290,
       "color": "red",
-      "description": "Most important GRE words appearing in recent exams"
+      "description": "Canonical high-frequency GRE words from major prep-list consensus"
     },
     "2": {
       "name": "High Priority",
-      "range": "501-1000",
+      "range": "291-598",
+      "words": 308,
       "color": "orange",
-      "description": "Frequently tested words"
+      "description": "Second band of frequently tested GRE words"
     },
     "3": {
       "name": "Medium Priority",
-      "range": "1001-2000",
+      "range": "599-1598",
+      "words": 1000,
       "color": "blue",
-      "description": "Important but less frequent"
+      "description": "Remaining corpus words, first half"
     },
     "4": {
       "name": "Review",
-      "range": "2001-3000",
+      "range": "1599-3502",
+      "words": 1904,
       "color": "green",
-      "description": "Advanced review words"
+      "description": "Long-tail review words"
     }
   },
   "csv_headers": [
