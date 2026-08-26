@@ -13,6 +13,8 @@ const State = {
   searchTerm: '',
   tierFilter: 'all',
   posFilter: 'all',
+  activeLetter: '',
+  scrollRaf: null,
   quiz: {
     question: null,
     options: [],
@@ -145,8 +147,120 @@ function renderWordList() {
       '<div class="gre-empty"><h3>No words found</h3><p>Try adjusting your search or filters.</p></div>';
     return;
   }
-  const html = State.filtered.map(w => renderWordCard(w)).join('');
-  elements.contentArea.innerHTML = html;
+
+  /* --- Group filtered words by first letter (A-Z, '#' fallback) --- */
+  const groups = new Map();
+  State.filtered.forEach(w => {
+    const first = (w.word || '?').charAt(0).toUpperCase();
+    const letter = /[A-Z]/.test(first) ? first : '#';
+    if (!groups.has(letter)) groups.set(letter, []);
+    groups.get(letter).push(w);
+  });
+
+  const letters = [...groups.keys()].sort((a, b) =>
+    a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b)
+  );
+  letters.forEach(l => groups.get(l).sort((x, y) => x.word.localeCompare(y.word)));
+
+  /* --- Sticky A-Z quick-jump bar --- */
+  const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').concat('#');
+  const barHtml = `
+<nav class="gre-alphabet-bar" id="alphabetBar" aria-label="Jump to words starting with letter">
+  ${allLetters.map(l => {
+    const count = groups.has(l) ? groups.get(l).length : 0;
+    const disabled = count === 0;
+    const title = disabled
+      ? `No words starting with "${l}"`
+      : `Jump to ${l} (${count} word${count !== 1 ? 's' : ''})`;
+    return `<button type="button" class="gre-alpha-btn${disabled ? ' disabled' : ''}"
+      data-letter="${l}" ${disabled ? 'disabled' : ''}
+      onclick="scrollToLetter('${l}')" title="${title}">${l}</button>`;
+  }).join('')}
+</nav>`;
+
+  /* --- Letter groups with sticky headers --- */
+  const groupsHtml = letters.map(letter => {
+    const items = groups.get(letter);
+    return `
+<section class="gre-letter-group" id="group-${letter}" data-letter="${letter}">
+  <header class="gre-letter-header">
+    <span class="gre-letter" aria-hidden="true">${letter}</span>
+    <h2 class="gre-letter-title">${letter === '#' ? 'Other' : `Words starting with “${letter}”`}</h2>
+    <span class="gre-letter-count">${items.length} word${items.length !== 1 ? 's' : ''}</span>
+  </header>
+  ${items.map(w => renderWordCard(w)).join('')}
+</section>`;
+  }).join('');
+
+  elements.contentArea.innerHTML = barHtml + groupsHtml;
+
+  /* Sync sticky offsets with the freshly rendered bar, set initial active letter */
+  State.activeLetter = letters[0] || '';
+  updateAlphaBarActive(false);
+  updateStickyOffsets();
+}
+
+/* ===== Alphabet Navigation ===== */
+
+function scrollToLetter(letter) {
+  const group = document.getElementById('group-' + letter);
+  if (!group) return;
+  State.activeLetter = letter;
+  updateAlphaBarActive(true);
+  group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateAlphaBarActive(scrollIntoView) {
+  const bar = document.getElementById('alphabetBar');
+  if (!bar) return;
+  bar.querySelectorAll('.gre-alpha-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.letter === State.activeLetter);
+  });
+  if (scrollIntoView) {
+    const activeBtn = bar.querySelector(`.gre-alpha-btn[data-letter="${State.activeLetter}"]`);
+    if (activeBtn) {
+      const target = activeBtn.offsetLeft - bar.clientWidth / 2 + activeBtn.clientWidth / 2;
+      bar.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    }
+  }
+}
+
+/* Scroll-spy: highlights the letter whose group header has passed under the sticky bars */
+function onScrollSpy() {
+  const bar = document.getElementById('alphabetBar');
+
+  if (bar) {
+    const triggerLine = getStickyOffset() + 24;
+    let current = '';
+    document.querySelectorAll('.gre-letter-group').forEach(group => {
+      if (group.getBoundingClientRect().top <= triggerLine) current = group.dataset.letter;
+    });
+
+    if (current && current !== State.activeLetter) {
+      State.activeLetter = current;
+      updateAlphaBarActive(true);
+    }
+  }
+
+  const backToTop = $('backToTop');
+  if (backToTop) backToTop.classList.toggle('visible', window.scrollY > 600);
+}
+
+function getStickyOffset() {
+  const nav = document.querySelector('.nav');
+  const bar = document.getElementById('alphabetBar');
+  const navH = nav ? nav.offsetHeight : 0;
+  const barH = bar ? bar.offsetHeight : 0;
+  return navH + barH;
+}
+
+/* Keep CSS sticky offsets in sync with the real nav/bar heights at any breakpoint */
+function updateStickyOffsets() {
+  const nav = document.querySelector('.nav');
+  const bar = document.getElementById('alphabetBar');
+  const root = document.documentElement.style;
+  root.setProperty('--nav-height', (nav ? nav.offsetHeight : 64) + 'px');
+  root.setProperty('--alpha-bar-height', (bar ? bar.offsetHeight : 54) + 'px');
 }
 
 function renderWordCard(w) {
@@ -406,6 +520,24 @@ function bindEvents() {
 
   elements.browseMode.addEventListener('click', () => setMode('browse'));
   elements.quizMode.addEventListener('click', () => setMode('quiz'));
+
+  // Scroll-spy for the alphabet bar + back-to-top visibility (rAF-throttled)
+  window.addEventListener('scroll', () => {
+    if (State.scrollRaf) return;
+    State.scrollRaf = requestAnimationFrame(() => {
+      State.scrollRaf = null;
+      onScrollSpy();
+    });
+  }, { passive: true });
+
+  // Re-measure sticky offsets when the viewport changes
+  window.addEventListener('resize', updateStickyOffsets);
+  window.addEventListener('load', updateStickyOffsets);
+
+  const backToTop = $('backToTop');
+  if (backToTop) {
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
