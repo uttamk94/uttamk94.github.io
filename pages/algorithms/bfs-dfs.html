@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The two fundamental ways to walk a graph" />
+  <title>BFS &amp; DFS Traversals | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🕸️</div><h1>BFS &amp; DFS Traversals</h1><p class="subtitle">🕸️ Graph · <span style="color:#dc2626;font-weight:600;">Must Know</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(V + E)</span><span class="stat-badge">Priority 5/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="lca-tree-diameter.html">← LCA &amp; Tree Diameter</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="bellman-ford-floyd-warshall.html">Bellman-Ford &amp; Floyd-Warshall →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">The two fundamental ways to walk a graph. Breadth-first search (BFS) uses a queue and explores in rings: everything 1 edge away, then 2 edges, and so on — so the first time it reaches a node is along a fewest-edges path. Depth-first search (DFS) uses a stack (or recursion) and follows one path as deep as it can before backtracking. Both visit each vertex and edge once.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Almost every graph algorithm is one of these two skeletons with extra bookkeeping: Dijkstra is BFS with a priority queue, topological sort is DFS with a finish-time stack, cycle detection and component counting are plain DFS/BFS loops. Mastery here is the entry fee to all of graph theory.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Shortest path in unweighted graphs (fewest edges) — BFS, or multi-source BFS.</li><li>Connectivity questions: is there a path, how many components, is it bipartite — either search.</li><li>Cycle detection (directed via DFS colours, undirected via a parent check).</li><li>Ordering/structure probes — DFS trees expose bridges, articulation points, topological order.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Distance-like answers (levels, fewest hops, nearest exit) → BFS.</li><li>Exhaustive structure questions (cycles, topological order, back-edges) → DFS.</li><li>Very deep graphs risk recursion overflow — use an explicit stack or BFS.</li><li>Huge width, deep answer — DFS keeps the frontier small; BFS memory can explode.</li><li>Mark nodes visited when ENQUEUED (BFS) or on entry (DFS) to avoid duplicates.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Weighted shortest paths — plain BFS ignores weights; use Dijkstra or Bellman-Ford.</li><li>Needless full traversal when a single path suffices — early-exit the search at the target.</li><li>The graph is a tree with a known root and you only need parent/depth — one DFS suffices (no queue).</li><li>Streaming graphs that change between queries — static traversals go stale; use dynamic structures.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(V + E) — every vertex and edge touched once</td></tr><tr><td>Average case</td><td>O(V + E)</td></tr><tr><td>Worst case</td><td>O(V + E)</td></tr><tr><td>Space</td><td>O(V) visited flags + O(V) queue (BFS) or recursion stack (DFS)</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>n/a</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-pre">#define N 7</span>
+
+<span class="tok-cmt">/* Graph as an adjacency matrix; nodes are indices 0..6 (A..G). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">adj</span>[<span class="tok-id">N</span>][<span class="tok-id">N</span>] = {
+    {<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},
+    {<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},
+    {<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>},
+    {<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},
+    {<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>},
+    {<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},
+    {<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},
+};
+<span class="tok-kw">const</span> <span class="tok-kw">char</span> *<span class="tok-id">name</span> = <span class="tok-str">"ABCDEFG"</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">bfs</span>(<span class="tok-kw">int</span> <span class="tok-id">start</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">visited</span>[<span class="tok-id">N</span>] = {<span class="tok-num">0</span>}, <span class="tok-id">queue</span>[<span class="tok-id">N</span>], <span class="tok-id">head</span> = <span class="tok-num">0</span>, <span class="tok-id">tail</span> = <span class="tok-num">0</span>;
+    <span class="tok-id">queue</span>[<span class="tok-id">tail</span>++] = <span class="tok-id">start</span>;
+    <span class="tok-id">visited</span>[<span class="tok-id">start</span>] = <span class="tok-num">1</span>;
+    <span class="tok-id">printf</span>(<span class="tok-str">"BFS: "</span>);
+    <span class="tok-kw">while</span> (<span class="tok-id">head</span> &lt; <span class="tok-id">tail</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">u</span> = <span class="tok-id">queue</span>[<span class="tok-id">head</span>++];
+        <span class="tok-id">printf</span>(<span class="tok-str">"%c "</span>, <span class="tok-id">name</span>[<span class="tok-id">u</span>]);
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">v</span>++)
+            <span class="tok-kw">if</span> (<span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">v</span>] &amp;&amp; !<span class="tok-id">visited</span>[<span class="tok-id">v</span>]) { <span class="tok-id">visited</span>[<span class="tok-id">v</span>] = <span class="tok-num">1</span>; <span class="tok-id">queue</span>[<span class="tok-id">tail</span>++] = <span class="tok-id">v</span>; }
+    }
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">dfs_rec</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">visited</span>[]) {
+    <span class="tok-id">visited</span>[<span class="tok-id">u</span>] = <span class="tok-num">1</span>;
+    <span class="tok-id">printf</span>(<span class="tok-str">"%c "</span>, <span class="tok-id">name</span>[<span class="tok-id">u</span>]);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">v</span>++)
+        <span class="tok-kw">if</span> (<span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">v</span>] &amp;&amp; !<span class="tok-id">visited</span>[<span class="tok-id">v</span>]) <span class="tok-id">dfs_rec</span>(<span class="tok-id">v</span>, <span class="tok-id">visited</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">dfs</span>(<span class="tok-kw">int</span> <span class="tok-id">start</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">visited</span>[<span class="tok-id">N</span>] = {<span class="tok-num">0</span>};
+    <span class="tok-id">printf</span>(<span class="tok-str">"DFS: "</span>);
+    <span class="tok-id">dfs_rec</span>(<span class="tok-id">start</span>, <span class="tok-id">visited</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+}
+
+<span class="tok-cmt">/* Connected components: restart a BFS from every unvisited node. */</span>
+<span class="tok-kw">int</span> <span class="tok-id">count_components</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">visited</span>[<span class="tok-id">N</span>] = {<span class="tok-num">0</span>}, <span class="tok-id">count</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">s</span> = <span class="tok-num">0</span>; <span class="tok-id">s</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">s</span>++) {
+        <span class="tok-kw">if</span> (!<span class="tok-id">visited</span>[<span class="tok-id">s</span>]) {
+            <span class="tok-id">count</span>++;
+            <span class="tok-kw">int</span> <span class="tok-id">queue</span>[<span class="tok-id">N</span>], <span class="tok-id">head</span> = <span class="tok-num">0</span>, <span class="tok-id">tail</span> = <span class="tok-num">0</span>;
+            <span class="tok-id">queue</span>[<span class="tok-id">tail</span>++] = <span class="tok-id">s</span>;
+            <span class="tok-id">visited</span>[<span class="tok-id">s</span>] = <span class="tok-num">1</span>;
+            <span class="tok-kw">while</span> (<span class="tok-id">head</span> &lt; <span class="tok-id">tail</span>) {
+                <span class="tok-kw">int</span> <span class="tok-id">u</span> = <span class="tok-id">queue</span>[<span class="tok-id">head</span>++];
+                <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">v</span>++)
+                    <span class="tok-kw">if</span> (<span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">v</span>] &amp;&amp; !<span class="tok-id">visited</span>[<span class="tok-id">v</span>]) { <span class="tok-id">visited</span>[<span class="tok-id">v</span>] = <span class="tok-num">1</span>; <span class="tok-id">queue</span>[<span class="tok-id">tail</span>++] = <span class="tok-id">v</span>; }
+            }
+        }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">count</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-id">bfs</span>(<span class="tok-num">0</span>);          <span class="tok-cmt">/* from A */</span>
+    <span class="tok-id">dfs</span>(<span class="tok-num">0</span>);          <span class="tok-cmt">/* from A */</span>
+    <span class="tok-id">bfs</span>(<span class="tok-num">3</span>);          <span class="tok-cmt">/* from D */</span>
+    <span class="tok-id">dfs</span>(<span class="tok-num">4</span>);          <span class="tok-cmt">/* from E */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Components: %d\n"</span>, <span class="tok-id">count_components</span>());
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-id">vector</span>&lt;<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">adj</span> = {
+    {<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>}, {<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>}, {<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>}, {<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},
+    {<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>}, {<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>}, {<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},
+};
+<span class="tok-kw">const</span> <span class="tok-id">string</span> <span class="tok-id">name</span> = <span class="tok-str">"ABCDEFG"</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">bfs</span>(<span class="tok-kw">int</span> <span class="tok-id">start</span>) {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">bool</span>&gt; <span class="tok-id">visited</span>(<span class="tok-id">adj</span>.<span class="tok-id">size</span>(), <span class="tok-id">false</span>);
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">queue</span>{<span class="tok-id">start</span>};
+    <span class="tok-id">visited</span>[<span class="tok-id">start</span>] = <span class="tok-id">true</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"BFS: "</span>;
+    <span class="tok-kw">for</span> (<span class="tok-id">size_t</span> <span class="tok-id">head</span> = <span class="tok-num">0</span>; <span class="tok-id">head</span> &lt; <span class="tok-id">queue</span>.<span class="tok-id">size</span>(); <span class="tok-id">head</span>++) {
+        <span class="tok-kw">int</span> <span class="tok-id">u</span> = <span class="tok-id">queue</span>[<span class="tok-id">head</span>];
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">name</span>[<span class="tok-id">u</span>] &lt;&lt; <span class="tok-str">" "</span>;
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">adj</span>.<span class="tok-id">size</span>(); <span class="tok-id">v</span>++)
+            <span class="tok-kw">if</span> (<span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">v</span>] &amp;&amp; !<span class="tok-id">visited</span>[<span class="tok-id">v</span>]) { <span class="tok-id">visited</span>[<span class="tok-id">v</span>] = <span class="tok-id">true</span>; <span class="tok-id">queue</span>.<span class="tok-id">push_back</span>(<span class="tok-id">v</span>); }
+    }
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">dfsRec</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-id">vector</span>&lt;<span class="tok-kw">bool</span>&gt;&amp; <span class="tok-id">visited</span>) {
+    <span class="tok-id">visited</span>[<span class="tok-id">u</span>] = <span class="tok-id">true</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">name</span>[<span class="tok-id">u</span>] &lt;&lt; <span class="tok-str">" "</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">adj</span>.<span class="tok-id">size</span>(); <span class="tok-id">v</span>++)
+        <span class="tok-kw">if</span> (<span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">v</span>] &amp;&amp; !<span class="tok-id">visited</span>[<span class="tok-id">v</span>]) <span class="tok-id">dfsRec</span>(<span class="tok-id">v</span>, <span class="tok-id">visited</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">dfs</span>(<span class="tok-kw">int</span> <span class="tok-id">start</span>) {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">bool</span>&gt; <span class="tok-id">visited</span>(<span class="tok-id">adj</span>.<span class="tok-id">size</span>(), <span class="tok-id">false</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"DFS: "</span>;
+    <span class="tok-id">dfsRec</span>(<span class="tok-id">start</span>, <span class="tok-id">visited</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+}
+
+<span class="tok-cmt">/* Connected components: restart a BFS from every unvisited node. */</span>
+<span class="tok-kw">int</span> <span class="tok-id">countComponents</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">bool</span>&gt; <span class="tok-id">visited</span>(<span class="tok-id">adj</span>.<span class="tok-id">size</span>(), <span class="tok-id">false</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">count</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">s</span> = <span class="tok-num">0</span>; <span class="tok-id">s</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">adj</span>.<span class="tok-id">size</span>(); <span class="tok-id">s</span>++) {
+        <span class="tok-kw">if</span> (!<span class="tok-id">visited</span>[<span class="tok-id">s</span>]) {
+            <span class="tok-id">count</span>++;
+            <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">queue</span>{<span class="tok-id">s</span>};
+            <span class="tok-id">visited</span>[<span class="tok-id">s</span>] = <span class="tok-id">true</span>;
+            <span class="tok-kw">for</span> (<span class="tok-id">size_t</span> <span class="tok-id">head</span> = <span class="tok-num">0</span>; <span class="tok-id">head</span> &lt; <span class="tok-id">queue</span>.<span class="tok-id">size</span>(); <span class="tok-id">head</span>++) {
+                <span class="tok-kw">int</span> <span class="tok-id">u</span> = <span class="tok-id">queue</span>[<span class="tok-id">head</span>];
+                <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">adj</span>.<span class="tok-id">size</span>(); <span class="tok-id">v</span>++)
+                    <span class="tok-kw">if</span> (<span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">v</span>] &amp;&amp; !<span class="tok-id">visited</span>[<span class="tok-id">v</span>]) { <span class="tok-id">visited</span>[<span class="tok-id">v</span>] = <span class="tok-id">true</span>; <span class="tok-id">queue</span>.<span class="tok-id">push_back</span>(<span class="tok-id">v</span>); }
+            }
+        }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">count</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">bfs</span>(<span class="tok-num">0</span>);
+    <span class="tok-id">dfs</span>(<span class="tok-num">0</span>);
+    <span class="tok-id">bfs</span>(<span class="tok-num">3</span>);
+    <span class="tok-id">dfs</span>(<span class="tok-num">4</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Components: "</span> &lt;&lt; <span class="tok-id">countComponents</span>() &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">from</span> <span class="tok-id">collections</span> <span class="tok-kw">import</span> <span class="tok-id">deque</span>
+
+<span class="tok-id">ADJ</span> = {
+    <span class="tok-str">"A"</span>: [<span class="tok-str">"B"</span>, <span class="tok-str">"C"</span>], <span class="tok-str">"B"</span>: [<span class="tok-str">"A"</span>, <span class="tok-str">"D"</span>], <span class="tok-str">"C"</span>: [<span class="tok-str">"A"</span>, <span class="tok-str">"E"</span>, <span class="tok-str">"F"</span>],
+    <span class="tok-str">"D"</span>: [<span class="tok-str">"B"</span>], <span class="tok-str">"E"</span>: [<span class="tok-str">"C"</span>, <span class="tok-str">"G"</span>], <span class="tok-str">"F"</span>: [<span class="tok-str">"C"</span>], <span class="tok-str">"G"</span>: [<span class="tok-str">"E"</span>],
+}
+
+
+<span class="tok-kw">def</span> <span class="tok-id">bfs</span>(<span class="tok-id">start</span>):
+    <span class="tok-id">visited</span> = {<span class="tok-id">start</span>}
+    <span class="tok-id">queue</span> = <span class="tok-id">deque</span>([<span class="tok-id">start</span>])
+    <span class="tok-id">order</span> = []
+    <span class="tok-kw">while</span> <span class="tok-id">queue</span>:
+        <span class="tok-id">u</span> = <span class="tok-id">queue</span>.<span class="tok-id">popleft</span>()
+        <span class="tok-id">order</span>.<span class="tok-id">append</span>(<span class="tok-id">u</span>)
+        <span class="tok-kw">for</span> <span class="tok-id">v</span> <span class="tok-kw">in</span> <span class="tok-id">ADJ</span>[<span class="tok-id">u</span>]:
+            <span class="tok-kw">if</span> <span class="tok-id">v</span> <span class="tok-kw">not</span> <span class="tok-kw">in</span> <span class="tok-id">visited</span>:
+                <span class="tok-id">visited</span>.<span class="tok-id">add</span>(<span class="tok-id">v</span>)
+                <span class="tok-id">queue</span>.<span class="tok-id">append</span>(<span class="tok-id">v</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">order</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">dfs</span>(<span class="tok-id">start</span>, <span class="tok-id">visited</span>=<span class="tok-kw">None</span>, <span class="tok-id">order</span>=<span class="tok-kw">None</span>):
+    <span class="tok-str">"""Recursive depth-first: mark, visit, then dive into each neighbor."""</span>
+    <span class="tok-kw">if</span> <span class="tok-id">visited</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-id">visited</span>, <span class="tok-id">order</span> = <span class="tok-id">set</span>(), []
+    <span class="tok-id">visited</span>.<span class="tok-id">add</span>(<span class="tok-id">start</span>)
+    <span class="tok-id">order</span>.<span class="tok-id">append</span>(<span class="tok-id">start</span>)
+    <span class="tok-kw">for</span> <span class="tok-id">v</span> <span class="tok-kw">in</span> <span class="tok-id">ADJ</span>[<span class="tok-id">start</span>]:
+        <span class="tok-kw">if</span> <span class="tok-id">v</span> <span class="tok-kw">not</span> <span class="tok-kw">in</span> <span class="tok-id">visited</span>:
+            <span class="tok-id">dfs</span>(<span class="tok-id">v</span>, <span class="tok-id">visited</span>, <span class="tok-id">order</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">order</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">components</span>(<span class="tok-id">nodes</span>):
+    <span class="tok-str">"""Number of connected pieces — run BFS from every unvisited node."""</span>
+    <span class="tok-id">seen</span>, <span class="tok-id">count</span> = <span class="tok-id">set</span>(), <span class="tok-num">0</span>
+    <span class="tok-kw">for</span> <span class="tok-id">s</span> <span class="tok-kw">in</span> <span class="tok-id">nodes</span>:
+        <span class="tok-kw">if</span> <span class="tok-id">s</span> <span class="tok-kw">not</span> <span class="tok-kw">in</span> <span class="tok-id">seen</span>:
+            <span class="tok-id">count</span> += <span class="tok-num">1</span>
+            <span class="tok-id">seen</span>.<span class="tok-id">update</span>(<span class="tok-id">bfs</span>(<span class="tok-id">s</span>))
+    <span class="tok-kw">return</span> <span class="tok-id">count</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">print</span>(<span class="tok-str">"BFS:"</span>, <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">bfs</span>(<span class="tok-str">"A"</span>)))
+    <span class="tok-id">print</span>(<span class="tok-str">"DFS:"</span>, <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">dfs</span>(<span class="tok-str">"A"</span>)))
+    <span class="tok-id">print</span>(<span class="tok-str">"BFS:"</span>, <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">bfs</span>(<span class="tok-str">"D"</span>)))
+    <span class="tok-id">print</span>(<span class="tok-str">"DFS:"</span>, <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">dfs</span>(<span class="tok-str">"E"</span>)))
+    <span class="tok-id">print</span>(<span class="tok-str">"Components:"</span>, <span class="tok-id">components</span>(<span class="tok-id">list</span>(<span class="tok-id">ADJ</span>)))
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">BFS: A B C D E F G 
+DFS: A B D C E G F 
+BFS: D B A C E F G 
+DFS: E C A B D F G 
+Components: 1</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">BFS: A B C D E F G 
+DFS: A B D C E G F 
+BFS: D B A C E F G 
+DFS: E C A B D F G 
+Components: 1</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">BFS: A B C D E F G
+DFS: A B D C E G F
+BFS: D B A C E F G
+DFS: E C A B D F G
+Components: 1</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Social networks</h4><p class="card-content" style="margin:0;">'Degrees of separation' and friend suggestions are BFS rings; community crawls use DFS.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Web crawling and indexing</h4><p class="card-content" style="margin:0;">Crawlers are bounded BFS over links; site audits DFS the link tree for broken paths.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Mazes, puzzles and games</h4><p class="card-content" style="margin:0;">Minimum-move puzzle solutions are BFS; walkthrough generation and cycle checks use DFS.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Garbage collection</h4><p class="card-content" style="margin:0;">Tracing collectors reachability-scan the object graph — exactly a graph traversal from roots.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/" target="_blank" rel="noopener">GeeksforGeeks — Breadth First Search (reference) ↗</a></li><li><a href="https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/" target="_blank" rel="noopener">GeeksforGeeks — Depth First Search (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "unvisited"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "unvisited"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "unvisited"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "unvisited"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "unvisited"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal"}, {"u": "A", "v": "C", "state": "normal"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "normal"}, {"u": "C", "v": "F", "state": "normal"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "BFS from A \u2014 a queue explores level by level", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "current"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "frontier"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "frontier"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "unvisited"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "unvisited"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "normal"}, {"u": "C", "v": "F", "state": "normal"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "BFS visits A; its unvisited neighbors ['B', 'C'] join the queue", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "current"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "frontier"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "frontier"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "unvisited"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "unvisited"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "normal"}, {"u": "C", "v": "F", "state": "normal"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "BFS visits B; its unvisited neighbors ['D'] join the queue", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "current"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "frontier"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "frontier"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "frontier"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "BFS visits C; its unvisited neighbors ['E', 'F'] join the queue", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "current"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "frontier"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "frontier"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "BFS visits D; its unvisited neighbors [] join the queue", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "done"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "current"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "frontier"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "frontier"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "BFS visits E; its unvisited neighbors ['G'] join the queue", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "done"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "done"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "current"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "frontier"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "BFS visits F; its unvisited neighbors [] join the queue", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "done"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "done"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "done"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "current"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "BFS visits G; its unvisited neighbors [] join the queue", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "done"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "done"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "done"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "done"}], "edges": [{"u": "A", "v": "B", "state": "normal"}, {"u": "A", "v": "C", "state": "normal"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "normal"}, {"u": "C", "v": "F", "state": "normal"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "BFS order: A, B, C, D, E, F, G \u2014 every node reached by fewest edges from A", "done": true}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "unvisited"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "unvisited"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "unvisited"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "unvisited"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "unvisited"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal"}, {"u": "A", "v": "C", "state": "normal"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "normal"}, {"u": "C", "v": "F", "state": "normal"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "Now DFS from A \u2014 a stack dives deep before backtracking", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "current"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "frontier"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "frontier"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "unvisited"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "unvisited"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "normal"}, {"u": "C", "v": "F", "state": "normal"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "DFS visits A; pushes ['B', 'C'] onto the stack", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "frontier"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "current"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "frontier"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "frontier"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "DFS visits C; pushes ['E', 'F'] onto the stack", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "frontier"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "frontier"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "current"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "normal"}], "directed": false, "weighted": false, "caption": "DFS visits F; pushes [] onto the stack", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "frontier"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "current"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "done"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "frontier"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "DFS visits E; pushes ['G'] onto the stack", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "frontier"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "unvisited"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "done"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "done"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "current"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "normal"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "DFS visits G; pushes [] onto the stack", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "current"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "frontier"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "done"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "done"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "done"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "DFS visits B; pushes ['D'] onto the stack", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "current"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "done"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "done"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "done"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "DFS visits D; pushes [] onto the stack", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "A", "pos": [0.5, 0.1], "state": "done"}, {"id": "B", "value": "B", "pos": [0.3, 0.45], "state": "done"}, {"id": "C", "value": "C", "pos": [0.7, 0.45], "state": "done"}, {"id": "D", "value": "D", "pos": [0.2, 0.8], "state": "done"}, {"id": "E", "value": "E", "pos": [0.6, 0.8], "state": "done"}, {"id": "F", "value": "F", "pos": [0.85, 0.8], "state": "done"}, {"id": "G", "value": "G", "pos": [0.45, 1.0], "state": "done"}], "edges": [{"u": "A", "v": "B", "state": "path"}, {"u": "A", "v": "C", "state": "path"}, {"u": "B", "v": "D", "state": "path"}, {"u": "C", "v": "E", "state": "path"}, {"u": "C", "v": "F", "state": "path"}, {"u": "E", "v": "G", "state": "path"}], "directed": false, "weighted": false, "caption": "DFS order: A, B, D, C, E, G, F \u2014 one path explored to its end before the next", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

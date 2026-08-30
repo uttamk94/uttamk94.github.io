@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A binary heap is a complete binary tree stored inside a plain array: the children of index i live at 2i+1 and 2i+2, its parent at (i-1)/2" />
+  <title>Binary Heap &amp; Priority Queue | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">⚖️</div><h1>Binary Heap &amp; Priority Queue</h1><p class="subtitle">🌳 Tree · <span style="color:#ea580c;font-weight:600;">Important</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(log n) push/pop; O(1) peek</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="binary-search-tree.html">← Binary Search Tree</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="avl-tree.html">AVL Tree →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">A binary heap is a complete binary tree stored inside a plain array: the children of index i live at 2i+1 and 2i+2, its parent at (i-1)/2. Every parent satisfies the heap property relative to its children (min-heap: parent ≤ children; max-heap: parent ≥ children), so the extreme value always sits at index 0. A priority queue is this structure plus push/pop/peek.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Whenever work must be processed 'most urgent first', a heap is the efficient answer: it finds and removes the extreme element in O(log n) and reorganises with two cheap sibling swaps per level — a sorted list would need O(n) per insert. Heaps are the engine inside Dijkstra and Prim, OS schedulers, event simulators, and every 'top-k' or streaming-median problem. They are also the structure behind heap sort.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Repeatedly extract the min or max while others keep arriving — schedulers, event loops.</li><li>Top-k / k smallest / k largest without fully sorting: O(n log k).</li><li>Dijkstra or Prim need a 'cheapest next vertex' operation.</li><li>Merging k sorted lists: heap of the k current heads.</li><li>Streaming median: two heaps (max-heap low half, min-heap high half).</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Min-heap vs max-heap: invert the comparator — C++ std::priority_queue is a max-heap unless you pass greater&lt;&gt;.</li><li>Need to decrease/increase an arbitrary element's key? Add an index map (indexed heap) or use a balanced tree.</li><li>Building from n known items: heapify bottom-up in O(n), not n pushes (O(n log n)).</li><li>Only need the k best: keep the heap at size k for O(n log k).</li><li>If you need ordered iteration over all keys, a heap is wrong — it only guarantees the extreme; use a BST.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>You must search for arbitrary keys — heaps have no search order, O(n) scan.</li><li>You need the full sorted sequence repeatedly — sorting once may be cheaper.</li><li>Stable priority among equal keys matters — heapify reorders equal items; pair the payload with a sequence number.</li><li>Concurrent access with lock-free requirements — specialised queues (e.g., lock-free MPMC) exist for that.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(1) peek; O(log n) push/pop</td></tr><tr><td>Average case</td><td>O(log n) push/pop</td></tr><tr><td>Worst case</td><td>O(log n) push/pop; O(1) peek</td></tr><tr><td>Space</td><td>O(n) — stored as a plain array</td></tr><tr><td>Stable</td><td>No (equal keys may reorder)</td></tr><tr><td>In-place</td><td>Yes (implicit tree in the array)</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-cmt">/* Array-backed binary min-heap: children of i live at 2i+1 and 2i+2,
+ * parent at (i-1)/2. push/pop are O(log n), peek is O(1). */</span>
+<span class="tok-pre">#define CAP 128</span>
+
+<span class="tok-kw">typedef</span> <span class="tok-kw">struct</span> {
+    <span class="tok-kw">int</span> <span class="tok-id">a</span>[<span class="tok-id">CAP</span>];
+    <span class="tok-kw">int</span> <span class="tok-id">size</span>;
+} <span class="tok-id">Heap</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">push</span>(<span class="tok-id">Heap</span> *<span class="tok-id">h</span>, <span class="tok-kw">int</span> <span class="tok-id">v</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">h</span>-&gt;<span class="tok-id">size</span>++;
+    <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">i</span>] = <span class="tok-id">v</span>;
+    <span class="tok-kw">while</span> (<span class="tok-id">i</span> &gt; <span class="tok-num">0</span>) {                    <span class="tok-cmt">/* sift up */</span>
+        <span class="tok-kw">int</span> <span class="tok-id">p</span> = (<span class="tok-id">i</span> - <span class="tok-num">1</span>) / <span class="tok-num">2</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">i</span>] &gt;= <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">p</span>]) <span class="tok-kw">break</span>;
+        <span class="tok-kw">int</span> <span class="tok-id">t</span> = <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">i</span>]; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">i</span>] = <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">p</span>]; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">p</span>] = <span class="tok-id">t</span>;
+        <span class="tok-id">i</span> = <span class="tok-id">p</span>;
+    }
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">peek</span>(<span class="tok-id">Heap</span> *<span class="tok-id">h</span>) { <span class="tok-kw">return</span> <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-num">0</span>]; }
+
+<span class="tok-kw">int</span> <span class="tok-id">pop</span>(<span class="tok-id">Heap</span> *<span class="tok-id">h</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">top</span> = <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-num">0</span>];
+    <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-num">0</span>] = <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[--<span class="tok-id">h</span>-&gt;<span class="tok-id">size</span>];
+    <span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (;;) {                         <span class="tok-cmt">/* sift down */</span>
+        <span class="tok-kw">int</span> <span class="tok-id">l</span> = <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">1</span>, <span class="tok-id">r</span> = <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">2</span>, <span class="tok-id">s</span> = <span class="tok-id">i</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">l</span> &lt; <span class="tok-id">h</span>-&gt;<span class="tok-id">size</span> &amp;&amp; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">l</span>] &lt; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">s</span>]) <span class="tok-id">s</span> = <span class="tok-id">l</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">r</span> &lt; <span class="tok-id">h</span>-&gt;<span class="tok-id">size</span> &amp;&amp; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">r</span>] &lt; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">s</span>]) <span class="tok-id">s</span> = <span class="tok-id">r</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">s</span> == <span class="tok-id">i</span>) <span class="tok-kw">break</span>;
+        <span class="tok-kw">int</span> <span class="tok-id">t</span> = <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">i</span>]; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">i</span>] = <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">s</span>]; <span class="tok-id">h</span>-&gt;<span class="tok-id">a</span>[<span class="tok-id">s</span>] = <span class="tok-id">t</span>;
+        <span class="tok-id">i</span> = <span class="tok-id">s</span>;
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">top</span>;
+}
+
+<span class="tok-cmt">/* k smallest values of an array: push all, pop k times. O(n log n). */</span>
+<span class="tok-kw">void</span> <span class="tok-id">k_smallest</span>(<span class="tok-kw">int</span> <span class="tok-id">arr</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">int</span> <span class="tok-id">k</span>, <span class="tok-kw">int</span> <span class="tok-id">out</span>[]) {
+    <span class="tok-id">Heap</span> <span class="tok-id">h</span> = {<span class="tok-num">0</span>};
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">push</span>(&amp;<span class="tok-id">h</span>, <span class="tok-id">arr</span>[<span class="tok-id">i</span>]);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">t</span> = <span class="tok-num">0</span>; <span class="tok-id">t</span> &lt; <span class="tok-id">k</span>; <span class="tok-id">t</span>++) <span class="tok-id">out</span>[<span class="tok-id">t</span>] = <span class="tok-id">pop</span>(&amp;<span class="tok-id">h</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">print_array</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">a</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-id">Heap</span> <span class="tok-id">h</span> = {<span class="tok-num">0</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">vals</span>[] = {<span class="tok-num">10</span>, <span class="tok-num">40</span>, <span class="tok-num">15</span>, <span class="tok-num">30</span>, <span class="tok-num">20</span>, <span class="tok-num">5</span>};
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-num">6</span>; <span class="tok-id">i</span>++) <span class="tok-id">push</span>(&amp;<span class="tok-id">h</span>, <span class="tok-id">vals</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1: top = %d\n"</span>, <span class="tok-id">peek</span>(&amp;<span class="tok-id">h</span>));
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2: pop all -&gt; "</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-num">6</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">pop</span>(&amp;<span class="tok-id">h</span>));
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+
+    <span class="tok-kw">int</span> <span class="tok-id">arr</span>[] = {<span class="tok-num">7</span>, <span class="tok-num">10</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">20</span>, <span class="tok-num">15</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">k3</span>[<span class="tok-num">3</span>];
+    <span class="tok-id">k_smallest</span>(<span class="tok-id">arr</span>, <span class="tok-num">6</span>, <span class="tok-num">3</span>, <span class="tok-id">k3</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3: 3 smallest -&gt; "</span>); <span class="tok-id">print_array</span>(<span class="tok-id">k3</span>, <span class="tok-num">3</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;queue&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-cmt">/* std::priority_queue is a max-heap by default; the greater&lt;&gt; comparator
+ * turns it into a min-heap. Under the hood it is exactly the array heap
+ * implemented in the C version (push_heap / pop_heap). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">priority_queue</span>&lt;<span class="tok-kw">int</span>, <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;, <span class="tok-id">greater</span>&lt;<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">pq</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> : {<span class="tok-num">10</span>, <span class="tok-num">40</span>, <span class="tok-num">15</span>, <span class="tok-num">30</span>, <span class="tok-num">20</span>, <span class="tok-num">5</span>}) <span class="tok-id">pq</span>.<span class="tok-id">push</span>(<span class="tok-id">v</span>);
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1: top = "</span> &lt;&lt; <span class="tok-id">pq</span>.<span class="tok-id">top</span>() &lt;&lt; <span class="tok-str">"\n"</span>;
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2: pop all -&gt; "</span>;
+    <span class="tok-kw">while</span> (!<span class="tok-id">pq</span>.<span class="tok-id">empty</span>()) {
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">pq</span>.<span class="tok-id">top</span>() &lt;&lt; <span class="tok-str">" "</span>;
+        <span class="tok-id">pq</span>.<span class="tok-id">pop</span>();
+    }
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+
+    <span class="tok-cmt">/* 3 smallest of an array: heapify a copy, pop 3 times. */</span>
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">arr</span> = {<span class="tok-num">7</span>, <span class="tok-num">10</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">20</span>, <span class="tok-num">15</span>};
+    <span class="tok-id">priority_queue</span>&lt;<span class="tok-kw">int</span>, <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;, <span class="tok-id">greater</span>&lt;<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">pq2</span>(<span class="tok-id">greater</span>&lt;<span class="tok-kw">int</span>&gt;(), <span class="tok-id">arr</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3: 3 smallest -&gt; "</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">t</span> = <span class="tok-num">0</span>; <span class="tok-id">t</span> &lt; <span class="tok-num">3</span>; <span class="tok-id">t</span>++) {
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">pq2</span>.<span class="tok-id">top</span>() &lt;&lt; <span class="tok-str">" "</span>;
+        <span class="tok-id">pq2</span>.<span class="tok-id">pop</span>();
+    }
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">import</span> <span class="tok-id">heapq</span>
+
+<span class="tok-cmt"># heapq implements a binary MIN-heap on a plain list:</span>
+<span class="tok-cmt"># heappush / heappop are O(log n), the list head is always the minimum.</span>
+
+<span class="tok-id">vals</span> = [<span class="tok-num">10</span>, <span class="tok-num">40</span>, <span class="tok-num">15</span>, <span class="tok-num">30</span>, <span class="tok-num">20</span>, <span class="tok-num">5</span>]
+<span class="tok-id">h</span> = <span class="tok-id">list</span>(<span class="tok-id">vals</span>)
+<span class="tok-id">heapq</span>.<span class="tok-id">heapify</span>(<span class="tok-id">h</span>)                      <span class="tok-cmt"># O(n) bottom-up build</span>
+<span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1: top = {h[0]}"</span>)
+
+<span class="tok-id">popped</span> = <span class="tok-str">""</span>.<span class="tok-id">join</span>(<span class="tok-id">f</span><span class="tok-str">"{heapq.heappop(h)} "</span> <span class="tok-kw">for</span> <span class="tok-id">_</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">len</span>(<span class="tok-id">vals</span>)))
+<span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2: pop all -&gt; {popped}"</span>)
+
+<span class="tok-id">arr</span> = [<span class="tok-num">7</span>, <span class="tok-num">10</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">20</span>, <span class="tok-num">15</span>]
+<span class="tok-id">h2</span> = <span class="tok-id">list</span>(<span class="tok-id">arr</span>)
+<span class="tok-id">heapq</span>.<span class="tok-id">heapify</span>(<span class="tok-id">h2</span>)
+<span class="tok-id">k3</span> = [<span class="tok-id">heapq</span>.<span class="tok-id">heappop</span>(<span class="tok-id">h2</span>) <span class="tok-kw">for</span> <span class="tok-id">_</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-num">3</span>)]
+<span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3: 3 smallest -&gt; {' '.join(map(str, k3))} "</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1: top = 5
+Test 2: pop all -&gt; 5 10 15 20 30 40 
+Test 3: 3 smallest -&gt; 3 4 7</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1: top = 5
+Test 2: pop all -&gt; 5 10 15 20 30 40 
+Test 3: 3 smallest -&gt; 3 4 7</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1: top = 5
+Test 2: pop all -&gt; 5 10 15 20 30 40 
+Test 3: 3 smallest -&gt; 3 4 7</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 CPU and job schedulers</h4><p class="card-content" style="margin:0;">Kernels and job systems keep runnable tasks in priority queues; the next task is a pop away.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Dijkstra / A* pathfinding</h4><p class="card-content" style="margin:0;">Navigation engines (maps, game AI) pop the cheapest frontier node from a heap at every step.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Event-driven simulation</h4><p class="card-content" style="margin:0;">Discrete-event simulators (networks, physics) order future events by time in a heap.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Huffman coding</h4><p class="card-content" style="margin:0;">The encoder repeatedly extracts the two least-frequent symbols — a heap makes each step O(log n).</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/binary-heap/" target="_blank" rel="noopener">GeeksforGeeks — Binary Heap (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "array", "data": [], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Empty heap \u2014 a min-heap stored in an array: children of i live at 2i+1 and 2i+2", "done": false}, {"kind": "array", "data": [10], "highlights": [0], "compare": [], "swap": [], "markers": {}, "caption": "Push 10 at the next free slot (index 0)", "done": false}, {"kind": "array", "data": [10], "highlights": [0], "compare": [], "swap": [], "markers": {}, "caption": "10 reached the root \u2014 it is the new minimum", "done": false}, {"kind": "array", "data": [10, 40], "highlights": [1], "compare": [], "swap": [], "markers": {}, "caption": "Push 40 at the next free slot (index 1)", "done": false}, {"kind": "array", "data": [10, 40], "highlights": [1], "compare": [1, 0], "swap": [], "markers": {}, "caption": "Sift up: compare 40 with parent 10 at index 0", "done": false}, {"kind": "array", "data": [10, 40], "highlights": [1], "compare": [], "swap": [], "markers": {}, "caption": "40 \u003e= parent 10 -\u003e heap property restored, stop", "done": false}, {"kind": "array", "data": [10, 40, 15], "highlights": [2], "compare": [], "swap": [], "markers": {}, "caption": "Push 15 at the next free slot (index 2)", "done": false}, {"kind": "array", "data": [10, 40, 15], "highlights": [2], "compare": [2, 0], "swap": [], "markers": {}, "caption": "Sift up: compare 15 with parent 10 at index 0", "done": false}, {"kind": "array", "data": [10, 40, 15], "highlights": [2], "compare": [], "swap": [], "markers": {}, "caption": "15 \u003e= parent 10 -\u003e heap property restored, stop", "done": false}, {"kind": "array", "data": [10, 40, 15, 30], "highlights": [3], "compare": [], "swap": [], "markers": {}, "caption": "Push 30 at the next free slot (index 3)", "done": false}, {"kind": "array", "data": [10, 40, 15, 30], "highlights": [3], "compare": [3, 1], "swap": [], "markers": {}, "caption": "Sift up: compare 30 with parent 40 at index 1", "done": false}, {"kind": "array", "data": [10, 40, 15, 30], "highlights": [], "compare": [], "swap": [3, 1], "markers": {}, "caption": "30 is smaller than parent 40 -\u003e swap them", "done": false}, {"kind": "array", "data": [10, 30, 15, 40], "highlights": [1], "compare": [1, 0], "swap": [], "markers": {}, "caption": "Sift up: compare 30 with parent 10 at index 0", "done": false}, {"kind": "array", "data": [10, 30, 15, 40], "highlights": [1], "compare": [], "swap": [], "markers": {}, "caption": "30 \u003e= parent 10 -\u003e heap property restored, stop", "done": false}, {"kind": "array", "data": [10, 30, 15, 40, 20], "highlights": [4], "compare": [], "swap": [], "markers": {}, "caption": "Push 20 at the next free slot (index 4)", "done": false}, {"kind": "array", "data": [10, 30, 15, 40, 20], "highlights": [4], "compare": [4, 1], "swap": [], "markers": {}, "caption": "Sift up: compare 20 with parent 30 at index 1", "done": false}, {"kind": "array", "data": [10, 30, 15, 40, 20], "highlights": [], "compare": [], "swap": [4, 1], "markers": {}, "caption": "20 is smaller than parent 30 -\u003e swap them", "done": false}, {"kind": "array", "data": [10, 20, 15, 40, 30], "highlights": [1], "compare": [1, 0], "swap": [], "markers": {}, "caption": "Sift up: compare 20 with parent 10 at index 0", "done": false}, {"kind": "array", "data": [10, 20, 15, 40, 30], "highlights": [1], "compare": [], "swap": [], "markers": {}, "caption": "20 \u003e= parent 10 -\u003e heap property restored, stop", "done": false}, {"kind": "array", "data": [10, 20, 15, 40, 30, 5], "highlights": [5], "compare": [], "swap": [], "markers": {}, "caption": "Push 5 at the next free slot (index 5)", "done": false}, {"kind": "array", "data": [10, 20, 15, 40, 30, 5], "highlights": [5], "compare": [5, 2], "swap": [], "markers": {}, "caption": "Sift up: compare 5 with parent 15 at index 2", "done": false}, {"kind": "array", "data": [10, 20, 15, 40, 30, 5], "highlights": [], "compare": [], "swap": [5, 2], "markers": {}, "caption": "5 is smaller than parent 15 -\u003e swap them", "done": false}, {"kind": "array", "data": [10, 20, 5, 40, 30, 15], "highlights": [2], "compare": [2, 0], "swap": [], "markers": {}, "caption": "Sift up: compare 5 with parent 10 at index 0", "done": false}, {"kind": "array", "data": [10, 20, 5, 40, 30, 15], "highlights": [], "compare": [], "swap": [2, 0], "markers": {}, "caption": "5 is smaller than parent 10 -\u003e swap them", "done": false}, {"kind": "array", "data": [5, 20, 10, 40, 30, 15], "highlights": [0], "compare": [], "swap": [], "markers": {}, "caption": "5 reached the root \u2014 it is the new minimum", "done": false}, {"kind": "array", "data": [5, 20, 10, 40, 30, 15], "highlights": [0], "compare": [], "swap": [], "markers": {}, "caption": "Heap built \u2014 index 0 always holds the minimum", "done": false}, {"kind": "array", "data": [15, 20, 10, 40, 30], "highlights": [0], "compare": [], "swap": [0], "markers": {}, "caption": "Pop min 5: move the last element 15 to the root, then sift down", "done": false}, {"kind": "array", "data": [15, 20, 10, 40, 30], "highlights": [0], "compare": [1, 2], "swap": [], "markers": {}, "caption": "Sift down: compare 15 with children 20, 10", "done": false}, {"kind": "array", "data": [10, 20, 15, 40, 30], "highlights": [], "compare": [], "swap": [0, 2], "markers": {}, "caption": "Swap with the smaller child 10 \u003c-\u003e 15", "done": false}, {"kind": "array", "data": [10, 20, 15, 40, 30], "highlights": [2], "compare": [], "swap": [], "markers": {}, "caption": "Both children are larger (or none) -\u003e stop", "done": false}, {"kind": "array", "data": [30, 20, 15, 40], "highlights": [0], "compare": [], "swap": [0], "markers": {}, "caption": "Pop min 10: move the last element 30 to the root, then sift down", "done": false}, {"kind": "array", "data": [30, 20, 15, 40], "highlights": [0], "compare": [1, 2], "swap": [], "markers": {}, "caption": "Sift down: compare 30 with children 20, 15", "done": false}, {"kind": "array", "data": [15, 20, 30, 40], "highlights": [], "compare": [], "swap": [0, 2], "markers": {}, "caption": "Swap with the smaller child 15 \u003c-\u003e 30", "done": false}, {"kind": "array", "data": [15, 20, 30, 40], "highlights": [2], "compare": [], "swap": [], "markers": {}, "caption": "Both children are larger (or none) -\u003e stop", "done": false}, {"kind": "array", "data": [15, 20, 30, 40], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Two extractions later: the smallest values left in sorted order", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

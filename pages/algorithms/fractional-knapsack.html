@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The knapsack problem: choose items with given values and weights to maximise total value under a weight capacity" />
+  <title>Fractional Knapsack | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🎒</div><h1>Fractional Knapsack</h1><p class="subtitle">💰 Greedy · <span style="color:#ea580c;font-weight:600;">Important</span> · Easy</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(n log n)</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="greedy-fundamentals.html">← Greedy Fundamentals &amp; Activity Selection</a><span class="algo-pn-sep"> · </span><span class="algo-prevnext disabled">Last →</span></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">The knapsack problem: choose items with given values and weights to maximise total value under a weight capacity. In the fractional variant you may cut items and take any portion, keeping the matching fraction of value. That single change makes the greedy strategy provably optimal: sort by value-to-weight ratio and fill the bag with the densest items first.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Fractional knapsack is the textbook demonstration that greedy can be EXACT, not just a heuristic — and it teaches why the same greedy fails for 0/1 knapsack ( indivisible items leave holes no ratio-sort can repair; DP is needed there). The ratio-sort pattern itself recurs constantly: scheduling by density, bandwidth allocation, resource rationing.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Goods are divisible: fuel, grain, bandwidth, budget shares, liquid/dust commodities.</li><li>You need a provably optimal answer in a single sort plus one linear scan.</li><li>An upper bound is required for branch-and-bound on the 0/1 version.</li><li>Teaching or interviewing: the cleanest contrast between greedy-optimal and greedy-fails.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Items divisible → greedy by ratio; items indivisible → 0/1 DP instead.</li><li>Sort by value/weight descending, take whole items while they fit, then one fraction.</li><li>Ties in ratio: order does not matter for value, but prefer lighter items to leave capacity flexible.</li><li>If weights are huge doubles, watch out for division precision — compare cross-multiplied ratios.</li><li>Capacity 0 or no items → answer 0; the code's tests cover both edges.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Items cannot be split — the greedy answer can be arbitrarily wrong; use 0/1 knapsack DP.</li><li>Multiple constraints (weight AND volume) — ratio sorting no longer decides; need DP or LP.</li><li>Items have dependencies/conflicts — the problem stops being a plain knapsack.</li><li>You need the item-level selection under integrality — greedy's fractional cut is not executable.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(n log n) — sorting dominates</td></tr><tr><td>Average case</td><td>O(n log n)</td></tr><tr><td>Worst case</td><td>O(n log n)</td></tr><tr><td>Space</td><td>O(1) extra (in-place sort) — O(n) if input must be preserved</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Yes (sorts a copy of the item list)</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-kw">typedef</span> <span class="tok-kw">struct</span> { <span class="tok-kw">double</span> <span class="tok-id">value</span>, <span class="tok-id">weight</span>; } <span class="tok-id">Item</span>;
+
+<span class="tok-cmt">/* Greedy: sort by value/weight descending, take whole items while they fit,
+ * then one fraction. O(n log n); optimal because goods are divisible. */</span>
+<span class="tok-kw">double</span> <span class="tok-id">fractional_knapsack</span>(<span class="tok-id">Item</span> <span class="tok-id">items</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">double</span> <span class="tok-id">capacity</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">1</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) {           <span class="tok-cmt">/* insertion sort by ratio desc */</span>
+        <span class="tok-id">Item</span> <span class="tok-id">key</span> = <span class="tok-id">items</span>[<span class="tok-id">i</span>];
+        <span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-id">i</span> - <span class="tok-num">1</span>;
+        <span class="tok-kw">while</span> (<span class="tok-id">j</span> &gt;= <span class="tok-num">0</span> &amp;&amp; <span class="tok-id">items</span>[<span class="tok-id">j</span>].<span class="tok-id">value</span> / <span class="tok-id">items</span>[<span class="tok-id">j</span>].<span class="tok-id">weight</span> &lt; <span class="tok-id">key</span>.<span class="tok-id">value</span> / <span class="tok-id">key</span>.<span class="tok-id">weight</span>) {
+            <span class="tok-id">items</span>[<span class="tok-id">j</span> + <span class="tok-num">1</span>] = <span class="tok-id">items</span>[<span class="tok-id">j</span>];
+            <span class="tok-id">j</span>--;
+        }
+        <span class="tok-id">items</span>[<span class="tok-id">j</span> + <span class="tok-num">1</span>] = <span class="tok-id">key</span>;
+    }
+    <span class="tok-kw">double</span> <span class="tok-id">total</span> = <span class="tok-num">0.0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span> &amp;&amp; <span class="tok-id">capacity</span> &gt; <span class="tok-num">0</span>; <span class="tok-id">i</span>++) {
+        <span class="tok-kw">if</span> (<span class="tok-id">items</span>[<span class="tok-id">i</span>].<span class="tok-id">weight</span> &lt;= <span class="tok-id">capacity</span>) {
+            <span class="tok-id">total</span> += <span class="tok-id">items</span>[<span class="tok-id">i</span>].<span class="tok-id">value</span>;
+            <span class="tok-id">capacity</span> -= <span class="tok-id">items</span>[<span class="tok-id">i</span>].<span class="tok-id">weight</span>;
+        } <span class="tok-kw">else</span> {
+            <span class="tok-id">total</span> += <span class="tok-id">items</span>[<span class="tok-id">i</span>].<span class="tok-id">value</span> * (<span class="tok-id">capacity</span> / <span class="tok-id">items</span>[<span class="tok-id">i</span>].<span class="tok-id">weight</span>);
+            <span class="tok-id">capacity</span> = <span class="tok-num">0</span>;
+        }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">total</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-id">Item</span> <span class="tok-id">items</span>[] = {{<span class="tok-num">60</span>, <span class="tok-num">10</span>}, {<span class="tok-num">100</span>, <span class="tok-num">20</span>}, {<span class="tok-num">120</span>, <span class="tok-num">30</span>}};
+    <span class="tok-id">Item</span> <span class="tok-id">copy1</span>[<span class="tok-num">3</span>], <span class="tok-id">copy2</span>[<span class="tok-num">3</span>], <span class="tok-id">copy3</span>[<span class="tok-num">3</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-num">3</span>; <span class="tok-id">i</span>++) <span class="tok-id">copy1</span>[<span class="tok-id">i</span>] = <span class="tok-id">items</span>[<span class="tok-id">i</span>];
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1: max value = %.2f\n"</span>, <span class="tok-id">fractional_knapsack</span>(<span class="tok-id">copy1</span>, <span class="tok-num">3</span>, <span class="tok-num">50.0</span>));
+
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-num">3</span>; <span class="tok-id">i</span>++) <span class="tok-id">copy2</span>[<span class="tok-id">i</span>] = <span class="tok-id">items</span>[<span class="tok-id">i</span>];
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2: max value = %.2f\n"</span>, <span class="tok-id">fractional_knapsack</span>(<span class="tok-id">copy2</span>, <span class="tok-num">3</span>, <span class="tok-num">0.0</span>));
+
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-num">3</span>; <span class="tok-id">i</span>++) <span class="tok-id">copy3</span>[<span class="tok-id">i</span>] = <span class="tok-id">items</span>[<span class="tok-id">i</span>];
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3: max value = %.2f\n"</span>, <span class="tok-id">fractional_knapsack</span>(<span class="tok-id">copy3</span>, <span class="tok-num">3</span>, <span class="tok-num">1000.0</span>));
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;algorithm&gt;</span>
+<span class="tok-pre">#include &lt;iomanip&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">struct</span> <span class="tok-id">Item</span> { <span class="tok-kw">double</span> <span class="tok-id">value</span>, <span class="tok-id">weight</span>; };
+
+<span class="tok-cmt">/* Greedy by value/weight ratio, descending. Optimal because goods are
+ * divisible: any optimal solution can be exchanged (swap argument) into
+ * this one without losing value. O(n log n). */</span>
+<span class="tok-kw">double</span> <span class="tok-id">fractionalKnapsack</span>(<span class="tok-id">vector</span>&lt;<span class="tok-id">Item</span>&gt; <span class="tok-id">items</span>, <span class="tok-kw">double</span> <span class="tok-id">capacity</span>) {
+    <span class="tok-id">sort</span>(<span class="tok-id">items</span>.<span class="tok-id">begin</span>(), <span class="tok-id">items</span>.<span class="tok-id">end</span>(), [](<span class="tok-kw">const</span> <span class="tok-id">Item</span>&amp; <span class="tok-id">a</span>, <span class="tok-kw">const</span> <span class="tok-id">Item</span>&amp; <span class="tok-id">b</span>) {
+        <span class="tok-kw">return</span> <span class="tok-id">a</span>.<span class="tok-id">value</span> / <span class="tok-id">a</span>.<span class="tok-id">weight</span> &gt; <span class="tok-id">b</span>.<span class="tok-id">value</span> / <span class="tok-id">b</span>.<span class="tok-id">weight</span>;
+    });
+    <span class="tok-kw">double</span> <span class="tok-id">total</span> = <span class="tok-num">0.0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-id">Item</span>&amp; <span class="tok-id">it</span> : <span class="tok-id">items</span>) {
+        <span class="tok-kw">if</span> (<span class="tok-id">capacity</span> &lt;= <span class="tok-num">0</span>) <span class="tok-kw">break</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">it</span>.<span class="tok-id">weight</span> &lt;= <span class="tok-id">capacity</span>) {
+            <span class="tok-id">total</span> += <span class="tok-id">it</span>.<span class="tok-id">value</span>;
+            <span class="tok-id">capacity</span> -= <span class="tok-id">it</span>.<span class="tok-id">weight</span>;
+        } <span class="tok-kw">else</span> {
+            <span class="tok-id">total</span> += <span class="tok-id">it</span>.<span class="tok-id">value</span> * (<span class="tok-id">capacity</span> / <span class="tok-id">it</span>.<span class="tok-id">weight</span>);
+            <span class="tok-id">capacity</span> = <span class="tok-num">0</span>;
+        }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">total</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">Item</span>&gt; <span class="tok-id">items</span> = {{<span class="tok-num">60</span>, <span class="tok-num">10</span>}, {<span class="tok-num">100</span>, <span class="tok-num">20</span>}, {<span class="tok-num">120</span>, <span class="tok-num">30</span>}};
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">fixed</span> &lt;&lt; <span class="tok-id">setprecision</span>(<span class="tok-num">2</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1: max value = "</span> &lt;&lt; <span class="tok-id">fractionalKnapsack</span>(<span class="tok-id">items</span>, <span class="tok-num">50.0</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2: max value = "</span> &lt;&lt; <span class="tok-id">fractionalKnapsack</span>(<span class="tok-id">items</span>, <span class="tok-num">0.0</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3: max value = "</span> &lt;&lt; <span class="tok-id">fractionalKnapsack</span>(<span class="tok-id">items</span>, <span class="tok-num">1000.0</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">def</span> <span class="tok-id">fractional_knapsack</span>(<span class="tok-id">items</span>, <span class="tok-id">capacity</span>):
+    <span class="tok-str">"""items: list of (value, weight). Returns the max total value when
+    goods are divisible. Greedy by value/weight ratio; O(n log n)."""</span>
+    <span class="tok-id">total</span> = <span class="tok-num">0.0</span>
+    <span class="tok-kw">for</span> <span class="tok-id">value</span>, <span class="tok-id">weight</span> <span class="tok-kw">in</span> <span class="tok-id">sorted</span>(<span class="tok-id">items</span>, <span class="tok-id">key</span>=<span class="tok-kw">lambda</span> <span class="tok-id">it</span>: <span class="tok-id">it</span>[<span class="tok-num">0</span>] / <span class="tok-id">it</span>[<span class="tok-num">1</span>], <span class="tok-id">reverse</span>=<span class="tok-kw">True</span>):
+        <span class="tok-kw">if</span> <span class="tok-id">capacity</span> &lt;= <span class="tok-num">0</span>:
+            <span class="tok-kw">break</span>
+        <span class="tok-kw">if</span> <span class="tok-id">weight</span> &lt;= <span class="tok-id">capacity</span>:
+            <span class="tok-id">total</span> += <span class="tok-id">value</span>
+            <span class="tok-id">capacity</span> -= <span class="tok-id">weight</span>
+        <span class="tok-kw">else</span>:
+            <span class="tok-id">total</span> += <span class="tok-id">value</span> * (<span class="tok-id">capacity</span> / <span class="tok-id">weight</span>)
+            <span class="tok-id">capacity</span> = <span class="tok-num">0</span>
+    <span class="tok-kw">return</span> <span class="tok-id">total</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">items</span> = [(<span class="tok-num">60</span>, <span class="tok-num">10</span>), (<span class="tok-num">100</span>, <span class="tok-num">20</span>), (<span class="tok-num">120</span>, <span class="tok-num">30</span>)]
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1: max value = {fractional_knapsack(items, 50.0):.2f}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2: max value = {fractional_knapsack(items, 0.0):.2f}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3: max value = {fractional_knapsack(items, 1000.0):.2f}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1: max value = 240.00
+Test 2: max value = 0.00
+Test 3: max value = 280.00</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1: max value = 240.00
+Test 2: max value = 0.00
+Test 3: max value = 280.00</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1: max value = 240.00
+Test 2: max value = 0.00
+Test 3: max value = 280.00</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Load and cargo planning</h4><p class="card-content" style="margin:0;">Shipping and fuel loading split fractions of goods to maximise value per kilogram carried.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Bandwidth / budget allocation</h4><p class="card-content" style="margin:0;">Allocating divisible resources (link capacity, ad budget) by return-per-unit is exactly this greedy.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Branch-and-bound bounds</h4><p class="card-content" style="margin:0;">The fractional optimum is the classic upper bound that prunes 0/1 knapsack search trees.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Combinatorial auctions and admissions</h4><p class="card-content" style="margin:0;">Pro-rata fill by bid density mirrors fractional knapsack's ratio rule.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/fractional-knapsack-problem/" target="_blank" rel="noopener">GeeksforGeeks — Fractional Knapsack Problem (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "array", "data": [6.0, 5.0, 4.0], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Sort items by value/weight ratio (bars = ratio): 6.0, 5.0, 4.0 \u2014 capacity 50", "done": false}, {"kind": "array", "data": [6.0, 5.0, 4.0], "highlights": [0], "compare": [], "swap": [0], "markers": {}, "caption": "Item 0 (value 60, weight 10) fits whole -\u003e take it. Value so far 60, capacity left 40", "done": false}, {"kind": "array", "data": [6.0, 5.0, 4.0], "highlights": [1], "compare": [], "swap": [0, 1], "markers": {}, "caption": "Item 1 (value 100, weight 20) fits whole -\u003e take it. Value so far 160, capacity left 20", "done": false}, {"kind": "array", "data": [6.0, 5.0, 4.0], "highlights": [2], "compare": [], "swap": [0, 1, 2], "markers": {}, "caption": "Item 2 (value 120, weight 30) too big -\u003e take 67% of it (worth 80). Total value 240", "done": false}, {"kind": "array", "data": [6.0, 5.0, 4.0], "highlights": [], "compare": [], "swap": [0, 1, 2], "markers": {}, "caption": "Optimal value = 240 \u2014 greedy by ratio is provably optimal here (fractional goods are divisible)", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

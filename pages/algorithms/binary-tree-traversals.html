@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A binary tree is a hierarchy where each node has at most two children" />
+  <title>Binary Tree &amp; Traversals | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🌲</div><h1>Binary Tree &amp; Traversals</h1><p class="subtitle">🌳 Tree · <span style="color:#dc2626;font-weight:600;">Must Know</span> · Easy</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(n)</span><span class="stat-badge">Priority 5/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="dijkstra.html">← Dijkstra's Shortest Path</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="binary-search-tree.html">Binary Search Tree →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">A binary tree is a hierarchy where each node has at most two children. Traversals define the order in which nodes are visited: the three depth-first orders (preorder: node-left-right, inorder: left-node-right, postorder: left-right-node) differ only in when the node itself is emitted relative to its subtrees, while level order walks breadth-first with a queue.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Almost every tree algorithm is a traversal wearing a different coat: expression trees evaluate in postorder, BSTs print in sorted order via inorder, serialization uses preorder with sentinels, and GUI/logic frameworks free or process children after parents with postorder. Learning these four patterns first makes every later tree topic — BST, heap, LCA, diameter — a small variation.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Printing, copying, or serialising a whole tree.</li><li>Inorder on a BST gives sorted output; preorder serialises a tree for rebuild.</li><li>Postorder for evaluate-children-first problems (expression trees, directory sizes, freeing memory).</li><li>Level order for breadth-related questions: height by levels, right-side view, nearest match.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Need the root before its subtrees (prefix output, copying)? Preorder.</li><li>Need a BST's keys in sorted order, or to validate a BST? Inorder.</li><li>Need children fully processed before the parent (evaluate, delete, aggregate)? Postorder.</li><li>Need nodes layer by layer (shortest depth, per-level aggregation)? Level order with a queue.</li><li>Very deep skewed trees: an explicit stack avoids recursion-overflow in languages without TCO.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>You need a specific node lookup in a BST — direct search is O(h), traversal is O(n).</li><li>The 'tree' is really a graph with cycles — plain traversal must track visited states first.</li><li>Huge trees in memory-tight settings — Morris inorder (O(1) extra) trades pointer rewrites for the stack.</li><li>The data is a heap stored in an array — implicit indices beat pointer traversal.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(n) — every node visited once</td></tr><tr><td>Average case</td><td>O(n)</td></tr><tr><td>Worst case</td><td>O(n)</td></tr><tr><td>Space</td><td>O(h) recursion stack (O(n) worst, O(log n) balanced); O(w) queue for level order</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Read-only traversal</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+<span class="tok-pre">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-kw">typedef</span> <span class="tok-kw">struct</span> <span class="tok-id">Node</span> {
+    <span class="tok-kw">int</span> <span class="tok-id">value</span>;
+    <span class="tok-kw">struct</span> <span class="tok-id">Node</span> *<span class="tok-id">left</span>, *<span class="tok-id">right</span>;
+} <span class="tok-id">Node</span>;
+
+<span class="tok-id">Node</span> *<span class="tok-id">new_node</span>(<span class="tok-kw">int</span> <span class="tok-id">v</span>) {
+    <span class="tok-id">Node</span> *<span class="tok-id">n</span> = (<span class="tok-id">Node</span> *)<span class="tok-kw">malloc</span>(<span class="tok-kw">sizeof</span>(<span class="tok-id">Node</span>));
+    <span class="tok-id">n</span>-&gt;<span class="tok-id">value</span> = <span class="tok-id">v</span>;
+    <span class="tok-id">n</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">n</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">NULL</span>;
+    <span class="tok-kw">return</span> <span class="tok-id">n</span>;
+}
+
+<span class="tok-cmt">/* Depth-first traversals: node position relative to its two subtrees. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">preorder</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">value</span>);
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">inorder</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">value</span>);
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">postorder</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">postorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">postorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">value</span>);
+}
+
+<span class="tok-cmt">/* Level order = breadth-first with an explicit ring-buffer queue. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">level_order</span>(<span class="tok-id">Node</span> *<span class="tok-id">root</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">root</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">Node</span> *<span class="tok-id">queue</span>[<span class="tok-num">64</span>];
+    <span class="tok-kw">int</span> <span class="tok-id">head</span> = <span class="tok-num">0</span>, <span class="tok-id">tail</span> = <span class="tok-num">0</span>;
+    <span class="tok-id">queue</span>[<span class="tok-id">tail</span>++] = <span class="tok-id">root</span>;
+    <span class="tok-kw">while</span> (<span class="tok-id">head</span> &lt; <span class="tok-id">tail</span>) {
+        <span class="tok-id">Node</span> *<span class="tok-id">cur</span> = <span class="tok-id">queue</span>[<span class="tok-id">head</span>++];
+        <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">cur</span>-&gt;<span class="tok-id">value</span>);
+        <span class="tok-kw">if</span> (<span class="tok-id">cur</span>-&gt;<span class="tok-id">left</span>)  <span class="tok-id">queue</span>[<span class="tok-id">tail</span>++] = <span class="tok-id">cur</span>-&gt;<span class="tok-id">left</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">cur</span>-&gt;<span class="tok-id">right</span>) <span class="tok-id">queue</span>[<span class="tok-id">tail</span>++] = <span class="tok-id">cur</span>-&gt;<span class="tok-id">right</span>;
+    }
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">free_tree</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">free_tree</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">free_tree</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+    <span class="tok-kw">free</span>(<span class="tok-id">r</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-cmt">/*        1
+     *       / \
+     *      2   3
+     *     / \ / \
+     *    4  5 6  7      */</span>
+    <span class="tok-id">Node</span> *<span class="tok-id">root</span> = <span class="tok-id">new_node</span>(<span class="tok-num">1</span>);
+    <span class="tok-id">root</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">new_node</span>(<span class="tok-num">2</span>);  <span class="tok-id">root</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">new_node</span>(<span class="tok-num">3</span>);
+    <span class="tok-id">root</span>-&gt;<span class="tok-id">left</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">new_node</span>(<span class="tok-num">4</span>);  <span class="tok-id">root</span>-&gt;<span class="tok-id">left</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">new_node</span>(<span class="tok-num">5</span>);
+    <span class="tok-id">root</span>-&gt;<span class="tok-id">right</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">new_node</span>(<span class="tok-num">6</span>); <span class="tok-id">root</span>-&gt;<span class="tok-id">right</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">new_node</span>(<span class="tok-num">7</span>);
+
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1 (preorder):  "</span>); <span class="tok-id">preorder</span>(<span class="tok-id">root</span>);  <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2 (inorder):   "</span>); <span class="tok-id">inorder</span>(<span class="tok-id">root</span>);   <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3 (postorder): "</span>); <span class="tok-id">postorder</span>(<span class="tok-id">root</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 4 (level order): "</span>); <span class="tok-id">level_order</span>(<span class="tok-id">root</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">free_tree</span>(<span class="tok-id">root</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;memory&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">struct</span> <span class="tok-id">Node</span> {
+    <span class="tok-kw">int</span> <span class="tok-id">value</span>;
+    <span class="tok-id">unique_ptr</span>&lt;<span class="tok-id">Node</span>&gt; <span class="tok-id">left</span>, <span class="tok-id">right</span>;
+    <span class="tok-id">explicit</span> <span class="tok-id">Node</span>(<span class="tok-kw">int</span> <span class="tok-id">v</span>) : <span class="tok-id">value</span>(<span class="tok-id">v</span>) {}
+};
+
+<span class="tok-kw">void</span> <span class="tok-id">preorder</span>(<span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">value</span> &lt;&lt; <span class="tok-str">" "</span>;
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>());
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>.<span class="tok-id">get</span>());
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">inorder</span>(<span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>());
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">value</span> &lt;&lt; <span class="tok-str">" "</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>.<span class="tok-id">get</span>());
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">postorder</span>(<span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">postorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>());
+    <span class="tok-id">postorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>.<span class="tok-id">get</span>());
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">value</span> &lt;&lt; <span class="tok-str">" "</span>;
+}
+
+<span class="tok-cmt">/* Level order: breadth-first with a queue (iterative). */</span>
+<span class="tok-kw">void</span> <span class="tok-id">level_order</span>(<span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">root</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">root</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">const</span> <span class="tok-id">Node</span>*&gt; <span class="tok-id">queue</span>{<span class="tok-id">root</span>};
+    <span class="tok-kw">for</span> (<span class="tok-id">size_t</span> <span class="tok-id">head</span> = <span class="tok-num">0</span>; <span class="tok-id">head</span> &lt; <span class="tok-id">queue</span>.<span class="tok-id">size</span>(); <span class="tok-id">head</span>++) {
+        <span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">cur</span> = <span class="tok-id">queue</span>[<span class="tok-id">head</span>];
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">cur</span>-&gt;<span class="tok-id">value</span> &lt;&lt; <span class="tok-str">" "</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">cur</span>-&gt;<span class="tok-id">left</span>)  <span class="tok-id">queue</span>.<span class="tok-id">push_back</span>(<span class="tok-id">cur</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>());
+        <span class="tok-kw">if</span> (<span class="tok-id">cur</span>-&gt;<span class="tok-id">right</span>) <span class="tok-id">queue</span>.<span class="tok-id">push_back</span>(<span class="tok-id">cur</span>-&gt;<span class="tok-id">right</span>.<span class="tok-id">get</span>());
+    }
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-cmt">/*        1
+     *       / \
+     *      2   3
+     *     / \ / \
+     *    4  5 6  7      */</span>
+    <span class="tok-kw">auto</span> <span class="tok-id">root</span> = <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-num">1</span>);
+    <span class="tok-id">root</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-num">2</span>);  <span class="tok-id">root</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-num">3</span>);
+    <span class="tok-id">root</span>-&gt;<span class="tok-id">left</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-num">4</span>);  <span class="tok-id">root</span>-&gt;<span class="tok-id">left</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-num">5</span>);
+    <span class="tok-id">root</span>-&gt;<span class="tok-id">right</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-num">6</span>); <span class="tok-id">root</span>-&gt;<span class="tok-id">right</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-num">7</span>);
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1 (preorder):  "</span>; <span class="tok-id">preorder</span>(<span class="tok-id">root</span>.<span class="tok-id">get</span>());  <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2 (inorder):   "</span>; <span class="tok-id">inorder</span>(<span class="tok-id">root</span>.<span class="tok-id">get</span>());   <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3 (postorder): "</span>; <span class="tok-id">postorder</span>(<span class="tok-id">root</span>.<span class="tok-id">get</span>()); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 4 (level order): "</span>; <span class="tok-id">level_order</span>(<span class="tok-id">root</span>.<span class="tok-id">get</span>()); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">from</span> <span class="tok-id">collections</span> <span class="tok-kw">import</span> <span class="tok-id">deque</span>
+
+
+<span class="tok-kw">class</span> <span class="tok-id">Node</span>:
+    <span class="tok-kw">def</span> <span class="tok-id">__init__</span>(<span class="tok-id">self</span>, <span class="tok-id">value</span>):
+        <span class="tok-id">self</span>.<span class="tok-id">value</span> = <span class="tok-id">value</span>
+        <span class="tok-id">self</span>.<span class="tok-id">left</span> = <span class="tok-kw">None</span>
+        <span class="tok-id">self</span>.<span class="tok-id">right</span> = <span class="tok-kw">None</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">preorder</span>(<span class="tok-id">r</span>):
+    <span class="tok-kw">if</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> []
+    <span class="tok-kw">return</span> [<span class="tok-id">r</span>.<span class="tok-id">value</span>] + <span class="tok-id">preorder</span>(<span class="tok-id">r</span>.<span class="tok-id">left</span>) + <span class="tok-id">preorder</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">inorder</span>(<span class="tok-id">r</span>):
+    <span class="tok-kw">if</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> []
+    <span class="tok-kw">return</span> <span class="tok-id">inorder</span>(<span class="tok-id">r</span>.<span class="tok-id">left</span>) + [<span class="tok-id">r</span>.<span class="tok-id">value</span>] + <span class="tok-id">inorder</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">postorder</span>(<span class="tok-id">r</span>):
+    <span class="tok-kw">if</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> []
+    <span class="tok-kw">return</span> <span class="tok-id">postorder</span>(<span class="tok-id">r</span>.<span class="tok-id">left</span>) + <span class="tok-id">postorder</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>) + [<span class="tok-id">r</span>.<span class="tok-id">value</span>]
+
+
+<span class="tok-kw">def</span> <span class="tok-id">level_order</span>(<span class="tok-id">root</span>):
+    <span class="tok-str">"""Breadth-first with a queue."""</span>
+    <span class="tok-kw">if</span> <span class="tok-id">root</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> []
+    <span class="tok-id">out</span>, <span class="tok-id">queue</span> = [], <span class="tok-id">deque</span>([<span class="tok-id">root</span>])
+    <span class="tok-kw">while</span> <span class="tok-id">queue</span>:
+        <span class="tok-id">cur</span> = <span class="tok-id">queue</span>.<span class="tok-id">popleft</span>()
+        <span class="tok-id">out</span>.<span class="tok-id">append</span>(<span class="tok-id">cur</span>.<span class="tok-id">value</span>)
+        <span class="tok-kw">if</span> <span class="tok-id">cur</span>.<span class="tok-id">left</span>:
+            <span class="tok-id">queue</span>.<span class="tok-id">append</span>(<span class="tok-id">cur</span>.<span class="tok-id">left</span>)
+        <span class="tok-kw">if</span> <span class="tok-id">cur</span>.<span class="tok-id">right</span>:
+            <span class="tok-id">queue</span>.<span class="tok-id">append</span>(<span class="tok-id">cur</span>.<span class="tok-id">right</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">out</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-cmt">#        1</span>
+    <span class="tok-cmt">#       / \</span>
+    <span class="tok-cmt">#      2   3</span>
+    <span class="tok-cmt">#     / \ / \</span>
+    <span class="tok-cmt">#    4  5 6  7</span>
+    <span class="tok-id">root</span> = <span class="tok-id">Node</span>(<span class="tok-num">1</span>)
+    <span class="tok-id">root</span>.<span class="tok-id">left</span>, <span class="tok-id">root</span>.<span class="tok-id">right</span> = <span class="tok-id">Node</span>(<span class="tok-num">2</span>), <span class="tok-id">Node</span>(<span class="tok-num">3</span>)
+    <span class="tok-id">root</span>.<span class="tok-id">left</span>.<span class="tok-id">left</span>, <span class="tok-id">root</span>.<span class="tok-id">left</span>.<span class="tok-id">right</span> = <span class="tok-id">Node</span>(<span class="tok-num">4</span>), <span class="tok-id">Node</span>(<span class="tok-num">5</span>)
+    <span class="tok-id">root</span>.<span class="tok-id">right</span>.<span class="tok-id">left</span>, <span class="tok-id">root</span>.<span class="tok-id">right</span>.<span class="tok-id">right</span> = <span class="tok-id">Node</span>(<span class="tok-num">6</span>), <span class="tok-id">Node</span>(<span class="tok-num">7</span>)
+
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1 (preorder):  {' '.join(map(str, preorder(root)))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2 (inorder):   {' '.join(map(str, inorder(root)))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3 (postorder): {' '.join(map(str, postorder(root)))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 4 (level order): {' '.join(map(str, level_order(root)))}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1 (preorder):  1 2 4 5 3 6 7 
+Test 2 (inorder):   4 2 5 1 6 3 7 
+Test 3 (postorder): 4 5 2 6 7 3 1 
+Test 4 (level order): 1 2 3 4 5 6 7</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1 (preorder):  1 2 4 5 3 6 7 
+Test 2 (inorder):   4 2 5 1 6 3 7 
+Test 3 (postorder): 4 5 2 6 7 3 1 
+Test 4 (level order): 1 2 3 4 5 6 7</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1 (preorder):  1 2 4 5 3 6 7
+Test 2 (inorder):   4 2 5 1 6 3 7
+Test 3 (postorder): 4 5 2 6 7 3 1
+Test 4 (level order): 1 2 3 4 5 6 7</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Expression evaluation</h4><p class="card-content" style="margin:0;">Compilers and calculators walk expression trees postorder — children are evaluated before their operator.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 File-system walks</h4><p class="card-content" style="margin:0;">du-style tools aggregate directory sizes with postorder; listings use preorder.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Serialization</h4><p class="card-content" style="margin:0;">Tree data saved to JSON/flatbuffers is written preorder with null markers and rebuilt by the same order.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 UI frameworks</h4><p class="card-content" style="margin:0;">Render and layout passes traverse widget trees; teardown frees children before parents (postorder).</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/" target="_blank" rel="noopener">GeeksforGeeks — Tree Traversals (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "current"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}], "caption": "Inorder = left subtree, node, right subtree \u2014 start at the root 1", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "current"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}], "caption": "Visit node 4 \u2014 output so far: 4", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "current"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "done"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}], "caption": "Visit node 2 \u2014 output so far: 4 2", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "done"}, {"id": 5, "value": 5, "parent": 2, "state": "current"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}], "caption": "Visit node 5 \u2014 output so far: 4 2 5", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "current"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "done"}, {"id": 5, "value": 5, "parent": 2, "state": "done"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}], "caption": "Visit node 1 \u2014 output so far: 4 2 5 1", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "done"}, {"id": 5, "value": 5, "parent": 2, "state": "done"}, {"id": 6, "value": 6, "parent": 3, "state": "current"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}], "caption": "Visit node 6 \u2014 output so far: 4 2 5 1 6", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 1, "state": "current"}, {"id": 4, "value": 4, "parent": 2, "state": "done"}, {"id": 5, "value": 5, "parent": 2, "state": "done"}, {"id": 6, "value": 6, "parent": 3, "state": "done"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}], "caption": "Visit node 3 \u2014 output so far: 4 2 5 1 6 3", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 1, "state": "done"}, {"id": 4, "value": 4, "parent": 2, "state": "done"}, {"id": 5, "value": 5, "parent": 2, "state": "done"}, {"id": 6, "value": 6, "parent": 3, "state": "done"}, {"id": 7, "value": 7, "parent": 3, "state": "current"}], "caption": "Visit node 7 \u2014 output so far: 4 2 5 1 6 3 7", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 1, "state": "done"}, {"id": 4, "value": 4, "parent": 2, "state": "done"}, {"id": 5, "value": 5, "parent": 2, "state": "done"}, {"id": 6, "value": 6, "parent": 3, "state": "done"}, {"id": 7, "value": 7, "parent": 3, "state": "done"}], "caption": "Done \u2014 inorder emitted the keys in sorted order for this BST-shaped tree", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

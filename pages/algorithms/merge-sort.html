@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Merge sort is a divide-and-conquer sort" />
+  <title>Merge Sort | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🧩</div><h1>Merge Sort</h1><p class="subtitle">🔍 Sorting &amp; Searching · <span style="color:#dc2626;font-weight:600;">Must Know</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(n log n)</span><span class="stat-badge">Priority 5/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="binary-search.html">← Binary Search</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="quick-sort.html">Quick Sort →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">Merge sort is a divide-and-conquer sort. It splits the array into two halves, recursively sorts each half, then merges the two sorted halves back into one sorted sequence using an auxiliary buffer. Because every input order follows the same deterministic schedule, its running time is always O(n log n).</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Quick sort can hit a quadratic worst case, and some problems require a stable sort or a guaranteed O(n log n) bound. Merge sort provides both, and its merge step is exactly the operation used to combine already-sorted runs — which is why it underpins external sorting and library hybrid sorts.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>You need a guaranteed O(n log n) worst case regardless of input order.</li><li>Stability matters: equal keys must keep their original relative order (multi-key sorting).</li><li>You are sorting a linked list, where merging needs no random access.</li><li>The data does not fit in memory — external merge sort repeatedly merges sorted runs on disk.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Pick merge sort when the worst-case bound must be reliable and stability is required.</li><li>Prefer it for linked lists; for arrays, quicksort is usually faster in practice (better constants).</li><li>For tiny subproblems switch to insertion sort inside the recursion — real libraries do this.</li><li>Use the inversion-count variant when a sorted order diagnosis is part of the task.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>When space is tight and an in-place sort is needed (merge sort costs O(n) auxiliary memory).</li><li>For small arrays in hot loops — insertion sort has better constants.</li><li>For near-sorted data — insertion sort runs in O(n) on such input, merge sort still pays O(n log n).</li><li>When you need the fastest average sort and memory is constrained — quicksort usually wins.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(n log n)</td></tr><tr><td>Average case</td><td>O(n log n)</td></tr><tr><td>Worst case</td><td>O(n log n)</td></tr><tr><td>Space</td><td>O(n) auxiliary</td></tr><tr><td>Stable</td><td>Yes</td></tr><tr><td>In-place</td><td>No</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+<span class="tok-pre">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-cmt">/* Merge two sorted halves a[lo..mid] and a[mid+1..hi] into a[lo..hi]. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">merge</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">lo</span>, <span class="tok-kw">int</span> <span class="tok-id">mid</span>, <span class="tok-kw">int</span> <span class="tok-id">hi</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">n1</span> = <span class="tok-id">mid</span> - <span class="tok-id">lo</span> + <span class="tok-num">1</span>, <span class="tok-id">n2</span> = <span class="tok-id">hi</span> - <span class="tok-id">mid</span>;
+    <span class="tok-kw">int</span> *<span class="tok-id">L</span> = (<span class="tok-kw">int</span> *)<span class="tok-kw">malloc</span>((<span class="tok-id">size_t</span>)<span class="tok-id">n1</span> * <span class="tok-kw">sizeof</span>(<span class="tok-kw">int</span>));
+    <span class="tok-kw">int</span> *<span class="tok-id">R</span> = (<span class="tok-kw">int</span> *)<span class="tok-kw">malloc</span>((<span class="tok-id">size_t</span>)<span class="tok-id">n2</span> * <span class="tok-kw">sizeof</span>(<span class="tok-kw">int</span>));
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n1</span>; <span class="tok-id">i</span>++) <span class="tok-id">L</span>[<span class="tok-id">i</span>] = <span class="tok-id">a</span>[<span class="tok-id">lo</span> + <span class="tok-id">i</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-num">0</span>; <span class="tok-id">j</span> &lt; <span class="tok-id">n2</span>; <span class="tok-id">j</span>++) <span class="tok-id">R</span>[<span class="tok-id">j</span>] = <span class="tok-id">a</span>[<span class="tok-id">mid</span> + <span class="tok-num">1</span> + <span class="tok-id">j</span>];
+    <span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>, <span class="tok-id">j</span> = <span class="tok-num">0</span>, <span class="tok-id">k</span> = <span class="tok-id">lo</span>;
+    <span class="tok-kw">while</span> (<span class="tok-id">i</span> &lt; <span class="tok-id">n1</span> &amp;&amp; <span class="tok-id">j</span> &lt; <span class="tok-id">n2</span>) {
+        <span class="tok-kw">if</span> (<span class="tok-id">L</span>[<span class="tok-id">i</span>] &lt;= <span class="tok-id">R</span>[<span class="tok-id">j</span>]) <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">L</span>[<span class="tok-id">i</span>++];
+        <span class="tok-kw">else</span>              <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">R</span>[<span class="tok-id">j</span>++];
+    }
+    <span class="tok-kw">while</span> (<span class="tok-id">i</span> &lt; <span class="tok-id">n1</span>) <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">L</span>[<span class="tok-id">i</span>++];
+    <span class="tok-kw">while</span> (<span class="tok-id">j</span> &lt; <span class="tok-id">n2</span>) <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">R</span>[<span class="tok-id">j</span>++];
+    <span class="tok-kw">free</span>(<span class="tok-id">L</span>);
+    <span class="tok-kw">free</span>(<span class="tok-id">R</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">merge_sort</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">lo</span>, <span class="tok-kw">int</span> <span class="tok-id">hi</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">lo</span> &gt;= <span class="tok-id">hi</span>) <span class="tok-kw">return</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) / <span class="tok-num">2</span>;
+    <span class="tok-id">merge_sort</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">mid</span>);
+    <span class="tok-id">merge_sort</span>(<span class="tok-id">a</span>, <span class="tok-id">mid</span> + <span class="tok-num">1</span>, <span class="tok-id">hi</span>);
+    <span class="tok-id">merge</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">mid</span>, <span class="tok-id">hi</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">print_array</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">a</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">a1</span>[] = {<span class="tok-num">38</span>, <span class="tok-num">27</span>, <span class="tok-num">43</span>, <span class="tok-num">3</span>, <span class="tok-num">9</span>, <span class="tok-num">82</span>, <span class="tok-num">10</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">a2</span>[] = {<span class="tok-num">5</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">a3</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span>};
+    <span class="tok-id">merge_sort</span>(<span class="tok-id">a1</span>, <span class="tok-num">0</span>, <span class="tok-num">6</span>); <span class="tok-id">print_array</span>(<span class="tok-id">a1</span>, <span class="tok-num">7</span>);
+    <span class="tok-id">merge_sort</span>(<span class="tok-id">a2</span>, <span class="tok-num">0</span>, <span class="tok-num">4</span>); <span class="tok-id">print_array</span>(<span class="tok-id">a2</span>, <span class="tok-num">5</span>);
+    <span class="tok-id">merge_sort</span>(<span class="tok-id">a3</span>, <span class="tok-num">0</span>, <span class="tok-num">4</span>); <span class="tok-id">print_array</span>(<span class="tok-id">a3</span>, <span class="tok-num">5</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">merge</span>(<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">lo</span>, <span class="tok-kw">int</span> <span class="tok-id">mid</span>, <span class="tok-kw">int</span> <span class="tok-id">hi</span>) {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">L</span>(<span class="tok-id">a</span>.<span class="tok-id">begin</span>() + <span class="tok-id">lo</span>, <span class="tok-id">a</span>.<span class="tok-id">begin</span>() + <span class="tok-id">mid</span> + <span class="tok-num">1</span>);
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">R</span>(<span class="tok-id">a</span>.<span class="tok-id">begin</span>() + <span class="tok-id">mid</span> + <span class="tok-num">1</span>, <span class="tok-id">a</span>.<span class="tok-id">begin</span>() + <span class="tok-id">hi</span> + <span class="tok-num">1</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>, <span class="tok-id">j</span> = <span class="tok-num">0</span>, <span class="tok-id">k</span> = <span class="tok-id">lo</span>;
+    <span class="tok-kw">while</span> (<span class="tok-id">i</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">L</span>.<span class="tok-id">size</span>() &amp;&amp; <span class="tok-id">j</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">R</span>.<span class="tok-id">size</span>()) {
+        <span class="tok-kw">if</span> (<span class="tok-id">L</span>[<span class="tok-id">i</span>] &lt;= <span class="tok-id">R</span>[<span class="tok-id">j</span>]) <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">L</span>[<span class="tok-id">i</span>++];
+        <span class="tok-kw">else</span>              <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">R</span>[<span class="tok-id">j</span>++];
+    }
+    <span class="tok-kw">while</span> (<span class="tok-id">i</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">L</span>.<span class="tok-id">size</span>()) <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">L</span>[<span class="tok-id">i</span>++];
+    <span class="tok-kw">while</span> (<span class="tok-id">j</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">R</span>.<span class="tok-id">size</span>()) <span class="tok-id">a</span>[<span class="tok-id">k</span>++] = <span class="tok-id">R</span>[<span class="tok-id">j</span>++];
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">mergeSort</span>(<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">lo</span>, <span class="tok-kw">int</span> <span class="tok-id">hi</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">lo</span> &gt;= <span class="tok-id">hi</span>) <span class="tok-kw">return</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) / <span class="tok-num">2</span>;
+    <span class="tok-id">mergeSort</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">mid</span>);
+    <span class="tok-id">mergeSort</span>(<span class="tok-id">a</span>, <span class="tok-id">mid</span> + <span class="tok-num">1</span>, <span class="tok-id">hi</span>);
+    <span class="tok-id">merge</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">mid</span>, <span class="tok-id">hi</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a1</span> = {<span class="tok-num">38</span>, <span class="tok-num">27</span>, <span class="tok-num">43</span>, <span class="tok-num">3</span>, <span class="tok-num">9</span>, <span class="tok-num">82</span>, <span class="tok-num">10</span>};
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a2</span> = {<span class="tok-num">5</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>};
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a3</span> = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span>};
+    <span class="tok-id">mergeSort</span>(<span class="tok-id">a1</span>, <span class="tok-num">0</span>, (<span class="tok-kw">int</span>)<span class="tok-id">a1</span>.<span class="tok-id">size</span>() - <span class="tok-num">1</span>); <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">x</span> : <span class="tok-id">a1</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">x</span> &lt;&lt; <span class="tok-str">" "</span>; <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">mergeSort</span>(<span class="tok-id">a2</span>, <span class="tok-num">0</span>, (<span class="tok-kw">int</span>)<span class="tok-id">a2</span>.<span class="tok-id">size</span>() - <span class="tok-num">1</span>); <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">x</span> : <span class="tok-id">a2</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">x</span> &lt;&lt; <span class="tok-str">" "</span>; <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">mergeSort</span>(<span class="tok-id">a3</span>, <span class="tok-num">0</span>, (<span class="tok-kw">int</span>)<span class="tok-id">a3</span>.<span class="tok-id">size</span>() - <span class="tok-num">1</span>); <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">x</span> : <span class="tok-id">a3</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">x</span> &lt;&lt; <span class="tok-str">" "</span>; <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">def</span> <span class="tok-id">merge</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">mid</span>, <span class="tok-id">hi</span>):
+    <span class="tok-str">"""Merge the two sorted halves a[lo..mid] and a[mid+1..hi]."""</span>
+    <span class="tok-id">left</span> = <span class="tok-id">a</span>[<span class="tok-id">lo</span>:<span class="tok-id">mid</span> + <span class="tok-num">1</span>]
+    <span class="tok-id">right</span> = <span class="tok-id">a</span>[<span class="tok-id">mid</span> + <span class="tok-num">1</span>:<span class="tok-id">hi</span> + <span class="tok-num">1</span>]
+    <span class="tok-id">i</span> = <span class="tok-id">j</span> = <span class="tok-num">0</span>
+    <span class="tok-id">k</span> = <span class="tok-id">lo</span>
+    <span class="tok-kw">while</span> <span class="tok-id">i</span> &lt; <span class="tok-id">len</span>(<span class="tok-id">left</span>) <span class="tok-kw">and</span> <span class="tok-id">j</span> &lt; <span class="tok-id">len</span>(<span class="tok-id">right</span>):
+        <span class="tok-kw">if</span> <span class="tok-id">left</span>[<span class="tok-id">i</span>] &lt;= <span class="tok-id">right</span>[<span class="tok-id">j</span>]:
+            <span class="tok-id">a</span>[<span class="tok-id">k</span>] = <span class="tok-id">left</span>[<span class="tok-id">i</span>]
+            <span class="tok-id">i</span> += <span class="tok-num">1</span>
+        <span class="tok-kw">else</span>:
+            <span class="tok-id">a</span>[<span class="tok-id">k</span>] = <span class="tok-id">right</span>[<span class="tok-id">j</span>]
+            <span class="tok-id">j</span> += <span class="tok-num">1</span>
+        <span class="tok-id">k</span> += <span class="tok-num">1</span>
+    <span class="tok-kw">while</span> <span class="tok-id">i</span> &lt; <span class="tok-id">len</span>(<span class="tok-id">left</span>):
+        <span class="tok-id">a</span>[<span class="tok-id">k</span>] = <span class="tok-id">left</span>[<span class="tok-id">i</span>]
+        <span class="tok-id">i</span> += <span class="tok-num">1</span>
+        <span class="tok-id">k</span> += <span class="tok-num">1</span>
+    <span class="tok-kw">while</span> <span class="tok-id">j</span> &lt; <span class="tok-id">len</span>(<span class="tok-id">right</span>):
+        <span class="tok-id">a</span>[<span class="tok-id">k</span>] = <span class="tok-id">right</span>[<span class="tok-id">j</span>]
+        <span class="tok-id">j</span> += <span class="tok-num">1</span>
+        <span class="tok-id">k</span> += <span class="tok-num">1</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">merge_sort</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">hi</span>):
+    <span class="tok-kw">if</span> <span class="tok-id">lo</span> &gt;= <span class="tok-id">hi</span>:
+        <span class="tok-kw">return</span>
+    <span class="tok-id">mid</span> = (<span class="tok-id">lo</span> + <span class="tok-id">hi</span>) // <span class="tok-num">2</span>
+    <span class="tok-id">merge_sort</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">mid</span>)
+    <span class="tok-id">merge_sort</span>(<span class="tok-id">a</span>, <span class="tok-id">mid</span> + <span class="tok-num">1</span>, <span class="tok-id">hi</span>)
+    <span class="tok-id">merge</span>(<span class="tok-id">a</span>, <span class="tok-id">lo</span>, <span class="tok-id">mid</span>, <span class="tok-id">hi</span>)
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-kw">for</span> <span class="tok-id">arr</span> <span class="tok-kw">in</span> ([<span class="tok-num">38</span>, <span class="tok-num">27</span>, <span class="tok-num">43</span>, <span class="tok-num">3</span>, <span class="tok-num">9</span>, <span class="tok-num">82</span>, <span class="tok-num">10</span>], [<span class="tok-num">5</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>], [<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span>]):
+        <span class="tok-id">merge_sort</span>(<span class="tok-id">arr</span>, <span class="tok-num">0</span>, <span class="tok-id">len</span>(<span class="tok-id">arr</span>) - <span class="tok-num">1</span>)
+        <span class="tok-id">print</span>(<span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">map</span>(<span class="tok-id">str</span>, <span class="tok-id">arr</span>)))
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">3 9 10 27 38 43 82 
+1 2 3 4 5 
+1 2 3 4 5</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">3 9 10 27 38 43 82 
+1 2 3 4 5 
+1 2 3 4 5</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">3 9 10 27 38 43 82
+1 2 3 4 5
+1 2 3 4 5</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Library sorting</h4><p class="card-content" style="margin:0;">Python's sorted() and Java's object sorts are merge-based hybrids (TimSort); merge sort is their backbone.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 External sorting</h4><p class="card-content" style="margin:0;">Databases merge sorted runs on disk because merging reads data sequentially and needs little memory.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Linked list sorting</h4><p class="card-content" style="margin:0;">Merging needs no random access, making merge sort the natural choice for list-based containers.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Inversion counting</h4><p class="card-content" style="margin:0;">A tiny change to the merge step counts how many pairs are out of order — used in collaborative filtering and similarity measures.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/merge-sort/" target="_blank" rel="noopener">GeeksforGeeks — Merge Sort (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "array", "data": [38, 27, 43, 3, 9, 82, 10], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Start \u2014 array to sort", "done": false}, {"kind": "array", "data": [38, 27, 43, 3, 9, 82, 10], "highlights": [0, 1, 2, 3, 4, 5, 6], "compare": [], "swap": [], "markers": {}, "caption": "Divide range [0..6] at mid = 3", "done": false}, {"kind": "array", "data": [38, 27, 43, 3, 9, 82, 10], "highlights": [0, 1, 2, 3], "compare": [], "swap": [], "markers": {}, "caption": "Divide range [0..3] at mid = 1", "done": false}, {"kind": "array", "data": [38, 27, 43, 3, 9, 82, 10], "highlights": [0, 1], "compare": [], "swap": [], "markers": {}, "caption": "Divide range [0..1] at mid = 0", "done": false}, {"kind": "array", "data": [27, 27, 43, 3, 9, 82, 10], "highlights": [0], "compare": [0, 1], "swap": [], "markers": {}, "caption": "Take 27 from right into position 0", "done": false}, {"kind": "array", "data": [27, 38, 43, 3, 9, 82, 10], "highlights": [1], "compare": [], "swap": [], "markers": {}, "caption": "Copy remaining left value 38 to position 1", "done": false}, {"kind": "array", "data": [27, 38, 43, 3, 9, 82, 10], "highlights": [0, 1], "compare": [], "swap": [], "markers": {}, "caption": "Merged range [0..1] -\u003e [27, 38, 43, 3, 9, 82, 10]", "done": false}, {"kind": "array", "data": [27, 38, 43, 3, 9, 82, 10], "highlights": [2, 3], "compare": [], "swap": [], "markers": {}, "caption": "Divide range [2..3] at mid = 2", "done": false}, {"kind": "array", "data": [27, 38, 3, 3, 9, 82, 10], "highlights": [2], "compare": [2, 3], "swap": [], "markers": {}, "caption": "Take 3 from right into position 2", "done": false}, {"kind": "array", "data": [27, 38, 3, 43, 9, 82, 10], "highlights": [3], "compare": [], "swap": [], "markers": {}, "caption": "Copy remaining left value 43 to position 3", "done": false}, {"kind": "array", "data": [27, 38, 3, 43, 9, 82, 10], "highlights": [2, 3], "compare": [], "swap": [], "markers": {}, "caption": "Merged range [2..3] -\u003e [27, 38, 3, 43, 9, 82, 10]", "done": false}, {"kind": "array", "data": [3, 38, 3, 43, 9, 82, 10], "highlights": [0], "compare": [0, 2], "swap": [], "markers": {}, "caption": "Take 3 from right into position 0", "done": false}, {"kind": "array", "data": [3, 27, 3, 43, 9, 82, 10], "highlights": [1], "compare": [0, 3], "swap": [], "markers": {}, "caption": "Take 27 from left into position 1", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [2], "compare": [1, 3], "swap": [], "markers": {}, "caption": "Take 38 from left into position 2", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [3], "compare": [], "swap": [], "markers": {}, "caption": "Copy remaining right value 43 to position 3", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [0, 1, 2, 3], "compare": [], "swap": [], "markers": {}, "caption": "Merged range [0..3] -\u003e [3, 27, 38, 43, 9, 82, 10]", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [4, 5, 6], "compare": [], "swap": [], "markers": {}, "caption": "Divide range [4..6] at mid = 5", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [4, 5], "compare": [], "swap": [], "markers": {}, "caption": "Divide range [4..5] at mid = 4", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [4], "compare": [4, 5], "swap": [], "markers": {}, "caption": "Take 9 from left into position 4", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [5], "compare": [], "swap": [], "markers": {}, "caption": "Copy remaining right value 82 to position 5", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [4, 5], "compare": [], "swap": [], "markers": {}, "caption": "Merged range [4..5] -\u003e [3, 27, 38, 43, 9, 82, 10]", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 82, 10], "highlights": [4], "compare": [4, 6], "swap": [], "markers": {}, "caption": "Take 9 from left into position 4", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 10, 10], "highlights": [5], "compare": [5, 6], "swap": [], "markers": {}, "caption": "Take 10 from right into position 5", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 10, 82], "highlights": [6], "compare": [], "swap": [], "markers": {}, "caption": "Copy remaining left value 82 to position 6", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 10, 82], "highlights": [4, 5, 6], "compare": [], "swap": [], "markers": {}, "caption": "Merged range [4..6] -\u003e [3, 27, 38, 43, 9, 10, 82]", "done": false}, {"kind": "array", "data": [3, 27, 38, 43, 9, 10, 82], "highlights": [0], "compare": [0, 4], "swap": [], "markers": {}, "caption": "Take 3 from left into position 0", "done": false}, {"kind": "array", "data": [3, 9, 38, 43, 9, 10, 82], "highlights": [1], "compare": [1, 4], "swap": [], "markers": {}, "caption": "Take 9 from right into position 1", "done": false}, {"kind": "array", "data": [3, 9, 10, 43, 9, 10, 82], "highlights": [2], "compare": [1, 5], "swap": [], "markers": {}, "caption": "Take 10 from right into position 2", "done": false}, {"kind": "array", "data": [3, 9, 10, 27, 9, 10, 82], "highlights": [3], "compare": [1, 6], "swap": [], "markers": {}, "caption": "Take 27 from left into position 3", "done": false}, {"kind": "array", "data": [3, 9, 10, 27, 38, 10, 82], "highlights": [4], "compare": [2, 6], "swap": [], "markers": {}, "caption": "Take 38 from left into position 4", "done": false}, {"kind": "array", "data": [3, 9, 10, 27, 38, 43, 82], "highlights": [5], "compare": [3, 6], "swap": [], "markers": {}, "caption": "Take 43 from left into position 5", "done": false}, {"kind": "array", "data": [3, 9, 10, 27, 38, 43, 82], "highlights": [6], "compare": [], "swap": [], "markers": {}, "caption": "Copy remaining right value 82 to position 6", "done": false}, {"kind": "array", "data": [3, 9, 10, 27, 38, 43, 82], "highlights": [0, 1, 2, 3, 4, 5, 6], "compare": [], "swap": [], "markers": {}, "caption": "Merged range [0..6] -\u003e [3, 9, 10, 27, 38, 43, 82]", "done": false}, {"kind": "array", "data": [3, 9, 10, 27, 38, 43, 82], "highlights": [0, 1, 2, 3, 4, 5, 6], "compare": [], "swap": [], "markers": {}, "caption": "Sorted!", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

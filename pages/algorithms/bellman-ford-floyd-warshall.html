@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Two robustness-oriented shortest-path algorithms" />
+  <title>Bellman-Ford &amp; Floyd-Warshall | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">⚖️</div><h1>Bellman-Ford &amp; Floyd-Warshall</h1><p class="subtitle">🕸️ Graph · <span style="color:#ea580c;font-weight:600;">Important</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case Bellman-Ford O(V·E); Floyd-Warshall O(V³)</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="bfs-dfs.html">← BFS &amp; DFS Traversals</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="topological-sort.html">Topological Sort →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">Two robustness-oriented shortest-path algorithms. Bellman-Ford relaxes every edge V−1 times; any edge that still improves afterwards proves a negative cycle. It handles negative weights, which Dijkstra cannot. Floyd-Warshall is dynamic programming over 'allowed intermediate vertices': after the k-th pass, d[i][j] is the shortest path from i to j using only nodes 0..k as stopovers — yielding all pairs at once.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Dijkstra fails on negative edges — and they appear more than expected: currency arbitrage, subsidised routes, time-gained edges in scheduling. Bellman-Ford is the safe single-source answer AND a negative-cycle detector (a 'money pump' proof). Floyd-Warshall's 5-line triple loop computes every-pairs distances for dense small graphs, which is exactly what routing tables and transitive-closure questions need.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Negative edge weights exist — Dijkstra is disqualified.</li><li>You must detect negative cycles (arbitrage, impossible schedules, inconsistent constraints).</li><li>Shortest paths between ALL pairs on a small/dense graph (up to a few hundred nodes).</li><li>Transitive closure / reachability via a variant of Floyd-Warshall's k-pass.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Single source + negative edges → Bellman-Ford (or SPFA for practical speedups).</li><li>All pairs + dense graph + n ≤ ~400 → Floyd-Warshall; larger/sparse → Johnson's (BF + Dijkstra per node).</li><li>Only weights matter? No — Floyd-Warshall can carry counts (number of paths) or booleans (closure) too.</li><li>Early exit: if a Bellman-Ford pass changes nothing, you can stop — the code shows the check.</li><li>Reconstructing paths: store a predecessor/next-hop table alongside distances.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>All weights non-negative and single source — Dijkstra (or even BFS for unit weights) is faster.</li><li>Very large sparse all-pairs — O(V²) memory and O(V³) time do not fit; use Johnson's.</li><li>Negative cycles reachable from the source make 'shortest path' undefined — report, don't solve.</li><li>Dense queries on a CHANGING graph — recomputing from scratch each time is too slow; dynamic APSP is research-grade.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>Bellman-Ford O(V·E); Floyd-Warshall O(V³)</td></tr><tr><td>Average case</td><td>Bellman-Ford O(V·E); Floyd-Warshall O(V³)</td></tr><tr><td>Worst case</td><td>Bellman-Ford O(V·E); Floyd-Warshall O(V³)</td></tr><tr><td>Space</td><td>Bellman-Ford O(V); Floyd-Warshall O(V²) matrix</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Floyd-Warshall updates its matrix in place</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-pre">#define N 4</span>
+<span class="tok-pre">#define INF 99999</span>
+
+<span class="tok-cmt">/* Directed weighted edges (includes a negative edge, no negative cycle). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">edge_u</span>[] = {<span class="tok-num">0</span>, <span class="tok-num">0</span>, <span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>};
+<span class="tok-kw">int</span> <span class="tok-id">edge_v</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">3</span>};
+<span class="tok-kw">int</span> <span class="tok-id">edge_w</span>[] = {<span class="tok-num">4</span>, <span class="tok-num">5</span>, -<span class="tok-num">3</span>, <span class="tok-num">2</span>, <span class="tok-num">7</span>};
+<span class="tok-kw">int</span> <span class="tok-id">E</span> = <span class="tok-num">5</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">bellman_ford</span>(<span class="tok-kw">int</span> <span class="tok-id">src</span>, <span class="tok-kw">int</span> <span class="tok-id">dist</span>[]) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++) <span class="tok-id">dist</span>[<span class="tok-id">i</span>] = <span class="tok-id">INF</span>;
+    <span class="tok-id">dist</span>[<span class="tok-id">src</span>] = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">round</span> = <span class="tok-num">0</span>; <span class="tok-id">round</span> &lt; <span class="tok-id">N</span> - <span class="tok-num">1</span>; <span class="tok-id">round</span>++)
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">e</span> = <span class="tok-num">0</span>; <span class="tok-id">e</span> &lt; <span class="tok-id">E</span>; <span class="tok-id">e</span>++)
+            <span class="tok-kw">if</span> (<span class="tok-id">dist</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]] + <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>] &lt; <span class="tok-id">dist</span>[<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]])
+                <span class="tok-id">dist</span>[<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]] = <span class="tok-id">dist</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]] + <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">e</span> = <span class="tok-num">0</span>; <span class="tok-id">e</span> &lt; <span class="tok-id">E</span>; <span class="tok-id">e</span>++)          <span class="tok-cmt">/* negative-cycle detection sweep */</span>
+        <span class="tok-kw">if</span> (<span class="tok-id">dist</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]] + <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>] &lt; <span class="tok-id">dist</span>[<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]]) {
+            <span class="tok-id">printf</span>(<span class="tok-str">"negative cycle\n"</span>);
+            <span class="tok-kw">return</span>;
+        }
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">floyd_warshall</span>(<span class="tok-kw">int</span> <span class="tok-id">d</span>[][<span class="tok-id">N</span>]) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">k</span> = <span class="tok-num">0</span>; <span class="tok-id">k</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">k</span>++)
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++)
+            <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-num">0</span>; <span class="tok-id">j</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">j</span>++)
+                <span class="tok-cmt">/* skip infinite legs: INF + negative edge must not creep down */</span>
+                <span class="tok-kw">if</span> (<span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] != <span class="tok-id">INF</span> &amp;&amp; <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>] != <span class="tok-id">INF</span> &amp;&amp;
+                    <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] + <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>] &lt; <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>])
+                    <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>] = <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] + <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>];
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">dist</span>[<span class="tok-id">N</span>];
+    <span class="tok-id">bellman_ford</span>(<span class="tok-num">0</span>, <span class="tok-id">dist</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Bellman-Ford from A:"</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">" %c=%d"</span>, <span class="tok-str">'A'</span> + <span class="tok-id">i</span>, <span class="tok-id">dist</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+
+    <span class="tok-kw">int</span> <span class="tok-id">d</span>[<span class="tok-id">N</span>][<span class="tok-id">N</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++)
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-num">0</span>; <span class="tok-id">j</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">j</span>++)
+            <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>] = (<span class="tok-id">i</span> == <span class="tok-id">j</span>) ? <span class="tok-num">0</span> : <span class="tok-id">INF</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">e</span> = <span class="tok-num">0</span>; <span class="tok-id">e</span> &lt; <span class="tok-id">E</span>; <span class="tok-id">e</span>++) <span class="tok-id">d</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]][<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]] = <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>];
+    <span class="tok-id">floyd_warshall</span>(<span class="tok-id">d</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Floyd-Warshall all-pairs:\n"</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++) {
+        <span class="tok-id">printf</span>(<span class="tok-str">"  "</span>);
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-num">0</span>; <span class="tok-id">j</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">j</span>++) {
+            <span class="tok-kw">if</span> (<span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>] &gt;= <span class="tok-id">INF</span>) <span class="tok-id">printf</span>(<span class="tok-str">"  inf"</span>);
+            <span class="tok-kw">else</span> <span class="tok-id">printf</span>(<span class="tok-str">" %3d"</span>, <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>]);
+        }
+        <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    }
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;cstdio&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-cmt">/* printf keeps the report format identical to the C build. */</span>
+<span class="tok-kw">const</span> <span class="tok-kw">int</span> <span class="tok-id">N</span> = <span class="tok-num">4</span>;
+<span class="tok-kw">const</span> <span class="tok-kw">int</span> <span class="tok-id">INF</span> = <span class="tok-num">99999</span>;
+
+<span class="tok-kw">int</span> <span class="tok-id">edge_u</span>[] = {<span class="tok-num">0</span>, <span class="tok-num">0</span>, <span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>};
+<span class="tok-kw">int</span> <span class="tok-id">edge_v</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">3</span>};
+<span class="tok-kw">int</span> <span class="tok-id">edge_w</span>[] = {<span class="tok-num">4</span>, <span class="tok-num">5</span>, -<span class="tok-num">3</span>, <span class="tok-num">2</span>, <span class="tok-num">7</span>};
+<span class="tok-kw">const</span> <span class="tok-kw">int</span> <span class="tok-id">E</span> = <span class="tok-num">5</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">bellmanFord</span>(<span class="tok-kw">int</span> <span class="tok-id">src</span>, <span class="tok-kw">int</span> <span class="tok-id">dist</span>[]) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++) <span class="tok-id">dist</span>[<span class="tok-id">i</span>] = <span class="tok-id">INF</span>;
+    <span class="tok-id">dist</span>[<span class="tok-id">src</span>] = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">round</span> = <span class="tok-num">0</span>; <span class="tok-id">round</span> &lt; <span class="tok-id">N</span> - <span class="tok-num">1</span>; <span class="tok-id">round</span>++)
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">e</span> = <span class="tok-num">0</span>; <span class="tok-id">e</span> &lt; <span class="tok-id">E</span>; <span class="tok-id">e</span>++)
+            <span class="tok-kw">if</span> (<span class="tok-id">dist</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]] + <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>] &lt; <span class="tok-id">dist</span>[<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]])
+                <span class="tok-id">dist</span>[<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]] = <span class="tok-id">dist</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]] + <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">e</span> = <span class="tok-num">0</span>; <span class="tok-id">e</span> &lt; <span class="tok-id">E</span>; <span class="tok-id">e</span>++)          <span class="tok-cmt">/* negative-cycle detection sweep */</span>
+        <span class="tok-kw">if</span> (<span class="tok-id">dist</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]] + <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>] &lt; <span class="tok-id">dist</span>[<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]]) {
+            <span class="tok-id">printf</span>(<span class="tok-str">"negative cycle\n"</span>);
+            <span class="tok-kw">return</span>;
+        }
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">floydWarshall</span>(<span class="tok-kw">int</span> <span class="tok-id">d</span>[][<span class="tok-id">N</span>]) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">k</span> = <span class="tok-num">0</span>; <span class="tok-id">k</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">k</span>++)
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++)
+            <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-num">0</span>; <span class="tok-id">j</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">j</span>++)
+                <span class="tok-cmt">/* skip infinite legs: INF + negative edge must not creep down */</span>
+                <span class="tok-kw">if</span> (<span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] != <span class="tok-id">INF</span> &amp;&amp; <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>] != <span class="tok-id">INF</span> &amp;&amp;
+                    <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] + <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>] &lt; <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>])
+                    <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>] = <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] + <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>];
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-kw">int</span> <span class="tok-id">dist</span>[<span class="tok-id">N</span>];
+    <span class="tok-id">bellmanFord</span>(<span class="tok-num">0</span>, <span class="tok-id">dist</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Bellman-Ford from A:"</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">" %c=%d"</span>, <span class="tok-str">'A'</span> + <span class="tok-id">i</span>, <span class="tok-id">dist</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">d</span>(<span class="tok-id">N</span>, <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;(<span class="tok-id">N</span>, <span class="tok-id">INF</span>));
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++) <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">i</span>] = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">e</span> = <span class="tok-num">0</span>; <span class="tok-id">e</span> &lt; <span class="tok-id">E</span>; <span class="tok-id">e</span>++) <span class="tok-id">d</span>[<span class="tok-id">edge_u</span>[<span class="tok-id">e</span>]][<span class="tok-id">edge_v</span>[<span class="tok-id">e</span>]] = <span class="tok-id">edge_w</span>[<span class="tok-id">e</span>];
+    <span class="tok-kw">int</span> <span class="tok-id">mat</span>[<span class="tok-id">N</span>][<span class="tok-id">N</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++)
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-num">0</span>; <span class="tok-id">j</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">j</span>++) <span class="tok-id">mat</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>] = <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>];
+    <span class="tok-id">floydWarshall</span>(<span class="tok-id">mat</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Floyd-Warshall all-pairs:\n"</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">i</span>++) {
+        <span class="tok-id">printf</span>(<span class="tok-str">"  "</span>);
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-num">0</span>; <span class="tok-id">j</span> &lt; <span class="tok-id">N</span>; <span class="tok-id">j</span>++) {
+            <span class="tok-kw">if</span> (<span class="tok-id">mat</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>] &gt;= <span class="tok-id">INF</span>) <span class="tok-id">printf</span>(<span class="tok-str">"  inf"</span>);
+            <span class="tok-kw">else</span> <span class="tok-id">printf</span>(<span class="tok-str">" %3d"</span>, <span class="tok-id">mat</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>]);
+        }
+        <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    }
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-id">INF</span> = <span class="tok-id">float</span>(<span class="tok-str">"inf"</span>)
+
+<span class="tok-cmt"># (u, v, w) directed edges — includes a negative edge, no negative cycle</span>
+<span class="tok-id">EDGES</span> = [(<span class="tok-str">"A"</span>, <span class="tok-str">"B"</span>, <span class="tok-num">4</span>), (<span class="tok-str">"A"</span>, <span class="tok-str">"C"</span>, <span class="tok-num">5</span>), (<span class="tok-str">"B"</span>, <span class="tok-str">"C"</span>, -<span class="tok-num">3</span>), (<span class="tok-str">"C"</span>, <span class="tok-str">"D"</span>, <span class="tok-num">2</span>), (<span class="tok-str">"B"</span>, <span class="tok-str">"D"</span>, <span class="tok-num">7</span>)]
+<span class="tok-id">NODES</span> = [<span class="tok-str">"A"</span>, <span class="tok-str">"B"</span>, <span class="tok-str">"C"</span>, <span class="tok-str">"D"</span>]
+
+
+<span class="tok-kw">def</span> <span class="tok-id">bellman_ford</span>(<span class="tok-id">src</span>):
+    <span class="tok-str">"""Relax every edge V-1 times; a further improving edge means a negative cycle."""</span>
+    <span class="tok-id">dist</span> = {<span class="tok-id">v</span>: <span class="tok-id">INF</span> <span class="tok-kw">for</span> <span class="tok-id">v</span> <span class="tok-kw">in</span> <span class="tok-id">NODES</span>}
+    <span class="tok-id">dist</span>[<span class="tok-id">src</span>] = <span class="tok-num">0</span>
+    <span class="tok-kw">for</span> <span class="tok-id">_</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">len</span>(<span class="tok-id">NODES</span>) - <span class="tok-num">1</span>):
+        <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span> <span class="tok-kw">in</span> <span class="tok-id">EDGES</span>:
+            <span class="tok-kw">if</span> <span class="tok-id">dist</span>[<span class="tok-id">u</span>] + <span class="tok-id">w</span> &lt; <span class="tok-id">dist</span>[<span class="tok-id">v</span>]:
+                <span class="tok-id">dist</span>[<span class="tok-id">v</span>] = <span class="tok-id">dist</span>[<span class="tok-id">u</span>] + <span class="tok-id">w</span>
+    <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span> <span class="tok-kw">in</span> <span class="tok-id">EDGES</span>:
+        <span class="tok-kw">if</span> <span class="tok-id">dist</span>[<span class="tok-id">u</span>] + <span class="tok-id">w</span> &lt; <span class="tok-id">dist</span>[<span class="tok-id">v</span>]:
+            <span class="tok-id">print</span>(<span class="tok-str">"negative cycle"</span>)
+            <span class="tok-kw">return</span> <span class="tok-id">dist</span>
+    <span class="tok-kw">return</span> <span class="tok-id">dist</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">floyd_warshall</span>():
+    <span class="tok-str">"""All-pairs shortest paths in O(V^3) with a distance matrix."""</span>
+    <span class="tok-id">n</span> = <span class="tok-id">len</span>(<span class="tok-id">NODES</span>)
+    <span class="tok-id">d</span> = [[<span class="tok-id">INF</span>] * <span class="tok-id">n</span> <span class="tok-kw">for</span> <span class="tok-id">_</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span>)]
+    <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span>):
+        <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">i</span>] = <span class="tok-num">0</span>
+    <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span> <span class="tok-kw">in</span> <span class="tok-id">EDGES</span>:
+        <span class="tok-id">d</span>[<span class="tok-id">NODES</span>.<span class="tok-id">index</span>(<span class="tok-id">u</span>)][<span class="tok-id">NODES</span>.<span class="tok-id">index</span>(<span class="tok-id">v</span>)] = <span class="tok-id">w</span>
+    <span class="tok-kw">for</span> <span class="tok-id">k</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span>):
+        <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span>):
+            <span class="tok-kw">for</span> <span class="tok-id">j</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span>):
+                <span class="tok-cmt"># skip infinite legs: INF + negative edge must not creep down</span>
+                <span class="tok-kw">if</span> (<span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] != <span class="tok-id">INF</span> <span class="tok-kw">and</span> <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>] != <span class="tok-id">INF</span>
+                        <span class="tok-kw">and</span> <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] + <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>] &lt; <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>]):
+                    <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">j</span>] = <span class="tok-id">d</span>[<span class="tok-id">i</span>][<span class="tok-id">k</span>] + <span class="tok-id">d</span>[<span class="tok-id">k</span>][<span class="tok-id">j</span>]
+    <span class="tok-kw">return</span> <span class="tok-id">d</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">dist</span> = <span class="tok-id">bellman_ford</span>(<span class="tok-str">"A"</span>)
+    <span class="tok-id">print</span>(<span class="tok-str">"Bellman-Ford from A: "</span> + <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">f</span><span class="tok-str">"{v}={dist[v]}"</span> <span class="tok-kw">for</span> <span class="tok-id">v</span> <span class="tok-kw">in</span> <span class="tok-id">NODES</span>))
+
+    <span class="tok-id">d</span> = <span class="tok-id">floyd_warshall</span>()
+    <span class="tok-id">print</span>(<span class="tok-str">"Floyd-Warshall all-pairs:"</span>)
+    <span class="tok-kw">for</span> <span class="tok-id">row</span> <span class="tok-kw">in</span> <span class="tok-id">d</span>:
+        <span class="tok-id">cells</span> = <span class="tok-str">""</span>.<span class="tok-id">join</span>(<span class="tok-str">"  inf"</span> <span class="tok-kw">if</span> <span class="tok-id">x</span> == <span class="tok-id">INF</span> <span class="tok-kw">else</span> <span class="tok-id">f</span><span class="tok-str">" {x:&gt;3}"</span> <span class="tok-kw">for</span> <span class="tok-id">x</span> <span class="tok-kw">in</span> <span class="tok-id">row</span>)
+        <span class="tok-id">print</span>(<span class="tok-str">"  "</span> + <span class="tok-id">cells</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Bellman-Ford from A: A=0 B=4 C=1 D=3
+Floyd-Warshall all-pairs:
+     0   4   1   3
+    inf   0  -3  -1
+    inf  inf   0   2
+    inf  inf  inf   0</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Bellman-Ford from A: A=0 B=4 C=1 D=3
+Floyd-Warshall all-pairs:
+     0   4   1   3
+    inf   0  -3  -1
+    inf  inf   0   2
+    inf  inf  inf   0</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Bellman-Ford from A: A=0 B=4 C=1 D=3
+Floyd-Warshall all-pairs:
+     0   4   1   3
+    inf   0  -3  -1
+    inf  inf   0   2
+    inf  inf  inf   0</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Currency arbitrage detection</h4><p class="card-content" style="margin:0;">Exchange rates as −log(weights) turn profitable loops into negative cycles — Bellman-Ford finds them.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Routing protocols</h4><p class="card-content" style="margin:0;">RIP-style distance-vector routing IS distributed Bellman-Ford; routers exchange distance tables with neighbors.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Flight/traffic networks with discounts</h4><p class="card-content" style="margin:0;">Negative 'rebate' edges (credits, time savings) break Dijkstra but not Bellman-Ford.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Network forensics and graph mining</h4><p class="card-content" style="margin:0;">All-pairs eccentricities and closeness centrality on modest graphs come from one Floyd-Warshall run.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/" target="_blank" rel="noopener">GeeksforGeeks — Bellman-Ford Algorithm (reference) ↗</a></li><li><a href="https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/" target="_blank" rel="noopener">GeeksforGeeks — Floyd-Warshall Algorithm (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "\u221e", "pos": [0.18, 0.5], "state": "unvisited"}, {"id": "C", "value": "\u221e", "pos": [0.82, 0.5], "state": "unvisited"}, {"id": "D", "value": "\u221e", "pos": [0.5, 0.88], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Bellman-Ford from A \u2014 distances start at \u221e except the source", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "4", "pos": [0.18, 0.5], "state": "current"}, {"id": "C", "value": "\u221e", "pos": [0.82, 0.5], "state": "unvisited"}, {"id": "D", "value": "\u221e", "pos": [0.5, 0.88], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Round 1: relax edge A\u2192B (weight 4) \u2014 0 + 4 beats the old value \u2192 dist[B] = 4", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "4", "pos": [0.18, 0.5], "state": "frontier"}, {"id": "C", "value": "5", "pos": [0.82, 0.5], "state": "current"}, {"id": "D", "value": "\u221e", "pos": [0.5, 0.88], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Round 1: relax edge A\u2192C (weight 5) \u2014 0 + 5 beats the old value \u2192 dist[C] = 5", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "4", "pos": [0.18, 0.5], "state": "frontier"}, {"id": "C", "value": "1", "pos": [0.82, 0.5], "state": "current"}, {"id": "D", "value": "\u221e", "pos": [0.5, 0.88], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Round 1: relax edge B\u2192C (weight -3) \u2014 4 + -3 beats the old value \u2192 dist[C] = 1", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "4", "pos": [0.18, 0.5], "state": "frontier"}, {"id": "C", "value": "1", "pos": [0.82, 0.5], "state": "frontier"}, {"id": "D", "value": "3", "pos": [0.5, 0.88], "state": "current"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Round 1: relax edge C\u2192D (weight 2) \u2014 1 + 2 beats the old value \u2192 dist[D] = 3", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "4", "pos": [0.18, 0.5], "state": "frontier"}, {"id": "C", "value": "1", "pos": [0.82, 0.5], "state": "frontier"}, {"id": "D", "value": "3", "pos": [0.5, 0.88], "state": "frontier"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Round 1 done: B=4; C=5; C=1; D=3", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "4", "pos": [0.18, 0.5], "state": "frontier"}, {"id": "C", "value": "1", "pos": [0.82, 0.5], "state": "frontier"}, {"id": "D", "value": "3", "pos": [0.5, 0.88], "state": "frontier"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Round 2: nothing improved \u2014 all distances are final", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "0", "pos": [0.5, 0.12], "state": "frontier"}, {"id": "B", "value": "4", "pos": [0.18, 0.5], "state": "frontier"}, {"id": "C", "value": "1", "pos": [0.82, 0.5], "state": "frontier"}, {"id": "D", "value": "3", "pos": [0.5, 0.88], "state": "frontier"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": null, "caption": "Final sweep: every edge already satisfies dist[u] + w \u2265 dist[v] \u2192 no negative cycle", "done": true}, {"kind": "graph", "nodes": [{"id": "A", "value": "\u221e", "pos": [0.5, 0.12], "state": "unvisited"}, {"id": "B", "value": "\u221e", "pos": [0.18, 0.5], "state": "unvisited"}, {"id": "C", "value": "\u221e", "pos": [0.82, 0.5], "state": "unvisited"}, {"id": "D", "value": "\u221e", "pos": [0.5, 0.88], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": [[0, 4, 5, Infinity], [Infinity, 0, -3, 7], [Infinity, Infinity, 0, 2], [Infinity, Infinity, Infinity, 0]], "caption": "Now Floyd-Warshall: all-pairs distances; the matrix starts as direct edges", "done": false}, {"kind": "graph", "nodes": [], "edges": [], "directed": true, "weighted": true, "table": [[0, 4, 5, Infinity], [Infinity, 0, -3, 7], [Infinity, Infinity, 0, 2], [Infinity, Infinity, Infinity, 0]], "caption": "Allow intermediate node A through paths \u2014 matrix updated", "done": false}, {"kind": "graph", "nodes": [], "edges": [], "directed": true, "weighted": true, "table": [[0, 4, 1, 11], [Infinity, 0, -3, 7], [Infinity, Infinity, 0, 2], [Infinity, Infinity, Infinity, 0]], "caption": "Allow intermediate node B through paths \u2014 matrix updated", "done": false}, {"kind": "graph", "nodes": [], "edges": [], "directed": true, "weighted": true, "table": [[0, 4, 1, 3], [Infinity, 0, -3, -1], [Infinity, Infinity, 0, 2], [Infinity, Infinity, Infinity, 0]], "caption": "Allow intermediate node C through paths \u2014 matrix updated", "done": false}, {"kind": "graph", "nodes": [], "edges": [], "directed": true, "weighted": true, "table": [[0, 4, 1, 3], [Infinity, 0, -3, -1], [Infinity, Infinity, 0, 2], [Infinity, Infinity, Infinity, 0]], "caption": "Allow intermediate node D through paths \u2014 matrix updated", "done": false}, {"kind": "graph", "nodes": [{"id": "A", "value": "\u221e", "pos": [0.5, 0.12], "state": "unvisited"}, {"id": "B", "value": "\u221e", "pos": [0.18, 0.5], "state": "unvisited"}, {"id": "C", "value": "\u221e", "pos": [0.82, 0.5], "state": "unvisited"}, {"id": "D", "value": "\u221e", "pos": [0.5, 0.88], "state": "unvisited"}], "edges": [{"u": "A", "v": "B", "state": "normal", "label": "4"}, {"u": "A", "v": "C", "state": "normal", "label": "5"}, {"u": "B", "v": "C", "state": "normal", "label": "-3"}, {"u": "C", "v": "D", "state": "normal", "label": "2"}, {"u": "B", "v": "D", "state": "normal", "label": "7"}], "directed": true, "weighted": true, "table": [[0, 4, 1, 3], [Infinity, 0, -3, -1], [Infinity, Infinity, 0, 2], [Infinity, Infinity, Infinity, 0]], "caption": "Floyd-Warshall done \u2014 d[i][j] now holds every shortest path at once", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

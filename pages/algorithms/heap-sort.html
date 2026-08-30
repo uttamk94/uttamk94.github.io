@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Heap sort treats the array as a binary max-heap: a complete tree where every parent is at least as large as its children, stored implicitly in the array itself (children of index i live at 2i+1 and 2i+2)" />
+  <title>Heap Sort | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🏔️</div><h1>Heap Sort</h1><p class="subtitle">🔍 Sorting &amp; Searching · <span style="color:#2563eb;font-weight:600;">Useful</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(n log n)</span><span class="stat-badge">Priority 3/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="quick-sort.html">← Quick Sort</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="counting-radix-sort.html">Counting Sort &amp; Radix Sort →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">Heap sort treats the array as a binary max-heap: a complete tree where every parent is at least as large as its children, stored implicitly in the array itself (children of index i live at 2i+1 and 2i+2). It first builds the heap in O(n), then repeatedly swaps the maximum (the root) with the last heap slot and re-heapifies the shrunk heap.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Heap sort is the only classic comparison sort that is simultaneously in-place AND guaranteed O(n log n) in the worst case — quick sort can degrade to O(n²) and merge sort needs an O(n) buffer. The same heap structure powers priority queues, so mastering it unlocks schedulers, Dijkstra, and streaming top-k selection.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>A hard worst-case O(n log n) guarantee with in-place operation is required.</li><li>The workload is really about repeated max/min extraction — a priority queue.</li><li>You need only the k largest/smallest items, not a full sort.</li><li>Memory constraints rule out merge sort's auxiliary buffer.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Worst-case bound matters more than average speed? Heap sort; raw average speed? quick sort.</li><li>Use Floyd's bottom-up build-heap — it is O(n), not n separate O(log n) insertions.</li><li>For top-k only, stop after k extractions instead of sorting everything.</li><li>Stability required? Heap sort reorders equal keys — use merge sort.</li><li>Tiny arrays: insertion sort's constants win; heap machinery is overkill.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Stability is required — equal keys change relative order.</li><li>The array is nearly sorted — insertion sort is O(n) here.</li><li>Cache-sensitive sorting of huge arrays — quick sort's locality beats heap jumps.</li><li>You just need a sorted result from a library — use the built-in sort.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(n log n)</td></tr><tr><td>Average case</td><td>O(n log n)</td></tr><tr><td>Worst case</td><td>O(n log n)</td></tr><tr><td>Space</td><td>O(1) auxiliary</td></tr><tr><td>Stable</td><td>No</td></tr><tr><td>In-place</td><td>Yes</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-cmt">/* Restore the max-heap property for the subtree rooted at i (children of i
+ * live at 2i+1 and 2i+2 in the array). O(log n). */</span>
+<span class="tok-kw">void</span> <span class="tok-id">sift_down</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">i</span>, <span class="tok-kw">int</span> <span class="tok-id">size</span>) {
+    <span class="tok-kw">for</span> (;;) {
+        <span class="tok-kw">int</span> <span class="tok-id">largest</span> = <span class="tok-id">i</span>, <span class="tok-id">l</span> = <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">1</span>, <span class="tok-id">r</span> = <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">2</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">l</span> &lt; <span class="tok-id">size</span> &amp;&amp; <span class="tok-id">a</span>[<span class="tok-id">l</span>] &gt; <span class="tok-id">a</span>[<span class="tok-id">largest</span>]) <span class="tok-id">largest</span> = <span class="tok-id">l</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">r</span> &lt; <span class="tok-id">size</span> &amp;&amp; <span class="tok-id">a</span>[<span class="tok-id">r</span>] &gt; <span class="tok-id">a</span>[<span class="tok-id">largest</span>]) <span class="tok-id">largest</span> = <span class="tok-id">r</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">largest</span> == <span class="tok-id">i</span>) <span class="tok-kw">break</span>;
+        <span class="tok-kw">int</span> <span class="tok-id">tmp</span> = <span class="tok-id">a</span>[<span class="tok-id">i</span>]; <span class="tok-id">a</span>[<span class="tok-id">i</span>] = <span class="tok-id">a</span>[<span class="tok-id">largest</span>]; <span class="tok-id">a</span>[<span class="tok-id">largest</span>] = <span class="tok-id">tmp</span>;
+        <span class="tok-id">i</span> = <span class="tok-id">largest</span>;
+    }
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">heap_sort</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>) {
+    <span class="tok-cmt">/* build a max-heap in O(n) by sifting internal nodes bottom-up */</span>
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">n</span> / <span class="tok-num">2</span> - <span class="tok-num">1</span>; <span class="tok-id">i</span> &gt;= <span class="tok-num">0</span>; <span class="tok-id">i</span>--) <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-id">i</span>, <span class="tok-id">n</span>);
+    <span class="tok-cmt">/* repeatedly move the max to the end and shrink the heap */</span>
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">end</span> = <span class="tok-id">n</span> - <span class="tok-num">1</span>; <span class="tok-id">end</span> &gt; <span class="tok-num">0</span>; <span class="tok-id">end</span>--) {
+        <span class="tok-kw">int</span> <span class="tok-id">tmp</span> = <span class="tok-id">a</span>[<span class="tok-num">0</span>]; <span class="tok-id">a</span>[<span class="tok-num">0</span>] = <span class="tok-id">a</span>[<span class="tok-id">end</span>]; <span class="tok-id">a</span>[<span class="tok-id">end</span>] = <span class="tok-id">tmp</span>;
+        <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">end</span>);
+    }
+}
+
+<span class="tok-cmt">/* k largest values in descending order: build a heap, extract k times. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">k_largest</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">int</span> <span class="tok-id">k</span>, <span class="tok-kw">int</span> <span class="tok-id">out</span>[]) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">n</span> / <span class="tok-num">2</span> - <span class="tok-num">1</span>; <span class="tok-id">i</span> &gt;= <span class="tok-num">0</span>; <span class="tok-id">i</span>--) <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-id">i</span>, <span class="tok-id">n</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">size</span> = <span class="tok-id">n</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">t</span> = <span class="tok-num">0</span>; <span class="tok-id">t</span> &lt; <span class="tok-id">k</span>; <span class="tok-id">t</span>++) {
+        <span class="tok-id">out</span>[<span class="tok-id">t</span>] = <span class="tok-id">a</span>[<span class="tok-num">0</span>];
+        <span class="tok-id">a</span>[<span class="tok-num">0</span>] = <span class="tok-id">a</span>[<span class="tok-id">size</span> - <span class="tok-num">1</span>];
+        <span class="tok-id">size</span>--;
+        <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">size</span>);
+    }
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">print_array</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">a</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">a1</span>[] = {<span class="tok-num">4</span>, <span class="tok-num">10</span>, <span class="tok-num">3</span>, <span class="tok-num">5</span>, <span class="tok-num">1</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">a2</span>[] = {<span class="tok-num">12</span>, <span class="tok-num">11</span>, <span class="tok-num">13</span>, <span class="tok-num">5</span>, <span class="tok-num">6</span>, <span class="tok-num">7</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">a3</span>[] = {<span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>};
+    <span class="tok-id">heap_sort</span>(<span class="tok-id">a1</span>, <span class="tok-num">5</span>); <span class="tok-id">printf</span>(<span class="tok-str">"Test 1: "</span>); <span class="tok-id">print_array</span>(<span class="tok-id">a1</span>, <span class="tok-num">5</span>);
+    <span class="tok-id">heap_sort</span>(<span class="tok-id">a2</span>, <span class="tok-num">6</span>); <span class="tok-id">printf</span>(<span class="tok-str">"Test 2: "</span>); <span class="tok-id">print_array</span>(<span class="tok-id">a2</span>, <span class="tok-num">6</span>);
+    <span class="tok-id">heap_sort</span>(<span class="tok-id">a3</span>, <span class="tok-num">3</span>); <span class="tok-id">printf</span>(<span class="tok-str">"Test 3: "</span>); <span class="tok-id">print_array</span>(<span class="tok-id">a3</span>, <span class="tok-num">3</span>);
+
+    <span class="tok-kw">int</span> <span class="tok-id">b</span>[] = {<span class="tok-num">7</span>, <span class="tok-num">10</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">20</span>, <span class="tok-num">15</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">top3</span>[<span class="tok-num">3</span>], <span class="tok-id">top1</span>[<span class="tok-num">1</span>];
+    <span class="tok-id">k_largest</span>(<span class="tok-id">b</span>, <span class="tok-num">6</span>, <span class="tok-num">3</span>, <span class="tok-id">top3</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 4: "</span>); <span class="tok-id">print_array</span>(<span class="tok-id">top3</span>, <span class="tok-num">3</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">c</span>[] = {<span class="tok-num">7</span>, <span class="tok-num">10</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">20</span>, <span class="tok-num">15</span>};
+    <span class="tok-id">k_largest</span>(<span class="tok-id">c</span>, <span class="tok-num">6</span>, <span class="tok-num">1</span>, <span class="tok-id">top1</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 5: "</span>); <span class="tok-id">print_array</span>(<span class="tok-id">top1</span>, <span class="tok-num">1</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">siftDown</span>(<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">i</span>, <span class="tok-kw">int</span> <span class="tok-id">size</span>) {
+    <span class="tok-kw">for</span> (;;) {
+        <span class="tok-kw">int</span> <span class="tok-id">largest</span> = <span class="tok-id">i</span>, <span class="tok-id">l</span> = <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">1</span>, <span class="tok-id">r</span> = <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">2</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">l</span> &lt; <span class="tok-id">size</span> &amp;&amp; <span class="tok-id">a</span>[<span class="tok-id">l</span>] &gt; <span class="tok-id">a</span>[<span class="tok-id">largest</span>]) <span class="tok-id">largest</span> = <span class="tok-id">l</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">r</span> &lt; <span class="tok-id">size</span> &amp;&amp; <span class="tok-id">a</span>[<span class="tok-id">r</span>] &gt; <span class="tok-id">a</span>[<span class="tok-id">largest</span>]) <span class="tok-id">largest</span> = <span class="tok-id">r</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">largest</span> == <span class="tok-id">i</span>) <span class="tok-kw">break</span>;
+        <span class="tok-id">swap</span>(<span class="tok-id">a</span>[<span class="tok-id">i</span>], <span class="tok-id">a</span>[<span class="tok-id">largest</span>]);
+        <span class="tok-id">i</span> = <span class="tok-id">largest</span>;
+    }
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">heapSort</span>(<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">n</span> = (<span class="tok-kw">int</span>)<span class="tok-id">a</span>.<span class="tok-id">size</span>();
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">n</span> / <span class="tok-num">2</span> - <span class="tok-num">1</span>; <span class="tok-id">i</span> &gt;= <span class="tok-num">0</span>; <span class="tok-id">i</span>--) <span class="tok-id">siftDown</span>(<span class="tok-id">a</span>, <span class="tok-id">i</span>, <span class="tok-id">n</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">end</span> = <span class="tok-id">n</span> - <span class="tok-num">1</span>; <span class="tok-id">end</span> &gt; <span class="tok-num">0</span>; <span class="tok-id">end</span>--) {
+        <span class="tok-id">swap</span>(<span class="tok-id">a</span>[<span class="tok-num">0</span>], <span class="tok-id">a</span>[<span class="tok-id">end</span>]);
+        <span class="tok-id">siftDown</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">end</span>);
+    }
+}
+
+<span class="tok-cmt">/* k largest values in descending order (heap-based, no full sort). */</span>
+<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">kLargest</span>(<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">k</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">n</span> = (<span class="tok-kw">int</span>)<span class="tok-id">a</span>.<span class="tok-id">size</span>();
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">n</span> / <span class="tok-num">2</span> - <span class="tok-num">1</span>; <span class="tok-id">i</span> &gt;= <span class="tok-num">0</span>; <span class="tok-id">i</span>--) <span class="tok-id">siftDown</span>(<span class="tok-id">a</span>, <span class="tok-id">i</span>, <span class="tok-id">n</span>);
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">out</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">size</span> = <span class="tok-id">n</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">t</span> = <span class="tok-num">0</span>; <span class="tok-id">t</span> &lt; <span class="tok-id">k</span>; <span class="tok-id">t</span>++) {
+        <span class="tok-id">out</span>.<span class="tok-id">push_back</span>(<span class="tok-id">a</span>[<span class="tok-num">0</span>]);
+        <span class="tok-id">a</span>[<span class="tok-num">0</span>] = <span class="tok-id">a</span>[<span class="tok-id">size</span> - <span class="tok-num">1</span>];
+        <span class="tok-id">size</span>--;
+        <span class="tok-id">siftDown</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">size</span>);
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">out</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">print_array</span>(<span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">x</span> : <span class="tok-id">a</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">x</span> &lt;&lt; <span class="tok-str">" "</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a1</span> = {<span class="tok-num">4</span>, <span class="tok-num">10</span>, <span class="tok-num">3</span>, <span class="tok-num">5</span>, <span class="tok-num">1</span>};
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a2</span> = {<span class="tok-num">12</span>, <span class="tok-num">11</span>, <span class="tok-num">13</span>, <span class="tok-num">5</span>, <span class="tok-num">6</span>, <span class="tok-num">7</span>};
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a3</span> = {<span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>};
+    <span class="tok-id">heapSort</span>(<span class="tok-id">a1</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1: "</span>; <span class="tok-id">print_array</span>(<span class="tok-id">a1</span>);
+    <span class="tok-id">heapSort</span>(<span class="tok-id">a2</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2: "</span>; <span class="tok-id">print_array</span>(<span class="tok-id">a2</span>);
+    <span class="tok-id">heapSort</span>(<span class="tok-id">a3</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3: "</span>; <span class="tok-id">print_array</span>(<span class="tok-id">a3</span>);
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 4: "</span>; <span class="tok-id">print_array</span>(<span class="tok-id">kLargest</span>({<span class="tok-num">7</span>, <span class="tok-num">10</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">20</span>, <span class="tok-num">15</span>}, <span class="tok-num">3</span>));
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 5: "</span>; <span class="tok-id">print_array</span>(<span class="tok-id">kLargest</span>({<span class="tok-num">7</span>, <span class="tok-num">10</span>, <span class="tok-num">4</span>, <span class="tok-num">3</span>, <span class="tok-num">20</span>, <span class="tok-num">15</span>}, <span class="tok-num">1</span>));
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">def</span> <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-id">i</span>, <span class="tok-id">size</span>):
+    <span class="tok-str">"""Restore the max-heap property for the subtree rooted at i."""</span>
+    <span class="tok-kw">while</span> <span class="tok-kw">True</span>:
+        <span class="tok-id">largest</span>, <span class="tok-id">l</span>, <span class="tok-id">r</span> = <span class="tok-id">i</span>, <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">1</span>, <span class="tok-num">2</span> * <span class="tok-id">i</span> + <span class="tok-num">2</span>
+        <span class="tok-kw">if</span> <span class="tok-id">l</span> &lt; <span class="tok-id">size</span> <span class="tok-kw">and</span> <span class="tok-id">a</span>[<span class="tok-id">l</span>] &gt; <span class="tok-id">a</span>[<span class="tok-id">largest</span>]:
+            <span class="tok-id">largest</span> = <span class="tok-id">l</span>
+        <span class="tok-kw">if</span> <span class="tok-id">r</span> &lt; <span class="tok-id">size</span> <span class="tok-kw">and</span> <span class="tok-id">a</span>[<span class="tok-id">r</span>] &gt; <span class="tok-id">a</span>[<span class="tok-id">largest</span>]:
+            <span class="tok-id">largest</span> = <span class="tok-id">r</span>
+        <span class="tok-kw">if</span> <span class="tok-id">largest</span> == <span class="tok-id">i</span>:
+            <span class="tok-kw">return</span>
+        <span class="tok-id">a</span>[<span class="tok-id">i</span>], <span class="tok-id">a</span>[<span class="tok-id">largest</span>] = <span class="tok-id">a</span>[<span class="tok-id">largest</span>], <span class="tok-id">a</span>[<span class="tok-id">i</span>]
+        <span class="tok-id">i</span> = <span class="tok-id">largest</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">heap_sort</span>(<span class="tok-id">a</span>):
+    <span class="tok-id">n</span> = <span class="tok-id">len</span>(<span class="tok-id">a</span>)
+    <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span> // <span class="tok-num">2</span> - <span class="tok-num">1</span>, -<span class="tok-num">1</span>, -<span class="tok-num">1</span>):
+        <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-id">i</span>, <span class="tok-id">n</span>)
+    <span class="tok-kw">for</span> <span class="tok-id">end</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span> - <span class="tok-num">1</span>, <span class="tok-num">0</span>, -<span class="tok-num">1</span>):
+        <span class="tok-id">a</span>[<span class="tok-num">0</span>], <span class="tok-id">a</span>[<span class="tok-id">end</span>] = <span class="tok-id">a</span>[<span class="tok-id">end</span>], <span class="tok-id">a</span>[<span class="tok-num">0</span>]
+        <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">end</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">k_largest</span>(<span class="tok-id">a</span>, <span class="tok-id">k</span>):
+    <span class="tok-str">"""k largest values in descending order (heap-based)."""</span>
+    <span class="tok-id">a</span> = <span class="tok-id">list</span>(<span class="tok-id">a</span>)
+    <span class="tok-id">n</span> = <span class="tok-id">len</span>(<span class="tok-id">a</span>)
+    <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">n</span> // <span class="tok-num">2</span> - <span class="tok-num">1</span>, -<span class="tok-num">1</span>, -<span class="tok-num">1</span>):
+        <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-id">i</span>, <span class="tok-id">n</span>)
+    <span class="tok-id">out</span>, <span class="tok-id">size</span> = [], <span class="tok-id">n</span>
+    <span class="tok-kw">for</span> <span class="tok-id">_</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">k</span>):
+        <span class="tok-id">out</span>.<span class="tok-id">append</span>(<span class="tok-id">a</span>[<span class="tok-num">0</span>])
+        <span class="tok-id">a</span>[<span class="tok-num">0</span>] = <span class="tok-id">a</span>[<span class="tok-id">size</span> - <span class="tok-num">1</span>]
+        <span class="tok-id">size</span> -= <span class="tok-num">1</span>
+        <span class="tok-id">sift_down</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">size</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">out</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">fmt</span>(<span class="tok-id">a</span>):
+    <span class="tok-kw">return</span> <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">map</span>(<span class="tok-id">str</span>, <span class="tok-id">a</span>))
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-kw">for</span> <span class="tok-id">i</span>, <span class="tok-id">arr</span> <span class="tok-kw">in</span> <span class="tok-id">enumerate</span>(([<span class="tok-num">4</span>, <span class="tok-num">10</span>, <span class="tok-num">3</span>, <span class="tok-num">5</span>, <span class="tok-num">1</span>], [<span class="tok-num">12</span>, <span class="tok-num">11</span>, <span class="tok-num">13</span>, <span class="tok-num">5</span>, <span class="tok-num">6</span>, <span class="tok-num">7</span>], [<span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>]), <span class="tok-num">1</span>):
+        <span class="tok-id">heap_sort</span>(<span class="tok-id">arr</span>)
+        <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test {i}: {fmt(arr)}"</span>)
+
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 4: {fmt(k_largest([7, 10, 4, 3, 20, 15], 3))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 5: {fmt(k_largest([7, 10, 4, 3, 20, 15], 1))}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1: 1 3 4 5 10 
+Test 2: 5 6 7 11 12 13 
+Test 3: 1 2 2 
+Test 4: 20 15 10 
+Test 5: 20</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1: 1 3 4 5 10 
+Test 2: 5 6 7 11 12 13 
+Test 3: 1 2 2 
+Test 4: 20 15 10 
+Test 5: 20</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1: 1 3 4 5 10
+Test 2: 5 6 7 11 12 13
+Test 3: 1 2 2
+Test 4: 20 15 10
+Test 5: 20</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Priority queues</h4><p class="card-content" style="margin:0;">OS schedulers, event simulations, and print queues are heaps; heap sort is the queue's batch mode.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Introsort fallback</h4><p class="card-content" style="margin:0;">C++ std::sort switches from quick sort to heap sort when recursion depth suggests quadratic behaviour.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Streaming top-k</h4><p class="card-content" style="margin:0;">Leaderboards and 'top N' dashboards keep a bounded heap instead of sorting every arrival.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Graph algorithms</h4><p class="card-content" style="margin:0;">Dijkstra and Prim pick their next node from a heap — the extraction loop here is exactly that operation.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/heap-sort/" target="_blank" rel="noopener">GeeksforGeeks — Heap Sort (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "array", "data": [4, 10, 3, 5, 1], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Start \u2014 array to sort", "done": false}, {"kind": "array", "data": [4, 10, 3, 5, 1], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Phase 1 \u2014 build a max-heap (sift down every internal node)", "done": false}, {"kind": "array", "data": [4, 10, 3, 5, 1], "highlights": [1], "compare": [3, 4], "swap": [], "markers": {"hi": 4}, "caption": "Sift down from A[1] = 10: compare with children A[3] = 5, A[4] = 1", "done": false}, {"kind": "array", "data": [4, 10, 3, 5, 1], "highlights": [0], "compare": [1, 2], "swap": [], "markers": {"hi": 4}, "caption": "Sift down from A[0] = 4: compare with children A[1] = 10, A[2] = 3", "done": false}, {"kind": "array", "data": [10, 4, 3, 5, 1], "highlights": [], "compare": [], "swap": [0, 1], "markers": {"hi": 4}, "caption": "A[1] is the largest child -\u003e swap A[0] \u003c-\u003e A[1]", "done": false}, {"kind": "array", "data": [10, 4, 3, 5, 1], "highlights": [1], "compare": [3, 4], "swap": [], "markers": {"hi": 4}, "caption": "Sift down from A[1] = 4: compare with children A[3] = 5, A[4] = 1", "done": false}, {"kind": "array", "data": [10, 5, 3, 4, 1], "highlights": [], "compare": [], "swap": [1, 3], "markers": {"hi": 4}, "caption": "A[3] is the largest child -\u003e swap A[1] \u003c-\u003e A[3]", "done": false}, {"kind": "array", "data": [10, 5, 3, 4, 1], "highlights": [3], "compare": [], "swap": [], "markers": {"hi": 4}, "caption": "Sift down from A[3] = 4: it is a leaf, stop", "done": false}, {"kind": "array", "data": [10, 5, 3, 4, 1], "highlights": [0], "compare": [], "swap": [], "markers": {}, "caption": "Max-heap ready: the largest value sits at the root A[0]", "done": false}, {"kind": "array", "data": [10, 5, 3, 4, 1], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Phase 2 \u2014 repeatedly swap the root with the last heap slot, then re-heapify", "done": false}, {"kind": "array", "data": [1, 5, 3, 4, 10], "highlights": [], "compare": [], "swap": [0, 4], "markers": {"hi": 3}, "caption": "Extract max 10: swap A[0] \u003c-\u003e A[4] \u2014 it is now in final position (1 of 5 sorted)", "done": false}, {"kind": "array", "data": [1, 5, 3, 4, 10], "highlights": [0], "compare": [1, 2], "swap": [], "markers": {"hi": 3}, "caption": "Sift down from A[0] = 1: compare with children A[1] = 5, A[2] = 3", "done": false}, {"kind": "array", "data": [5, 1, 3, 4, 10], "highlights": [], "compare": [], "swap": [0, 1], "markers": {"hi": 3}, "caption": "A[1] is the largest child -\u003e swap A[0] \u003c-\u003e A[1]", "done": false}, {"kind": "array", "data": [5, 1, 3, 4, 10], "highlights": [1], "compare": [3], "swap": [], "markers": {"hi": 3}, "caption": "Sift down from A[1] = 1: compare with children A[3] = 4", "done": false}, {"kind": "array", "data": [5, 4, 3, 1, 10], "highlights": [], "compare": [], "swap": [1, 3], "markers": {"hi": 3}, "caption": "A[3] is the largest child -\u003e swap A[1] \u003c-\u003e A[3]", "done": false}, {"kind": "array", "data": [5, 4, 3, 1, 10], "highlights": [3], "compare": [], "swap": [], "markers": {"hi": 3}, "caption": "Sift down from A[3] = 1: it is a leaf, stop", "done": false}, {"kind": "array", "data": [1, 4, 3, 5, 10], "highlights": [], "compare": [], "swap": [0, 3], "markers": {"hi": 2}, "caption": "Extract max 5: swap A[0] \u003c-\u003e A[3] \u2014 it is now in final position (2 of 5 sorted)", "done": false}, {"kind": "array", "data": [1, 4, 3, 5, 10], "highlights": [0], "compare": [1, 2], "swap": [], "markers": {"hi": 2}, "caption": "Sift down from A[0] = 1: compare with children A[1] = 4, A[2] = 3", "done": false}, {"kind": "array", "data": [4, 1, 3, 5, 10], "highlights": [], "compare": [], "swap": [0, 1], "markers": {"hi": 2}, "caption": "A[1] is the largest child -\u003e swap A[0] \u003c-\u003e A[1]", "done": false}, {"kind": "array", "data": [4, 1, 3, 5, 10], "highlights": [1], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Sift down from A[1] = 1: it is a leaf, stop", "done": false}, {"kind": "array", "data": [3, 1, 4, 5, 10], "highlights": [], "compare": [], "swap": [0, 2], "markers": {"hi": 1}, "caption": "Extract max 4: swap A[0] \u003c-\u003e A[2] \u2014 it is now in final position (3 of 5 sorted)", "done": false}, {"kind": "array", "data": [3, 1, 4, 5, 10], "highlights": [0], "compare": [1], "swap": [], "markers": {"hi": 1}, "caption": "Sift down from A[0] = 3: compare with children A[1] = 1", "done": false}, {"kind": "array", "data": [1, 3, 4, 5, 10], "highlights": [], "compare": [], "swap": [0, 1], "markers": {"hi": 0}, "caption": "Extract max 3: swap A[0] \u003c-\u003e A[1] \u2014 it is now in final position (4 of 5 sorted)", "done": false}, {"kind": "array", "data": [1, 3, 4, 5, 10], "highlights": [0], "compare": [], "swap": [], "markers": {"hi": 0}, "caption": "Sift down from A[0] = 1: it is a leaf, stop", "done": false}, {"kind": "array", "data": [1, 3, 4, 5, 10], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Done \u2014 the array is fully sorted", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

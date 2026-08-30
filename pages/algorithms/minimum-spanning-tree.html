@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A minimum spanning tree connects every node of a weighted, undirected graph using exactly V−1 edges with the smallest possible total weight and no cycles" />
+  <title>Minimum Spanning Tree (Kruskal &amp; Prim) | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🪢</div><h1>Minimum Spanning Tree (Kruskal &amp; Prim)</h1><p class="subtitle">🕸️ Graph · <span style="color:#ea580c;font-weight:600;">Important</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case Kruskal O(E log E); Prim O(E log V)</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="union-find.html">← Union-Find (Disjoint Set Union)</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="greedy-fundamentals.html">Greedy Fundamentals &amp; Activity Selection →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">A minimum spanning tree connects every node of a weighted, undirected graph using exactly V−1 edges with the smallest possible total weight and no cycles. Kruskal sorts all edges by weight and keeps each one whose endpoints are in different components (checked with union-find). Prim grows a single tree outward from a start node, always swallowing the cheapest edge that leaves the tree (frontier managed by a heap). The cut property — across any partition, the lightest crossing edge is safe — proves both correct.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Whenever you must link everything for the least total cost — cabling, pipelining, circuit wiring, cluster merging — the MST is the exact optimum, and it is one of the few hard-looking optimisation problems with a fast, provably optimal greedy solution. MSTs also seed approximations for harder problems (travelling salesman) and define single-linkage clustering.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Connecting all sites with minimum total edge weight (networks, grids, roads).</li><li>Reducing redundant links while keeping the graph connected (backbone design).</li><li>Single-linkage clustering: cut the V−k heaviest MST edges to get k clusters.</li><li>A starting structure for approximating NP-hard problems such as metric TSP.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Sparse graph (E ≈ V): Kruskal is simple and sorts few edges.</li><li>Dense graph (E ≈ V²): Prim with an adjacency matrix in O(V²) beats sorting all edges.</li><li>Edges arrive pre-sorted or weights are tiny integers: Kruskal runs in near-linear time.</li><li>Need incremental queries ('is the MST still the same after this edge changes?') — dynamic MST structures exist but are advanced.</li><li>Disconnected graph? No spanning tree exists — run the algorithm per component (a minimum spanning forest).</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>You need shortest PATHS, not cheapest connectivity — Dijkstra answers distances; MST minimises total weight only.</li><li>The graph is directed — spanning trees are undefined; use arborescences (Edmonds) instead.</li><li>Per-pair latency matters — an MST can make some individual paths longer than the original graph offers.</li><li>Edges must satisfy constraints beyond weight (capacity, degree limits) — MST does not handle side constraints.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>Kruskal O(E log E); Prim O(E log V) with a heap</td></tr><tr><td>Average case</td><td>Kruskal O(E log E); Prim O(E log V)</td></tr><tr><td>Worst case</td><td>Kruskal O(E log E); Prim O(E log V)</td></tr><tr><td>Space</td><td>Kruskal O(V+E) — stores all edges; Prim O(V) — stores the frontier</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>No (produces a tree)</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+<span class="tok-pre">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-pre">#define V 5</span>
+
+<span class="tok-cmt">/* ---------- Kruskal: sort edges + union-find ---------- */</span>
+<span class="tok-kw">typedef</span> <span class="tok-kw">struct</span> { <span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span>; } <span class="tok-id">Edge</span>;
+
+<span class="tok-kw">int</span> <span class="tok-id">find</span>(<span class="tok-kw">int</span> <span class="tok-id">parent</span>[], <span class="tok-kw">int</span> <span class="tok-id">x</span>) {
+    <span class="tok-kw">while</span> (<span class="tok-id">parent</span>[<span class="tok-id">x</span>] != <span class="tok-id">x</span>) {
+        <span class="tok-id">parent</span>[<span class="tok-id">x</span>] = <span class="tok-id">parent</span>[<span class="tok-id">parent</span>[<span class="tok-id">x</span>]];   <span class="tok-cmt">/* path halving */</span>
+        <span class="tok-id">x</span> = <span class="tok-id">parent</span>[<span class="tok-id">x</span>];
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">x</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">cmp_edges</span>(<span class="tok-kw">const</span> <span class="tok-kw">void</span> *<span class="tok-id">a</span>, <span class="tok-kw">const</span> <span class="tok-kw">void</span> *<span class="tok-id">b</span>) {
+    <span class="tok-kw">return</span> ((<span class="tok-kw">const</span> <span class="tok-id">Edge</span> *)<span class="tok-id">a</span>)-&gt;<span class="tok-id">w</span> - ((<span class="tok-kw">const</span> <span class="tok-id">Edge</span> *)<span class="tok-id">b</span>)-&gt;<span class="tok-id">w</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">kruskal</span>(<span class="tok-id">Edge</span> <span class="tok-id">edges</span>[], <span class="tok-kw">int</span> <span class="tok-id">m</span>, <span class="tok-id">Edge</span> <span class="tok-id">mst</span>[]) {
+    <span class="tok-kw">int</span> <span class="tok-id">parent</span>[<span class="tok-id">V</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">V</span>; <span class="tok-id">i</span>++) <span class="tok-id">parent</span>[<span class="tok-id">i</span>] = <span class="tok-id">i</span>;
+    <span class="tok-id">qsort</span>(<span class="tok-id">edges</span>, <span class="tok-id">m</span>, <span class="tok-kw">sizeof</span>(<span class="tok-id">Edge</span>), <span class="tok-id">cmp_edges</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">count</span> = <span class="tok-num">0</span>, <span class="tok-id">total</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">m</span> &amp;&amp; <span class="tok-id">count</span> &lt; <span class="tok-id">V</span> - <span class="tok-num">1</span>; <span class="tok-id">i</span>++) {
+        <span class="tok-kw">int</span> <span class="tok-id">ru</span> = <span class="tok-id">find</span>(<span class="tok-id">parent</span>, <span class="tok-id">edges</span>[<span class="tok-id">i</span>].<span class="tok-id">u</span>), <span class="tok-id">rv</span> = <span class="tok-id">find</span>(<span class="tok-id">parent</span>, <span class="tok-id">edges</span>[<span class="tok-id">i</span>].<span class="tok-id">v</span>);
+        <span class="tok-kw">if</span> (<span class="tok-id">ru</span> != <span class="tok-id">rv</span>) {
+            <span class="tok-id">parent</span>[<span class="tok-id">ru</span>] = <span class="tok-id">rv</span>;             <span class="tok-cmt">/* union joins two trees */</span>
+            <span class="tok-id">mst</span>[<span class="tok-id">count</span>++] = <span class="tok-id">edges</span>[<span class="tok-id">i</span>];
+            <span class="tok-id">total</span> += <span class="tok-id">edges</span>[<span class="tok-id">i</span>].<span class="tok-id">w</span>;
+        }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">total</span>;
+}
+
+<span class="tok-cmt">/* ---------- Prim: grow one tree, O(V^2) with arrays ---------- */</span>
+<span class="tok-kw">int</span> <span class="tok-id">prim</span>(<span class="tok-kw">int</span> <span class="tok-id">g</span>[<span class="tok-id">V</span>][<span class="tok-id">V</span>], <span class="tok-kw">int</span> <span class="tok-id">mst</span>[<span class="tok-id">V</span> - <span class="tok-num">1</span>][<span class="tok-num">3</span>]) {
+    <span class="tok-kw">int</span> <span class="tok-id">in_tree</span>[<span class="tok-id">V</span>] = {<span class="tok-num">0</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">key</span>[<span class="tok-id">V</span>];                        <span class="tok-cmt">/* cheapest edge into the tree */</span>
+    <span class="tok-kw">int</span> <span class="tok-id">from</span>[<span class="tok-id">V</span>];
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">V</span>; <span class="tok-id">i</span>++) { <span class="tok-id">key</span>[<span class="tok-id">i</span>] = <span class="tok-num">1</span> &lt;&lt; <span class="tok-num">30</span>; <span class="tok-id">from</span>[<span class="tok-id">i</span>] = -<span class="tok-num">1</span>; }
+    <span class="tok-id">key</span>[<span class="tok-num">0</span>] = <span class="tok-num">0</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">total</span> = <span class="tok-num">0</span>, <span class="tok-id">count</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">step</span> = <span class="tok-num">0</span>; <span class="tok-id">step</span> &lt; <span class="tok-id">V</span>; <span class="tok-id">step</span>++) {
+        <span class="tok-kw">int</span> <span class="tok-id">best</span> = -<span class="tok-num">1</span>;
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; <span class="tok-id">V</span>; <span class="tok-id">v</span>++)
+            <span class="tok-kw">if</span> (!<span class="tok-id">in_tree</span>[<span class="tok-id">v</span>] &amp;&amp; (<span class="tok-id">best</span> == -<span class="tok-num">1</span> || <span class="tok-id">key</span>[<span class="tok-id">v</span>] &lt; <span class="tok-id">key</span>[<span class="tok-id">best</span>])) <span class="tok-id">best</span> = <span class="tok-id">v</span>;
+        <span class="tok-id">in_tree</span>[<span class="tok-id">best</span>] = <span class="tok-num">1</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">from</span>[<span class="tok-id">best</span>] != -<span class="tok-num">1</span>) {
+            <span class="tok-id">mst</span>[<span class="tok-id">count</span>][<span class="tok-num">0</span>] = <span class="tok-id">from</span>[<span class="tok-id">best</span>]; <span class="tok-id">mst</span>[<span class="tok-id">count</span>][<span class="tok-num">1</span>] = <span class="tok-id">best</span>; <span class="tok-id">mst</span>[<span class="tok-id">count</span>][<span class="tok-num">2</span>] = <span class="tok-id">key</span>[<span class="tok-id">best</span>];
+            <span class="tok-id">total</span> += <span class="tok-id">key</span>[<span class="tok-id">best</span>]; <span class="tok-id">count</span>++;
+        }
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-num">0</span>; <span class="tok-id">v</span> &lt; <span class="tok-id">V</span>; <span class="tok-id">v</span>++)
+            <span class="tok-kw">if</span> (!<span class="tok-id">in_tree</span>[<span class="tok-id">v</span>] &amp;&amp; <span class="tok-id">g</span>[<span class="tok-id">best</span>][<span class="tok-id">v</span>] &amp;&amp; <span class="tok-id">g</span>[<span class="tok-id">best</span>][<span class="tok-id">v</span>] &lt; <span class="tok-id">key</span>[<span class="tok-id">v</span>]) {
+                <span class="tok-id">key</span>[<span class="tok-id">v</span>] = <span class="tok-id">g</span>[<span class="tok-id">best</span>][<span class="tok-id">v</span>];
+                <span class="tok-id">from</span>[<span class="tok-id">v</span>] = <span class="tok-id">best</span>;
+            }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">total</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-cmt">/* Same graph in both forms: 5 nodes, 7 weighted edges. */</span>
+    <span class="tok-id">Edge</span> <span class="tok-id">edges</span>[] = {{<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">2</span>},{<span class="tok-num">0</span>,<span class="tok-num">2</span>,<span class="tok-num">3</span>},{<span class="tok-num">1</span>,<span class="tok-num">2</span>,<span class="tok-num">1</span>},{<span class="tok-num">1</span>,<span class="tok-num">3</span>,<span class="tok-num">4</span>},{<span class="tok-num">2</span>,<span class="tok-num">3</span>,<span class="tok-num">5</span>},{<span class="tok-num">2</span>,<span class="tok-num">4</span>,<span class="tok-num">6</span>},{<span class="tok-num">3</span>,<span class="tok-num">4</span>,<span class="tok-num">7</span>}};
+    <span class="tok-id">Edge</span> <span class="tok-id">mst</span>[<span class="tok-id">V</span> - <span class="tok-num">1</span>];
+    <span class="tok-kw">int</span> <span class="tok-id">total</span> = <span class="tok-id">kruskal</span>(<span class="tok-id">edges</span>, <span class="tok-num">7</span>, <span class="tok-id">mst</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1 (Kruskal) total=%d edges:"</span>, <span class="tok-id">total</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">V</span> - <span class="tok-num">1</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">" %d-%d(w=%d)"</span>, <span class="tok-id">mst</span>[<span class="tok-id">i</span>].<span class="tok-id">u</span>, <span class="tok-id">mst</span>[<span class="tok-id">i</span>].<span class="tok-id">v</span>, <span class="tok-id">mst</span>[<span class="tok-id">i</span>].<span class="tok-id">w</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+
+    <span class="tok-kw">int</span> <span class="tok-id">g</span>[<span class="tok-id">V</span>][<span class="tok-id">V</span>] = {{<span class="tok-num">0</span>,<span class="tok-num">2</span>,<span class="tok-num">3</span>,<span class="tok-num">0</span>,<span class="tok-num">0</span>},{<span class="tok-num">2</span>,<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">4</span>,<span class="tok-num">0</span>},{<span class="tok-num">3</span>,<span class="tok-num">1</span>,<span class="tok-num">0</span>,<span class="tok-num">5</span>,<span class="tok-num">6</span>},{<span class="tok-num">0</span>,<span class="tok-num">4</span>,<span class="tok-num">5</span>,<span class="tok-num">0</span>,<span class="tok-num">7</span>},{<span class="tok-num">0</span>,<span class="tok-num">0</span>,<span class="tok-num">6</span>,<span class="tok-num">7</span>,<span class="tok-num">0</span>}};
+    <span class="tok-kw">int</span> <span class="tok-id">pmst</span>[<span class="tok-id">V</span> - <span class="tok-num">1</span>][<span class="tok-num">3</span>];
+    <span class="tok-id">total</span> = <span class="tok-id">prim</span>(<span class="tok-id">g</span>, <span class="tok-id">pmst</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2 (Prim) total=%d edges:"</span>, <span class="tok-id">total</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">V</span> - <span class="tok-num">1</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">" %d-%d(w=%d)"</span>, <span class="tok-id">pmst</span>[<span class="tok-id">i</span>][<span class="tok-num">0</span>], <span class="tok-id">pmst</span>[<span class="tok-id">i</span>][<span class="tok-num">1</span>], <span class="tok-id">pmst</span>[<span class="tok-id">i</span>][<span class="tok-num">2</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;algorithm&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;queue&gt;</span>
+<span class="tok-pre">#include &lt;tuple&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">struct</span> <span class="tok-id">DSU</span> {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">parent</span>, <span class="tok-id">rank_</span>;
+    <span class="tok-id">explicit</span> <span class="tok-id">DSU</span>(<span class="tok-kw">int</span> <span class="tok-id">n</span>) : <span class="tok-id">parent</span>(<span class="tok-id">n</span>), <span class="tok-id">rank_</span>(<span class="tok-id">n</span>, <span class="tok-num">0</span>) {
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">parent</span>[<span class="tok-id">i</span>] = <span class="tok-id">i</span>;
+    }
+    <span class="tok-kw">int</span> <span class="tok-id">find</span>(<span class="tok-kw">int</span> <span class="tok-id">x</span>) {
+        <span class="tok-kw">while</span> (<span class="tok-id">parent</span>[<span class="tok-id">x</span>] != <span class="tok-id">x</span>) { <span class="tok-id">parent</span>[<span class="tok-id">x</span>] = <span class="tok-id">parent</span>[<span class="tok-id">parent</span>[<span class="tok-id">x</span>]]; <span class="tok-id">x</span> = <span class="tok-id">parent</span>[<span class="tok-id">x</span>]; }
+        <span class="tok-kw">return</span> <span class="tok-id">x</span>;
+    }
+    <span class="tok-kw">bool</span> <span class="tok-id">unite</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">b</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">ra</span> = <span class="tok-id">find</span>(<span class="tok-id">a</span>), <span class="tok-id">rb</span> = <span class="tok-id">find</span>(<span class="tok-id">b</span>);
+        <span class="tok-kw">if</span> (<span class="tok-id">ra</span> == <span class="tok-id">rb</span>) <span class="tok-kw">return</span> <span class="tok-id">false</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">rank_</span>[<span class="tok-id">ra</span>] &lt; <span class="tok-id">rank_</span>[<span class="tok-id">rb</span>]) <span class="tok-id">swap</span>(<span class="tok-id">ra</span>, <span class="tok-id">rb</span>);
+        <span class="tok-id">parent</span>[<span class="tok-id">rb</span>] = <span class="tok-id">ra</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">rank_</span>[<span class="tok-id">ra</span>] == <span class="tok-id">rank_</span>[<span class="tok-id">rb</span>]) <span class="tok-id">rank_</span>[<span class="tok-id">ra</span>]++;
+        <span class="tok-kw">return</span> <span class="tok-id">true</span>;
+    }
+};
+
+<span class="tok-cmt">/* Kruskal: O(E log E) — sort edges, union them greedily. */</span>
+<span class="tok-id">vector</span>&lt;<span class="tok-id">tuple</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">kruskal</span>(<span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-id">vector</span>&lt;<span class="tok-id">tuple</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">edges</span>) {
+    <span class="tok-id">sort</span>(<span class="tok-id">edges</span>.<span class="tok-id">begin</span>(), <span class="tok-id">edges</span>.<span class="tok-id">end</span>(), [](<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; <span class="tok-id">a</span>, <span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; <span class="tok-id">b</span>) { <span class="tok-kw">return</span> <span class="tok-id">get</span>&lt;<span class="tok-num">2</span>&gt;(<span class="tok-id">a</span>) &lt; <span class="tok-id">get</span>&lt;<span class="tok-num">2</span>&gt;(<span class="tok-id">b</span>); });
+    <span class="tok-id">DSU</span> <span class="tok-id">dsu</span>(<span class="tok-id">n</span>);
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">tuple</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">mst</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">total</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">auto</span> [<span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span>] : <span class="tok-id">edges</span>) {
+        <span class="tok-kw">if</span> (<span class="tok-id">dsu</span>.<span class="tok-id">unite</span>(<span class="tok-id">u</span>, <span class="tok-id">v</span>)) {
+            <span class="tok-id">mst</span>.<span class="tok-id">push_back</span>({<span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span>});
+            <span class="tok-id">total</span> += <span class="tok-id">w</span>;
+        }
+    }
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1 (Kruskal) total="</span> &lt;&lt; <span class="tok-id">total</span> &lt;&lt; <span class="tok-str">" edges:"</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">auto</span> [<span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span>] : <span class="tok-id">mst</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">" "</span> &lt;&lt; <span class="tok-id">u</span> &lt;&lt; <span class="tok-str">"-"</span> &lt;&lt; <span class="tok-id">v</span> &lt;&lt; <span class="tok-str">"(w="</span> &lt;&lt; <span class="tok-id">w</span> &lt;&lt; <span class="tok-str">")"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-id">mst</span>;
+}
+
+<span class="tok-cmt">/* Prim: O(E log V) with a min-heap of (weight, node, parent). */</span>
+<span class="tok-kw">void</span> <span class="tok-id">prim</span>(<span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-id">vector</span>&lt;<span class="tok-id">pair</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;&gt;&gt;&amp; <span class="tok-id">adj</span>) {
+    <span class="tok-kw">using</span> <span class="tok-id">T</span> = <span class="tok-id">tuple</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;;              <span class="tok-cmt">// (weight, node, parent)</span>
+    <span class="tok-id">priority_queue</span>&lt;<span class="tok-id">T</span>, <span class="tok-id">vector</span>&lt;<span class="tok-id">T</span>&gt;, <span class="tok-id">greater</span>&lt;<span class="tok-id">T</span>&gt;&gt; <span class="tok-id">pq</span>;
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">bool</span>&gt; <span class="tok-id">in_tree</span>(<span class="tok-id">n</span>, <span class="tok-id">false</span>);
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">tuple</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">mst</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">total</span> = <span class="tok-num">0</span>;
+    <span class="tok-id">pq</span>.<span class="tok-id">push</span>({<span class="tok-num">0</span>, <span class="tok-num">0</span>, -<span class="tok-num">1</span>});
+    <span class="tok-kw">while</span> (!<span class="tok-id">pq</span>.<span class="tok-id">empty</span>()) {
+        <span class="tok-kw">auto</span> [<span class="tok-id">w</span>, <span class="tok-id">u</span>, <span class="tok-id">p</span>] = <span class="tok-id">pq</span>.<span class="tok-id">top</span>(); <span class="tok-id">pq</span>.<span class="tok-id">pop</span>();
+        <span class="tok-kw">if</span> (<span class="tok-id">in_tree</span>[<span class="tok-id">u</span>]) <span class="tok-kw">continue</span>;
+        <span class="tok-id">in_tree</span>[<span class="tok-id">u</span>] = <span class="tok-id">true</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">p</span> != -<span class="tok-num">1</span>) { <span class="tok-id">mst</span>.<span class="tok-id">push_back</span>({<span class="tok-id">p</span>, <span class="tok-id">u</span>, <span class="tok-id">w</span>}); <span class="tok-id">total</span> += <span class="tok-id">w</span>; }
+        <span class="tok-kw">for</span> (<span class="tok-kw">auto</span> [<span class="tok-id">v</span>, <span class="tok-id">ew</span>] : <span class="tok-id">adj</span>[<span class="tok-id">u</span>])
+            <span class="tok-kw">if</span> (!<span class="tok-id">in_tree</span>[<span class="tok-id">v</span>]) <span class="tok-id">pq</span>.<span class="tok-id">push</span>({<span class="tok-id">ew</span>, <span class="tok-id">v</span>, <span class="tok-id">u</span>});
+    }
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2 (Prim) total="</span> &lt;&lt; <span class="tok-id">total</span> &lt;&lt; <span class="tok-str">" edges:"</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">auto</span> [<span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span>] : <span class="tok-id">mst</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">" "</span> &lt;&lt; <span class="tok-id">u</span> &lt;&lt; <span class="tok-str">"-"</span> &lt;&lt; <span class="tok-id">v</span> &lt;&lt; <span class="tok-str">"(w="</span> &lt;&lt; <span class="tok-id">w</span> &lt;&lt; <span class="tok-str">")"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">tuple</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">edges</span> = {{<span class="tok-num">0</span>,<span class="tok-num">1</span>,<span class="tok-num">2</span>},{<span class="tok-num">0</span>,<span class="tok-num">2</span>,<span class="tok-num">3</span>},{<span class="tok-num">1</span>,<span class="tok-num">2</span>,<span class="tok-num">1</span>},{<span class="tok-num">1</span>,<span class="tok-num">3</span>,<span class="tok-num">4</span>},{<span class="tok-num">2</span>,<span class="tok-num">3</span>,<span class="tok-num">5</span>},{<span class="tok-num">2</span>,<span class="tok-num">4</span>,<span class="tok-num">6</span>},{<span class="tok-num">3</span>,<span class="tok-num">4</span>,<span class="tok-num">7</span>}};
+    <span class="tok-id">kruskal</span>(<span class="tok-num">5</span>, <span class="tok-id">edges</span>);
+
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">vector</span>&lt;<span class="tok-id">pair</span>&lt;<span class="tok-kw">int</span>,<span class="tok-kw">int</span>&gt;&gt;&gt; <span class="tok-id">adj</span>(<span class="tok-num">5</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">auto</span> [<span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span>] : <span class="tok-id">edges</span>) { <span class="tok-id">adj</span>[<span class="tok-id">u</span>].<span class="tok-id">push_back</span>({<span class="tok-id">v</span>, <span class="tok-id">w</span>}); <span class="tok-id">adj</span>[<span class="tok-id">v</span>].<span class="tok-id">push_back</span>({<span class="tok-id">u</span>, <span class="tok-id">w</span>}); }
+    <span class="tok-id">prim</span>(<span class="tok-num">5</span>, <span class="tok-id">adj</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">def</span> <span class="tok-id">kruskal</span>(<span class="tok-id">n</span>, <span class="tok-id">edges</span>):
+    <span class="tok-str">"""Minimum spanning tree: sort edges, unite with DSU. O(E log E)."""</span>
+    <span class="tok-id">parent</span> = <span class="tok-id">list</span>(<span class="tok-id">range</span>(<span class="tok-id">n</span>))
+
+    <span class="tok-kw">def</span> <span class="tok-id">find</span>(<span class="tok-id">x</span>):
+        <span class="tok-kw">while</span> <span class="tok-id">parent</span>[<span class="tok-id">x</span>] != <span class="tok-id">x</span>:
+            <span class="tok-id">parent</span>[<span class="tok-id">x</span>] = <span class="tok-id">parent</span>[<span class="tok-id">parent</span>[<span class="tok-id">x</span>]]   <span class="tok-cmt"># path halving</span>
+            <span class="tok-id">x</span> = <span class="tok-id">parent</span>[<span class="tok-id">x</span>]
+        <span class="tok-kw">return</span> <span class="tok-id">x</span>
+
+    <span class="tok-id">total</span>, <span class="tok-id">mst</span> = <span class="tok-num">0</span>, []
+    <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span> <span class="tok-kw">in</span> <span class="tok-id">sorted</span>(<span class="tok-id">edges</span>, <span class="tok-id">key</span>=<span class="tok-kw">lambda</span> <span class="tok-id">e</span>: <span class="tok-id">e</span>[<span class="tok-num">2</span>]):
+        <span class="tok-id">ru</span>, <span class="tok-id">rv</span> = <span class="tok-id">find</span>(<span class="tok-id">u</span>), <span class="tok-id">find</span>(<span class="tok-id">v</span>)
+        <span class="tok-kw">if</span> <span class="tok-id">ru</span> != <span class="tok-id">rv</span>:
+            <span class="tok-id">parent</span>[<span class="tok-id">ru</span>] = <span class="tok-id">rv</span>
+            <span class="tok-id">mst</span>.<span class="tok-id">append</span>((<span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span>))
+            <span class="tok-id">total</span> += <span class="tok-id">w</span>
+    <span class="tok-kw">return</span> <span class="tok-id">mst</span>, <span class="tok-id">total</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">prim</span>(<span class="tok-id">n</span>, <span class="tok-id">adj</span>):
+    <span class="tok-str">"""Minimum spanning tree grown from node 0 with a heap. O(E log V)."""</span>
+    <span class="tok-kw">import</span> <span class="tok-id">heapq</span>
+    <span class="tok-id">in_tree</span> = [<span class="tok-kw">False</span>] * <span class="tok-id">n</span>
+    <span class="tok-id">pq</span> = [(<span class="tok-num">0</span>, <span class="tok-num">0</span>, -<span class="tok-num">1</span>)]                     <span class="tok-cmt"># (weight, node, parent)</span>
+    <span class="tok-id">total</span>, <span class="tok-id">mst</span> = <span class="tok-num">0</span>, []
+    <span class="tok-kw">while</span> <span class="tok-id">pq</span>:
+        <span class="tok-id">w</span>, <span class="tok-id">u</span>, <span class="tok-id">p</span> = <span class="tok-id">heapq</span>.<span class="tok-id">heappop</span>(<span class="tok-id">pq</span>)
+        <span class="tok-kw">if</span> <span class="tok-id">in_tree</span>[<span class="tok-id">u</span>]:
+            <span class="tok-kw">continue</span>
+        <span class="tok-id">in_tree</span>[<span class="tok-id">u</span>] = <span class="tok-kw">True</span>
+        <span class="tok-kw">if</span> <span class="tok-id">p</span> != -<span class="tok-num">1</span>:
+            <span class="tok-id">mst</span>.<span class="tok-id">append</span>((<span class="tok-id">p</span>, <span class="tok-id">u</span>, <span class="tok-id">w</span>))
+            <span class="tok-id">total</span> += <span class="tok-id">w</span>
+        <span class="tok-kw">for</span> <span class="tok-id">v</span>, <span class="tok-id">ew</span> <span class="tok-kw">in</span> <span class="tok-id">adj</span>[<span class="tok-id">u</span>]:
+            <span class="tok-kw">if</span> <span class="tok-kw">not</span> <span class="tok-id">in_tree</span>[<span class="tok-id">v</span>]:
+                <span class="tok-id">heapq</span>.<span class="tok-id">heappush</span>(<span class="tok-id">pq</span>, (<span class="tok-id">ew</span>, <span class="tok-id">v</span>, <span class="tok-id">u</span>))
+    <span class="tok-kw">return</span> <span class="tok-id">mst</span>, <span class="tok-id">total</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">edges</span> = [(<span class="tok-num">0</span>, <span class="tok-num">1</span>, <span class="tok-num">2</span>), (<span class="tok-num">0</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>), (<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">1</span>), (<span class="tok-num">1</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>), (<span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">5</span>), (<span class="tok-num">2</span>, <span class="tok-num">4</span>, <span class="tok-num">6</span>), (<span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">7</span>)]
+    <span class="tok-id">mst</span>, <span class="tok-id">total</span> = <span class="tok-id">kruskal</span>(<span class="tok-num">5</span>, <span class="tok-id">edges</span>)
+    <span class="tok-id">print</span>(<span class="tok-str">"Test 1 (Kruskal) total={} edges: {}"</span>.<span class="tok-id">format</span>(
+        <span class="tok-id">total</span>, <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">f</span><span class="tok-str">"{u}-{v}(w={w})"</span> <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span> <span class="tok-kw">in</span> <span class="tok-id">mst</span>)))
+
+    <span class="tok-id">adj</span> = [[] <span class="tok-kw">for</span> <span class="tok-id">_</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-num">5</span>)]
+    <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span> <span class="tok-kw">in</span> <span class="tok-id">edges</span>:
+        <span class="tok-id">adj</span>[<span class="tok-id">u</span>].<span class="tok-id">append</span>((<span class="tok-id">v</span>, <span class="tok-id">w</span>))
+        <span class="tok-id">adj</span>[<span class="tok-id">v</span>].<span class="tok-id">append</span>((<span class="tok-id">u</span>, <span class="tok-id">w</span>))
+    <span class="tok-id">mst</span>, <span class="tok-id">total</span> = <span class="tok-id">prim</span>(<span class="tok-num">5</span>, <span class="tok-id">adj</span>)
+    <span class="tok-id">print</span>(<span class="tok-str">"Test 2 (Prim) total={} edges: {}"</span>.<span class="tok-id">format</span>(
+        <span class="tok-id">total</span>, <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">f</span><span class="tok-str">"{u}-{v}(w={w})"</span> <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span>, <span class="tok-id">w</span> <span class="tok-kw">in</span> <span class="tok-id">mst</span>)))
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1 (Kruskal) total=13 edges: 1-2(w=1) 0-1(w=2) 1-3(w=4) 2-4(w=6)
+Test 2 (Prim) total=13 edges: 0-1(w=2) 1-2(w=1) 1-3(w=4) 2-4(w=6)</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1 (Kruskal) total=13 edges: 1-2(w=1) 0-1(w=2) 1-3(w=4) 2-4(w=6)
+Test 2 (Prim) total=13 edges: 0-1(w=2) 1-2(w=1) 1-3(w=4) 2-4(w=6)</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1 (Kruskal) total=13 edges: 1-2(w=1) 0-1(w=2) 1-3(w=4) 2-4(w=6)
+Test 2 (Prim) total=13 edges: 0-1(w=2) 1-2(w=1) 1-3(w=4) 2-4(w=6)</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Telecom &amp; utility networks</h4><p class="card-content" style="margin:0;">Fiber, power-line, and pipeline layouts are planned as MSTs to minimise cabling cost.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Circuit design</h4><p class="card-content" style="margin:0;">Wire-length minimisation in VLSI routing uses rectilinear MSTs (e.g. Prim/Boruvka variants).</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Cluster analysis</h4><p class="card-content" style="margin:0;">Single-linkage clustering is an MST: cut its longest edges to split groups.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Approximation algorithms</h4><p class="card-content" style="margin:0;">The 2-approximation for metric TSP builds an MST, then shortcuts a depth-first walk of it.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/minimum-spanning-tree/" target="_blank" rel="noopener">GeeksforGeeks — Minimum Spanning Tree (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [], "checking": null, "state": "normal", "caption": "Kruskal: sort all edges by weight, then take the cheapest that joins two different trees", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1]], "checking": ["1", "2", 1], "state": "accepted", "caption": "Edge 1-2 (w=1): endpoints are in different trees \u2014 ACCEPT (1 of 4 edges)", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2]], "checking": ["0", "1", 2], "state": "accepted", "caption": "Edge 0-1 (w=2): endpoints are in different trees \u2014 ACCEPT (2 of 4 edges)", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2]], "checking": ["0", "2", 3], "state": "rejected", "caption": "Edge 0-2 (w=3): both ends already connected \u2014 REJECT (would form a cycle)", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2], ["1", "3", 4]], "checking": ["1", "3", 4], "state": "accepted", "caption": "Edge 1-3 (w=4): endpoints are in different trees \u2014 ACCEPT (3 of 4 edges)", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2], ["1", "3", 4]], "checking": ["2", "3", 5], "state": "rejected", "caption": "Edge 2-3 (w=5): both ends already connected \u2014 REJECT (would form a cycle)", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2], ["1", "3", 4], ["2", "4", 6]], "checking": ["2", "4", 6], "state": "accepted", "caption": "Edge 2-4 (w=6): endpoints are in different trees \u2014 ACCEPT (4 of 4 edges)", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2], ["1", "3", 4], ["2", "4", 6]], "checking": ["3", "4", 7], "state": "rejected", "caption": "Edge 3-4 (w=7): both ends already connected \u2014 REJECT (would form a cycle)", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2], ["1", "3", 4], ["2", "4", 6]], "checking": null, "state": "accepted", "caption": "Kruskal done \u2014 MST weight 13", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": ["0"], "checking": null, "state": "normal", "caption": "Prim: grow one tree from node 0, always adding the cheapest edge leaving it", "done": false}, {"kind": "graph", "nodes": [{"id": "0", "x": 50, "y": 40}, {"id": "1", "x": 300, "y": 40}, {"id": "2", "x": 150, "y": 160}, {"id": "3", "x": 460, "y": 160}, {"id": "4", "x": 300, "y": 280}], "edges": [{"u": "0", "v": "1", "w": 2}, {"u": "0", "v": "2", "w": 3}, {"u": "1", "v": "2", "w": 1}, {"u": "1", "v": "3", "w": 4}, {"u": "2", "v": "3", "w": 5}, {"u": "2", "v": "4", "w": 6}, {"u": "3", "v": "4", "w": 7}], "mst": [["1", "2", 1], ["0", "1", 2], ["1", "3", 4], ["2", "4", 6]], "checking": null, "state": "accepted", "caption": "Prim's picks are the same set of edges here \u2014 cut-crossing property guarantees it. Kruskal = sort + DSU, Prim = heap; both O(E log E)-ish", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

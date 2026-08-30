@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A binary search tree keeps one ordering invariant: every key in a node's left subtree is smaller than the node, and every key in its right subtree is larger" />
+  <title>Binary Search Tree | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🌳</div><h1>Binary Search Tree</h1><p class="subtitle">🌳 Tree · <span style="color:#dc2626;font-weight:600;">Must Know</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(n) — degenerates into a linked list</span><span class="stat-badge">Priority 5/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="binary-tree-traversals.html">← Binary Tree &amp; Traversals</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="binary-heap-priority-queue.html">Binary Heap &amp; Priority Queue →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">A binary search tree keeps one ordering invariant: every key in a node's left subtree is smaller than the node, and every key in its right subtree is larger. That single rule turns search into a guided walk from the root — at each node you discard an entire half of the tree — and it makes an inorder traversal emit the keys in sorted order.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">The BST is the first data structure that combines fast lookup with fast, in-order updates. Sorted arrays search in O(log n) but insert in O(n); hash sets average O(1) but lose ordering entirely. A BST supports search, insert, delete, min/max, predecessor/successor, and range scans in O(h) while keeping the data sorted at all times — which is why every balanced variant (AVL, red-black) and most database index trees grow from this idea.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Frequent inserts/deletes interleaved with lookups, and the data must stay sorted.</li><li>Ordered queries: minimum, maximum, successor, predecessor, range reporting.</li><li>Implementing ordered sets, maps, or index structures.</li><li>A teaching base before studying AVL, red-black, or B-trees.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Insert order decides shape — random keys give O(log n) height, sorted keys give O(n).</li><li>If adversarial or sorted input is likely, self-balancing trees (AVL, red-black) are mandatory.</li><li>Need ordering plus worst-case guarantees but data lives on disk? Use a B-tree instead.</li><li>Only point lookups, no ordering? A hash table is simpler and faster on average.</li><li>Duplicates: keep a counter per node, or adopt a 'right = &gt;= ' convention consistently.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Keys arrive in sorted order and cannot be balanced — height becomes n, all operations O(n).</li><li>You never need ordered queries — a hash table's O(1) average beats O(log n).</li><li>Strict latency guarantees matter — an unbalanced BST has none; pick a balanced structure.</li><li>The dataset fits in a sorted array and is read-mostly — binary search on the array is lighter.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(log n) — balanced tree</td></tr><tr><td>Average case</td><td>O(log n)</td></tr><tr><td>Worst case</td><td>O(n) — degenerates into a linked list</td></tr><tr><td>Space</td><td>O(n) for the structure; O(h) recursion per operation</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Yes (pointer rewiring)</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+<span class="tok-pre">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-kw">typedef</span> <span class="tok-kw">struct</span> <span class="tok-id">Node</span> {
+    <span class="tok-kw">int</span> <span class="tok-id">key</span>;
+    <span class="tok-kw">struct</span> <span class="tok-id">Node</span> *<span class="tok-id">left</span>, *<span class="tok-id">right</span>;
+} <span class="tok-id">Node</span>;
+
+<span class="tok-id">Node</span> *<span class="tok-id">new_node</span>(<span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+    <span class="tok-id">Node</span> *<span class="tok-id">n</span> = (<span class="tok-id">Node</span> *)<span class="tok-kw">malloc</span>(<span class="tok-kw">sizeof</span>(<span class="tok-id">Node</span>));
+    <span class="tok-id">n</span>-&gt;<span class="tok-id">key</span> = <span class="tok-id">key</span>;
+    <span class="tok-id">n</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">n</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">NULL</span>;
+    <span class="tok-kw">return</span> <span class="tok-id">n</span>;
+}
+
+<span class="tok-cmt">/* Insert: smaller keys go left, larger go right. O(h). */</span>
+<span class="tok-id">Node</span> *<span class="tok-id">insert</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>, <span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span> <span class="tok-id">new_node</span>(<span class="tok-id">key</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">key</span> &lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">insert</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">else</span> <span class="tok-kw">if</span> (<span class="tok-id">key</span> &gt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">insert</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">return</span> <span class="tok-id">r</span>;               <span class="tok-cmt">/* duplicates are ignored */</span>
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">search</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>, <span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+    <span class="tok-kw">while</span> (<span class="tok-id">r</span>) {
+        <span class="tok-kw">if</span> (<span class="tok-id">key</span> == <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) <span class="tok-kw">return</span> <span class="tok-num">1</span>;
+        <span class="tok-id">r</span> = (<span class="tok-id">key</span> &lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) ? <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span> : <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>;
+    }
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">find_min</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">while</span> (<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>) <span class="tok-id">r</span> = <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>;
+    <span class="tok-kw">return</span> <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>;
+}
+
+<span class="tok-cmt">/* Delete: three cases — leaf, one child, two children (replace with the
+ * inorder successor = minimum of the right subtree). O(h). */</span>
+<span class="tok-id">Node</span> *<span class="tok-id">delete_node</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>, <span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span> <span class="tok-id">NULL</span>;
+    <span class="tok-kw">if</span> (<span class="tok-id">key</span> &lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">delete_node</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">else</span> <span class="tok-kw">if</span> (<span class="tok-id">key</span> &gt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">delete_node</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">else</span> {
+        <span class="tok-kw">if</span> (!<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>)  { <span class="tok-id">Node</span> *<span class="tok-id">t</span> = <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>; <span class="tok-kw">free</span>(<span class="tok-id">r</span>); <span class="tok-kw">return</span> <span class="tok-id">t</span>; }
+        <span class="tok-kw">if</span> (!<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>) { <span class="tok-id">Node</span> *<span class="tok-id">t</span> = <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>;  <span class="tok-kw">free</span>(<span class="tok-id">r</span>); <span class="tok-kw">return</span> <span class="tok-id">t</span>; }
+        <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span> = <span class="tok-id">find_min</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+        <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">delete_node</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>);
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">r</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">inorder</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>);
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">free_tree</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">free_tree</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">free_tree</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+    <span class="tok-kw">free</span>(<span class="tok-id">r</span>);
+}
+
+<span class="tok-id">Node</span> *<span class="tok-id">build</span>(<span class="tok-kw">int</span> <span class="tok-id">keys</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>) {
+    <span class="tok-id">Node</span> *<span class="tok-id">root</span> = <span class="tok-id">NULL</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">root</span> = <span class="tok-id">insert</span>(<span class="tok-id">root</span>, <span class="tok-id">keys</span>[<span class="tok-id">i</span>]);
+    <span class="tok-kw">return</span> <span class="tok-id">root</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">keys</span>[] = {<span class="tok-num">50</span>, <span class="tok-num">30</span>, <span class="tok-num">70</span>, <span class="tok-num">20</span>, <span class="tok-num">40</span>, <span class="tok-num">60</span>, <span class="tok-num">80</span>};
+    <span class="tok-id">Node</span> *<span class="tok-id">t</span> = <span class="tok-id">build</span>(<span class="tok-id">keys</span>, <span class="tok-num">7</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1 (inorder): "</span>); <span class="tok-id">inorder</span>(<span class="tok-id">t</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2: search 40 -&gt; %s\n"</span>, <span class="tok-id">search</span>(<span class="tok-id">t</span>, <span class="tok-num">40</span>) ? <span class="tok-str">"found"</span> : <span class="tok-str">"not found"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3: search 35 -&gt; %s\n"</span>, <span class="tok-id">search</span>(<span class="tok-id">t</span>, <span class="tok-num">35</span>) ? <span class="tok-str">"found"</span> : <span class="tok-str">"not found"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 4: min = %d\n"</span>, <span class="tok-id">find_min</span>(<span class="tok-id">t</span>));
+
+    <span class="tok-id">t</span> = <span class="tok-id">delete_node</span>(<span class="tok-id">t</span>, <span class="tok-num">20</span>);   <span class="tok-cmt">/* leaf */</span>
+    <span class="tok-id">t</span> = <span class="tok-id">delete_node</span>(<span class="tok-id">t</span>, <span class="tok-num">30</span>);   <span class="tok-cmt">/* two children */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 5 (after deleting 20, 30): "</span>); <span class="tok-id">inorder</span>(<span class="tok-id">t</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">free_tree</span>(<span class="tok-id">t</span>);
+
+    <span class="tok-kw">int</span> <span class="tok-id">asc</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span>};   <span class="tok-cmt">/* degenerates into a linked list */</span>
+    <span class="tok-id">Node</span> *<span class="tok-id">w</span> = <span class="tok-id">build</span>(<span class="tok-id">asc</span>, <span class="tok-num">5</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 6 (skewed insert order, inorder still sorted): "</span>); <span class="tok-id">inorder</span>(<span class="tok-id">w</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">free_tree</span>(<span class="tok-id">w</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;memory&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">struct</span> <span class="tok-id">Node</span> {
+    <span class="tok-kw">int</span> <span class="tok-id">key</span>;
+    <span class="tok-id">unique_ptr</span>&lt;<span class="tok-id">Node</span>&gt; <span class="tok-id">left</span>, <span class="tok-id">right</span>;
+    <span class="tok-id">explicit</span> <span class="tok-id">Node</span>(<span class="tok-kw">int</span> <span class="tok-id">k</span>) : <span class="tok-id">key</span>(<span class="tok-id">k</span>) {}
+};
+
+<span class="tok-kw">class</span> <span class="tok-id">BST</span> {
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">void</span> <span class="tok-id">insert</span>(<span class="tok-kw">int</span> <span class="tok-id">key</span>) { <span class="tok-id">root_</span> = <span class="tok-id">insert</span>(<span class="tok-id">move</span>(<span class="tok-id">root_</span>), <span class="tok-id">key</span>); }
+    <span class="tok-kw">bool</span> <span class="tok-id">search</span>(<span class="tok-kw">int</span> <span class="tok-id">key</span>) <span class="tok-kw">const</span> {
+        <span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">r</span> = <span class="tok-id">root_</span>.<span class="tok-id">get</span>();
+        <span class="tok-kw">while</span> (<span class="tok-id">r</span>) {
+            <span class="tok-kw">if</span> (<span class="tok-id">key</span> == <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) <span class="tok-kw">return</span> <span class="tok-id">true</span>;
+            <span class="tok-id">r</span> = (<span class="tok-id">key</span> &lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) ? <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>() : <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>.<span class="tok-id">get</span>();
+        }
+        <span class="tok-kw">return</span> <span class="tok-id">false</span>;
+    }
+    <span class="tok-kw">int</span> <span class="tok-id">min_key</span>() <span class="tok-kw">const</span> {
+        <span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">r</span> = <span class="tok-id">root_</span>.<span class="tok-id">get</span>();
+        <span class="tok-kw">while</span> (<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>) <span class="tok-id">r</span> = <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>();
+        <span class="tok-kw">return</span> <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>;
+    }
+    <span class="tok-kw">void</span> <span class="tok-id">erase</span>(<span class="tok-kw">int</span> <span class="tok-id">key</span>) { <span class="tok-id">root_</span> = <span class="tok-id">erase</span>(<span class="tok-id">move</span>(<span class="tok-id">root_</span>), <span class="tok-id">key</span>); }
+
+    <span class="tok-kw">void</span> <span class="tok-id">inorder</span>(<span class="tok-id">ostream</span>&amp; <span class="tok-id">os</span>) <span class="tok-kw">const</span> { <span class="tok-id">inorder</span>(<span class="tok-id">os</span>, <span class="tok-id">root_</span>.<span class="tok-id">get</span>()); }
+
+<span class="tok-kw">private</span>:
+    <span class="tok-id">unique_ptr</span>&lt;<span class="tok-id">Node</span>&gt; <span class="tok-id">root_</span>;
+
+    <span class="tok-kw">static</span> <span class="tok-id">unique_ptr</span>&lt;<span class="tok-id">Node</span>&gt; <span class="tok-id">insert</span>(<span class="tok-id">unique_ptr</span>&lt;<span class="tok-id">Node</span>&gt; <span class="tok-id">r</span>, <span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+        <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span> <span class="tok-id">make_unique</span>&lt;<span class="tok-id">Node</span>&gt;(<span class="tok-id">key</span>);
+        <span class="tok-kw">if</span> (<span class="tok-id">key</span> &lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>  = <span class="tok-id">insert</span>(<span class="tok-id">move</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>), <span class="tok-id">key</span>);
+        <span class="tok-kw">else</span> <span class="tok-kw">if</span> (<span class="tok-id">key</span> &gt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">insert</span>(<span class="tok-id">move</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>), <span class="tok-id">key</span>);
+        <span class="tok-kw">return</span> <span class="tok-id">r</span>;                       <span class="tok-cmt">/* duplicates ignored */</span>
+    }
+
+    <span class="tok-kw">static</span> <span class="tok-id">unique_ptr</span>&lt;<span class="tok-id">Node</span>&gt; <span class="tok-id">erase</span>(<span class="tok-id">unique_ptr</span>&lt;<span class="tok-id">Node</span>&gt; <span class="tok-id">r</span>, <span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+        <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span> <span class="tok-id">nullptr</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">key</span> &lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>  = <span class="tok-id">erase</span>(<span class="tok-id">move</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>), <span class="tok-id">key</span>);
+        <span class="tok-kw">else</span> <span class="tok-kw">if</span> (<span class="tok-id">key</span> &gt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>) <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">erase</span>(<span class="tok-id">move</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>), <span class="tok-id">key</span>);
+        <span class="tok-kw">else</span> {
+            <span class="tok-kw">if</span> (!<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>)  <span class="tok-kw">return</span> <span class="tok-id">move</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+            <span class="tok-kw">if</span> (!<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>) <span class="tok-kw">return</span> <span class="tok-id">move</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+            <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span> = <span class="tok-id">min_node</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>.<span class="tok-id">get</span>())-&gt;<span class="tok-id">key</span>;
+            <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">erase</span>(<span class="tok-id">move</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>), <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>);
+        }
+        <span class="tok-kw">return</span> <span class="tok-id">r</span>;
+    }
+
+    <span class="tok-kw">static</span> <span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">min_node</span>(<span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">r</span>) {
+        <span class="tok-kw">while</span> (<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>) <span class="tok-id">r</span> = <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>();
+        <span class="tok-kw">return</span> <span class="tok-id">r</span>;
+    }
+
+    <span class="tok-kw">static</span> <span class="tok-kw">void</span> <span class="tok-id">inorder</span>(<span class="tok-id">ostream</span>&amp; <span class="tok-id">os</span>, <span class="tok-kw">const</span> <span class="tok-id">Node</span>* <span class="tok-id">r</span>) {
+        <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+        <span class="tok-id">inorder</span>(<span class="tok-id">os</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>.<span class="tok-id">get</span>());
+        <span class="tok-id">os</span> &lt;&lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span> &lt;&lt; <span class="tok-str">" "</span>;
+        <span class="tok-id">inorder</span>(<span class="tok-id">os</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>.<span class="tok-id">get</span>());
+    }
+};
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">BST</span> <span class="tok-id">t</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">k</span> : {<span class="tok-num">50</span>, <span class="tok-num">30</span>, <span class="tok-num">70</span>, <span class="tok-num">20</span>, <span class="tok-num">40</span>, <span class="tok-num">60</span>, <span class="tok-num">80</span>}) <span class="tok-id">t</span>.<span class="tok-id">insert</span>(<span class="tok-id">k</span>);
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1 (inorder): "</span>; <span class="tok-id">t</span>.<span class="tok-id">inorder</span>(<span class="tok-id">cout</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2: search 40 -&gt; "</span> &lt;&lt; (<span class="tok-id">t</span>.<span class="tok-id">search</span>(<span class="tok-num">40</span>) ? <span class="tok-str">"found"</span> : <span class="tok-str">"not found"</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3: search 35 -&gt; "</span> &lt;&lt; (<span class="tok-id">t</span>.<span class="tok-id">search</span>(<span class="tok-num">35</span>) ? <span class="tok-str">"found"</span> : <span class="tok-str">"not found"</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 4: min = "</span> &lt;&lt; <span class="tok-id">t</span>.<span class="tok-id">min_key</span>() &lt;&lt; <span class="tok-str">"\n"</span>;
+
+    <span class="tok-id">t</span>.<span class="tok-id">erase</span>(<span class="tok-num">20</span>);   <span class="tok-cmt">/* leaf */</span>
+    <span class="tok-id">t</span>.<span class="tok-id">erase</span>(<span class="tok-num">30</span>);   <span class="tok-cmt">/* two children */</span>
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 5 (after deleting 20, 30): "</span>; <span class="tok-id">t</span>.<span class="tok-id">inorder</span>(<span class="tok-id">cout</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+
+    <span class="tok-id">BST</span> <span class="tok-id">w</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">k</span> : {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span>}) <span class="tok-id">w</span>.<span class="tok-id">insert</span>(<span class="tok-id">k</span>);   <span class="tok-cmt">/* degenerates into a list */</span>
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 6 (skewed insert order, inorder still sorted): "</span>; <span class="tok-id">w</span>.<span class="tok-id">inorder</span>(<span class="tok-id">cout</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">class</span> <span class="tok-id">Node</span>:
+    <span class="tok-id">__slots__</span> = (<span class="tok-str">"key"</span>, <span class="tok-str">"left"</span>, <span class="tok-str">"right"</span>)
+
+    <span class="tok-kw">def</span> <span class="tok-id">__init__</span>(<span class="tok-id">self</span>, <span class="tok-id">key</span>):
+        <span class="tok-id">self</span>.<span class="tok-id">key</span> = <span class="tok-id">key</span>
+        <span class="tok-id">self</span>.<span class="tok-id">left</span> = <span class="tok-kw">None</span>
+        <span class="tok-id">self</span>.<span class="tok-id">right</span> = <span class="tok-kw">None</span>
+
+
+<span class="tok-kw">class</span> <span class="tok-id">BST</span>:
+    <span class="tok-kw">def</span> <span class="tok-id">__init__</span>(<span class="tok-id">self</span>):
+        <span class="tok-id">self</span>.<span class="tok-id">root</span> = <span class="tok-kw">None</span>
+
+    <span class="tok-kw">def</span> <span class="tok-id">insert</span>(<span class="tok-id">self</span>, <span class="tok-id">key</span>):
+        <span class="tok-id">self</span>.<span class="tok-id">root</span> = <span class="tok-id">self</span>.<span class="tok-id">_insert</span>(<span class="tok-id">self</span>.<span class="tok-id">root</span>, <span class="tok-id">key</span>)
+
+    <span class="tok-kw">def</span> <span class="tok-id">_insert</span>(<span class="tok-id">self</span>, <span class="tok-id">r</span>, <span class="tok-id">key</span>):
+        <span class="tok-kw">if</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+            <span class="tok-kw">return</span> <span class="tok-id">Node</span>(<span class="tok-id">key</span>)
+        <span class="tok-kw">if</span> <span class="tok-id">key</span> &lt; <span class="tok-id">r</span>.<span class="tok-id">key</span>:
+            <span class="tok-id">r</span>.<span class="tok-id">left</span> = <span class="tok-id">self</span>.<span class="tok-id">_insert</span>(<span class="tok-id">r</span>.<span class="tok-id">left</span>, <span class="tok-id">key</span>)
+        <span class="tok-kw">elif</span> <span class="tok-id">key</span> &gt; <span class="tok-id">r</span>.<span class="tok-id">key</span>:
+            <span class="tok-id">r</span>.<span class="tok-id">right</span> = <span class="tok-id">self</span>.<span class="tok-id">_insert</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>, <span class="tok-id">key</span>)
+        <span class="tok-kw">return</span> <span class="tok-id">r</span>                          <span class="tok-cmt"># duplicates ignored</span>
+
+    <span class="tok-kw">def</span> <span class="tok-id">search</span>(<span class="tok-id">self</span>, <span class="tok-id">key</span>):
+        <span class="tok-id">r</span> = <span class="tok-id">self</span>.<span class="tok-id">root</span>
+        <span class="tok-kw">while</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">not</span> <span class="tok-kw">None</span>:
+            <span class="tok-kw">if</span> <span class="tok-id">key</span> == <span class="tok-id">r</span>.<span class="tok-id">key</span>:
+                <span class="tok-kw">return</span> <span class="tok-kw">True</span>
+            <span class="tok-id">r</span> = <span class="tok-id">r</span>.<span class="tok-id">left</span> <span class="tok-kw">if</span> <span class="tok-id">key</span> &lt; <span class="tok-id">r</span>.<span class="tok-id">key</span> <span class="tok-kw">else</span> <span class="tok-id">r</span>.<span class="tok-id">right</span>
+        <span class="tok-kw">return</span> <span class="tok-kw">False</span>
+
+    <span class="tok-kw">def</span> <span class="tok-id">min_key</span>(<span class="tok-id">self</span>):
+        <span class="tok-id">r</span> = <span class="tok-id">self</span>.<span class="tok-id">root</span>
+        <span class="tok-kw">while</span> <span class="tok-id">r</span>.<span class="tok-id">left</span> <span class="tok-kw">is</span> <span class="tok-kw">not</span> <span class="tok-kw">None</span>:
+            <span class="tok-id">r</span> = <span class="tok-id">r</span>.<span class="tok-id">left</span>
+        <span class="tok-kw">return</span> <span class="tok-id">r</span>.<span class="tok-id">key</span>
+
+    <span class="tok-kw">def</span> <span class="tok-id">erase</span>(<span class="tok-id">self</span>, <span class="tok-id">key</span>):
+        <span class="tok-id">self</span>.<span class="tok-id">root</span> = <span class="tok-id">self</span>.<span class="tok-id">_erase</span>(<span class="tok-id">self</span>.<span class="tok-id">root</span>, <span class="tok-id">key</span>)
+
+    <span class="tok-kw">def</span> <span class="tok-id">_erase</span>(<span class="tok-id">self</span>, <span class="tok-id">r</span>, <span class="tok-id">key</span>):
+        <span class="tok-kw">if</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+            <span class="tok-kw">return</span> <span class="tok-kw">None</span>
+        <span class="tok-kw">if</span> <span class="tok-id">key</span> &lt; <span class="tok-id">r</span>.<span class="tok-id">key</span>:
+            <span class="tok-id">r</span>.<span class="tok-id">left</span> = <span class="tok-id">self</span>.<span class="tok-id">_erase</span>(<span class="tok-id">r</span>.<span class="tok-id">left</span>, <span class="tok-id">key</span>)
+        <span class="tok-kw">elif</span> <span class="tok-id">key</span> &gt; <span class="tok-id">r</span>.<span class="tok-id">key</span>:
+            <span class="tok-id">r</span>.<span class="tok-id">right</span> = <span class="tok-id">self</span>.<span class="tok-id">_erase</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>, <span class="tok-id">key</span>)
+        <span class="tok-kw">else</span>:
+            <span class="tok-kw">if</span> <span class="tok-id">r</span>.<span class="tok-id">left</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+                <span class="tok-kw">return</span> <span class="tok-id">r</span>.<span class="tok-id">right</span>
+            <span class="tok-kw">if</span> <span class="tok-id">r</span>.<span class="tok-id">right</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+                <span class="tok-kw">return</span> <span class="tok-id">r</span>.<span class="tok-id">left</span>
+            <span class="tok-id">succ</span> = <span class="tok-id">r</span>.<span class="tok-id">right</span>                 <span class="tok-cmt"># inorder successor</span>
+            <span class="tok-kw">while</span> <span class="tok-id">succ</span>.<span class="tok-id">left</span> <span class="tok-kw">is</span> <span class="tok-kw">not</span> <span class="tok-kw">None</span>:
+                <span class="tok-id">succ</span> = <span class="tok-id">succ</span>.<span class="tok-id">left</span>
+            <span class="tok-id">r</span>.<span class="tok-id">key</span> = <span class="tok-id">succ</span>.<span class="tok-id">key</span>
+            <span class="tok-id">r</span>.<span class="tok-id">right</span> = <span class="tok-id">self</span>.<span class="tok-id">_erase</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>, <span class="tok-id">r</span>.<span class="tok-id">key</span>)
+        <span class="tok-kw">return</span> <span class="tok-id">r</span>
+
+    <span class="tok-kw">def</span> <span class="tok-id">inorder</span>(<span class="tok-id">self</span>):
+        <span class="tok-id">out</span> = []
+
+        <span class="tok-kw">def</span> <span class="tok-id">walk</span>(<span class="tok-id">n</span>):
+            <span class="tok-kw">if</span> <span class="tok-id">n</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+                <span class="tok-kw">return</span>
+            <span class="tok-id">walk</span>(<span class="tok-id">n</span>.<span class="tok-id">left</span>)
+            <span class="tok-id">out</span>.<span class="tok-id">append</span>(<span class="tok-id">n</span>.<span class="tok-id">key</span>)
+            <span class="tok-id">walk</span>(<span class="tok-id">n</span>.<span class="tok-id">right</span>)
+
+        <span class="tok-id">walk</span>(<span class="tok-id">self</span>.<span class="tok-id">root</span>)
+        <span class="tok-kw">return</span> <span class="tok-id">out</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">t</span> = <span class="tok-id">BST</span>()
+    <span class="tok-kw">for</span> <span class="tok-id">k</span> <span class="tok-kw">in</span> (<span class="tok-num">50</span>, <span class="tok-num">30</span>, <span class="tok-num">70</span>, <span class="tok-num">20</span>, <span class="tok-num">40</span>, <span class="tok-num">60</span>, <span class="tok-num">80</span>):
+        <span class="tok-id">t</span>.<span class="tok-id">insert</span>(<span class="tok-id">k</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1 (inorder): {' '.join(map(str, t.inorder()))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2: search 40 -&gt; {'found' if t.search(40) else 'not found'}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3: search 35 -&gt; {'found' if t.search(35) else 'not found'}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 4: min = {t.min_key()}"</span>)
+
+    <span class="tok-id">t</span>.<span class="tok-id">erase</span>(<span class="tok-num">20</span>)   <span class="tok-cmt"># leaf</span>
+    <span class="tok-id">t</span>.<span class="tok-id">erase</span>(<span class="tok-num">30</span>)   <span class="tok-cmt"># two children</span>
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 5 (after deleting 20, 30): {' '.join(map(str, t.inorder()))}"</span>)
+
+    <span class="tok-id">w</span> = <span class="tok-id">BST</span>()
+    <span class="tok-kw">for</span> <span class="tok-id">k</span> <span class="tok-kw">in</span> (<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span>):      <span class="tok-cmt"># degenerates into a linked list</span>
+        <span class="tok-id">w</span>.<span class="tok-id">insert</span>(<span class="tok-id">k</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 6 (skewed insert order, inorder still sorted): {' '.join(map(str, w.inorder()))}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1 (inorder): 20 30 40 50 60 70 80 
+Test 2: search 40 -&gt; found
+Test 3: search 35 -&gt; not found
+Test 4: min = 20
+Test 5 (after deleting 20, 30): 40 50 60 70 80 
+Test 6 (skewed insert order, inorder still sorted): 1 2 3 4 5</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1 (inorder): 20 30 40 50 60 70 80 
+Test 2: search 40 -&gt; found
+Test 3: search 35 -&gt; not found
+Test 4: min = 20
+Test 5 (after deleting 20, 30): 40 50 60 70 80 
+Test 6 (skewed insert order, inorder still sorted): 1 2 3 4 5</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1 (inorder): 20 30 40 50 60 70 80
+Test 2: search 40 -&gt; found
+Test 3: search 35 -&gt; not found
+Test 4: min = 20
+Test 5 (after deleting 20, 30): 40 50 60 70 80
+Test 6 (skewed insert order, inorder still sorted): 1 2 3 4 5</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Ordered sets and maps</h4><p class="card-content" style="margin:0;">C++ std::set/std::map are red-black trees — the balanced descendant of the plain BST shown here.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Database indexes</h4><p class="card-content" style="margin:0;">B-trees and B+ trees keep the BST ordering invariant across disk pages; the search walk is identical.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Autocomplete and range queries</h4><p class="card-content" style="margin:0;">Prefix stores and interval indexes exploit the same ordered-tree navigation.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Scheduling and event queues</h4><p class="card-content" style="margin:0;">Ordered event calendars (network simulators) use BSTs for fast 'next event after time t' queries.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/binary-search-tree-data-structure/" target="_blank" rel="noopener">GeeksforGeeks — Binary Search Tree (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "frontier", "edgeState": "path"}], "caption": "Insert 50 as the root", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}], "caption": "Insert 30: compare with 50 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "normal", "edgeState": "normal"}, {"id": 30, "value": 30, "parent": 50, "state": "frontier", "edgeState": "path"}], "caption": "Attach 30 as the left child of 50", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}], "caption": "Insert 70: compare with 50 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "normal", "edgeState": "normal"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "frontier", "edgeState": "path"}], "caption": "Attach 70 as the right child of 50", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}], "caption": "Insert 20: compare with 50 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "current", "edgeState": "path"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}], "caption": "Insert 20: compare with 30 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "normal", "edgeState": "normal"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "frontier", "edgeState": "path"}], "caption": "Attach 20 as the left child of 30", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 40: compare with 50 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "current", "edgeState": "path"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 40: compare with 30 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "normal", "edgeState": "normal"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "frontier", "edgeState": "path"}], "caption": "Attach 40 as the right child of 30", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 60: compare with 50 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 60: compare with 70 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "normal", "edgeState": "normal"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "frontier", "edgeState": "path"}], "caption": "Attach 60 as the left child of 70", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Insert 80: compare with 50 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Insert 80: compare with 70 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "normal", "edgeState": "normal"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "frontier", "edgeState": "path"}], "caption": "Attach 80 as the right child of 70", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "normal", "edgeState": "normal"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Tree built \u2014 7 nodes; inorder traversal of a BST emits keys in sorted order", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Search 60: 60 \u003e 50 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Search 60: 60 \u003c 70 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "current", "edgeState": "path"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Search 60: found at node 60 after 2 comparison(s)", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "current", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Search 35: 35 \u003c 50 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "current", "edgeState": "path"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Search 35: 35 \u003e 30 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "path", "edgeState": "path"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "current", "edgeState": "path"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Search 35: 35 \u003c 40 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 50, "value": 50, "parent": null, "state": "path", "edgeState": "path"}, {"id": 30, "value": 30, "parent": 50, "state": "path", "edgeState": "path"}, {"id": 70, "value": 70, "parent": 50, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 60, "value": 60, "parent": 70, "state": "normal", "edgeState": "normal"}, {"id": 80, "value": 80, "parent": 70, "state": "normal", "edgeState": "normal"}], "caption": "Search 35: hit an empty subtree \u2014 35 is not in the tree", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

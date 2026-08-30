@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Union-Find maintains a collection of disjoint sets under two operations: find(x) returns a representative (the root of x's set), and union(a, b) merges the two sets" />
+  <title>Union-Find (Disjoint Set Union) | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🧩</div><h1>Union-Find (Disjoint Set Union)</h1><p class="subtitle">🕸️ Graph · <span style="color:#ea580c;font-weight:600;">Important</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(α(n)) amortised with union by rank + path compression</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="topological-sort.html">← Topological Sort</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="minimum-spanning-tree.html">Minimum Spanning Tree (Kruskal &amp; Prim) →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">Union-Find maintains a collection of disjoint sets under two operations: find(x) returns a representative (the root of x's set), and union(a, b) merges the two sets. Each set is a tree stored as a parent array. Two heuristics make it fast: union by rank (always hang the shallower tree under the deeper one) and path compression (re-point visited nodes straight at the root).</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">No other structure answers 'are these two things connected?' while the structure keeps changing in nearly constant time. Kruskal's MST algorithm is little more than a DSU plus sorting; cycle detection in incremental graphs, connected-component labelling, and percolation checks are all one-liners once a DSU exists. The amortised α(n) bound is a celebrated result — α(n) ≤ 4 for any input that fits in the universe.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Dynamic connectivity: merge groups, query connected-ness, count components.</li><li>Kruskal's minimum spanning tree — reject edges whose endpoints already share a root.</li><li>Cycle detection while adding edges one at a time.</li><li>Connected-component labelling in image processing, or merging accounts/users that share a key.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Always combine BOTH heuristics — either alone is weaker; together they give α(n).</li><li>Need the exact tree shape or deletions? DSU cannot delete — use link-cut trees or rollbacks.</li><li>Want extra data per set (size, sum)? Keep it at the root and update inside union.</li><li>Weighted/parity DSU extends to 'relative distance between nodes' problems.</li><li>Queries arrive offline? DSU over sorted queries beats re-running BFS/DFS each time.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>The graph is static and small — one BFS/DFS lists all components more directly.</li><li>You need to disconnect (split) sets — plain DSU cannot undo a union.</li><li>You need shortest paths — DSU knows connectivity only, not distances.</li><li>Exact worst-case per-operation latency matters — α(n) is amortised, not per-call.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(1) amortised per operation</td></tr><tr><td>Average case</td><td>O(α(n)) amortised — inverse Ackermann, effectively constant</td></tr><tr><td>Worst case</td><td>O(α(n)) amortised with union by rank + path compression</td></tr><tr><td>Space</td><td>O(n) parent + rank arrays</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Yes</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-kw">int</span> <span class="tok-id">parent</span>[<span class="tok-num">101</span>], <span class="tok-id">rnk</span>[<span class="tok-num">101</span>];
+
+<span class="tok-kw">void</span> <span class="tok-id">make_set</span>(<span class="tok-kw">int</span> <span class="tok-id">n</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt;= <span class="tok-id">n</span>; <span class="tok-id">i</span>++) { <span class="tok-id">parent</span>[<span class="tok-id">i</span>] = <span class="tok-id">i</span>; <span class="tok-id">rnk</span>[<span class="tok-id">i</span>] = <span class="tok-num">0</span>; }
+}
+
+<span class="tok-cmt">/* Find with path halving: every hop re-points x to its grandparent,
+ * flattening the tree as a side effect. */</span>
+<span class="tok-kw">int</span> <span class="tok-id">find</span>(<span class="tok-kw">int</span> <span class="tok-id">x</span>) {
+    <span class="tok-kw">while</span> (<span class="tok-id">parent</span>[<span class="tok-id">x</span>] != <span class="tok-id">x</span>) {
+        <span class="tok-id">parent</span>[<span class="tok-id">x</span>] = <span class="tok-id">parent</span>[<span class="tok-id">parent</span>[<span class="tok-id">x</span>]];
+        <span class="tok-id">x</span> = <span class="tok-id">parent</span>[<span class="tok-id">x</span>];
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">x</span>;
+}
+
+<span class="tok-cmt">/* Union by rank. Returns 1 if merged, 0 if already in the same set
+ * (that '0' case is exactly how Kruskal detects cycles). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">union_sets</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">b</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">ra</span> = <span class="tok-id">find</span>(<span class="tok-id">a</span>), <span class="tok-id">rb</span> = <span class="tok-id">find</span>(<span class="tok-id">b</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">ra</span> == <span class="tok-id">rb</span>) <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+    <span class="tok-kw">if</span> (<span class="tok-id">rnk</span>[<span class="tok-id">ra</span>] &lt; <span class="tok-id">rnk</span>[<span class="tok-id">rb</span>]) { <span class="tok-kw">int</span> <span class="tok-id">t</span> = <span class="tok-id">ra</span>; <span class="tok-id">ra</span> = <span class="tok-id">rb</span>; <span class="tok-id">rb</span> = <span class="tok-id">t</span>; }
+    <span class="tok-id">parent</span>[<span class="tok-id">rb</span>] = <span class="tok-id">ra</span>;
+    <span class="tok-kw">if</span> (<span class="tok-id">rnk</span>[<span class="tok-id">ra</span>] == <span class="tok-id">rnk</span>[<span class="tok-id">rb</span>]) <span class="tok-id">rnk</span>[<span class="tok-id">ra</span>]++;
+    <span class="tok-kw">return</span> <span class="tok-num">1</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-id">make_set</span>(<span class="tok-num">6</span>);
+    <span class="tok-id">union_sets</span>(<span class="tok-num">1</span>, <span class="tok-num">2</span>); <span class="tok-id">union_sets</span>(<span class="tok-num">3</span>, <span class="tok-num">4</span>); <span class="tok-id">union_sets</span>(<span class="tok-num">5</span>, <span class="tok-num">6</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1: connected(1,4)? %s ; connected(1,5)? %s\n"</span>,
+           <span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">find</span>(<span class="tok-num">4</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>, <span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">find</span>(<span class="tok-num">5</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>);
+    <span class="tok-id">union_sets</span>(<span class="tok-num">2</span>, <span class="tok-num">3</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2: after union(2,3): connected(1,4)? %s\n"</span>,
+           <span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">find</span>(<span class="tok-num">4</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>);
+    <span class="tok-id">union_sets</span>(<span class="tok-num">4</span>, <span class="tok-num">5</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">sets</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">1</span>; <span class="tok-id">i</span> &lt;= <span class="tok-num">6</span>; <span class="tok-id">i</span>++) <span class="tok-kw">if</span> (<span class="tok-id">find</span>(<span class="tok-id">i</span>) == <span class="tok-id">i</span>) <span class="tok-id">sets</span>++;
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3: distinct sets after union(4,5): %d\n"</span>, <span class="tok-id">sets</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 4: union(1,3) merged anything? %s (already one set)\n"</span>,
+           <span class="tok-id">union_sets</span>(<span class="tok-num">1</span>, <span class="tok-num">3</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>);
+
+    <span class="tok-id">make_set</span>(<span class="tok-num">3</span>);
+    <span class="tok-id">union_sets</span>(<span class="tok-num">1</span>, <span class="tok-num">2</span>); <span class="tok-id">union_sets</span>(<span class="tok-num">2</span>, <span class="tok-num">3</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 5: adding edge (3,1) creates a cycle? %s\n"</span>,
+           <span class="tok-id">union_sets</span>(<span class="tok-num">3</span>, <span class="tok-num">1</span>) ? <span class="tok-str">"No"</span> : <span class="tok-str">"Yes"</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">struct</span> <span class="tok-id">DSU</span> {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">parent</span>, <span class="tok-id">rnk</span>;
+
+    <span class="tok-id">explicit</span> <span class="tok-id">DSU</span>(<span class="tok-kw">int</span> <span class="tok-id">n</span>) : <span class="tok-id">parent</span>(<span class="tok-id">n</span> + <span class="tok-num">1</span>), <span class="tok-id">rnk</span>(<span class="tok-id">n</span> + <span class="tok-num">1</span>, <span class="tok-num">0</span>) {
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt;= <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">parent</span>[<span class="tok-id">i</span>] = <span class="tok-id">i</span>;
+    }
+
+    <span class="tok-kw">int</span> <span class="tok-id">find</span>(<span class="tok-kw">int</span> <span class="tok-id">x</span>) {
+        <span class="tok-kw">while</span> (<span class="tok-id">parent</span>[<span class="tok-id">x</span>] != <span class="tok-id">x</span>) {
+            <span class="tok-id">parent</span>[<span class="tok-id">x</span>] = <span class="tok-id">parent</span>[<span class="tok-id">parent</span>[<span class="tok-id">x</span>]];   <span class="tok-cmt">/* path halving */</span>
+            <span class="tok-id">x</span> = <span class="tok-id">parent</span>[<span class="tok-id">x</span>];
+        }
+        <span class="tok-kw">return</span> <span class="tok-id">x</span>;
+    }
+
+    <span class="tok-kw">bool</span> <span class="tok-id">unite</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">b</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">ra</span> = <span class="tok-id">find</span>(<span class="tok-id">a</span>), <span class="tok-id">rb</span> = <span class="tok-id">find</span>(<span class="tok-id">b</span>);
+        <span class="tok-kw">if</span> (<span class="tok-id">ra</span> == <span class="tok-id">rb</span>) <span class="tok-kw">return</span> <span class="tok-id">false</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">rnk</span>[<span class="tok-id">ra</span>] &lt; <span class="tok-id">rnk</span>[<span class="tok-id">rb</span>]) <span class="tok-id">swap</span>(<span class="tok-id">ra</span>, <span class="tok-id">rb</span>);
+        <span class="tok-id">parent</span>[<span class="tok-id">rb</span>] = <span class="tok-id">ra</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">rnk</span>[<span class="tok-id">ra</span>] == <span class="tok-id">rnk</span>[<span class="tok-id">rb</span>]) <span class="tok-id">rnk</span>[<span class="tok-id">ra</span>]++;
+        <span class="tok-kw">return</span> <span class="tok-id">true</span>;
+    }
+};
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">DSU</span> <span class="tok-id">d</span>(<span class="tok-num">6</span>);
+    <span class="tok-id">d</span>.<span class="tok-id">unite</span>(<span class="tok-num">1</span>, <span class="tok-num">2</span>); <span class="tok-id">d</span>.<span class="tok-id">unite</span>(<span class="tok-num">3</span>, <span class="tok-num">4</span>); <span class="tok-id">d</span>.<span class="tok-id">unite</span>(<span class="tok-num">5</span>, <span class="tok-num">6</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1: connected(1,4)? "</span> &lt;&lt; (<span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">4</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>)
+         &lt;&lt; <span class="tok-str">" ; connected(1,5)? "</span> &lt;&lt; (<span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">5</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">d</span>.<span class="tok-id">unite</span>(<span class="tok-num">2</span>, <span class="tok-num">3</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2: after union(2,3): connected(1,4)? "</span>
+         &lt;&lt; (<span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">4</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">d</span>.<span class="tok-id">unite</span>(<span class="tok-num">4</span>, <span class="tok-num">5</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">sets</span> = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">1</span>; <span class="tok-id">i</span> &lt;= <span class="tok-num">6</span>; <span class="tok-id">i</span>++) <span class="tok-kw">if</span> (<span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-id">i</span>) == <span class="tok-id">i</span>) <span class="tok-id">sets</span>++;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3: distinct sets after union(4,5): "</span> &lt;&lt; <span class="tok-id">sets</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 4: union(1,3) merged anything? "</span>
+         &lt;&lt; (<span class="tok-id">d</span>.<span class="tok-id">unite</span>(<span class="tok-num">1</span>, <span class="tok-num">3</span>) ? <span class="tok-str">"Yes"</span> : <span class="tok-str">"No"</span>) &lt;&lt; <span class="tok-str">" (already one set)\n"</span>;
+
+    <span class="tok-id">DSU</span> <span class="tok-id">e</span>(<span class="tok-num">3</span>);
+    <span class="tok-id">e</span>.<span class="tok-id">unite</span>(<span class="tok-num">1</span>, <span class="tok-num">2</span>); <span class="tok-id">e</span>.<span class="tok-id">unite</span>(<span class="tok-num">2</span>, <span class="tok-num">3</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 5: adding edge (3,1) creates a cycle? "</span>
+         &lt;&lt; (<span class="tok-id">e</span>.<span class="tok-id">unite</span>(<span class="tok-num">3</span>, <span class="tok-num">1</span>) ? <span class="tok-str">"No"</span> : <span class="tok-str">"Yes"</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">class</span> <span class="tok-id">DSU</span>:
+    <span class="tok-kw">def</span> <span class="tok-id">__init__</span>(<span class="tok-id">self</span>, <span class="tok-id">n</span>):
+        <span class="tok-id">self</span>.<span class="tok-id">parent</span> = <span class="tok-id">list</span>(<span class="tok-id">range</span>(<span class="tok-id">n</span> + <span class="tok-num">1</span>))
+        <span class="tok-id">self</span>.<span class="tok-id">rank</span> = [<span class="tok-num">0</span>] * (<span class="tok-id">n</span> + <span class="tok-num">1</span>)
+
+    <span class="tok-kw">def</span> <span class="tok-id">find</span>(<span class="tok-id">self</span>, <span class="tok-id">x</span>):
+        <span class="tok-str">"""Find with path halving: re-point x to its grandparent each hop."""</span>
+        <span class="tok-kw">while</span> <span class="tok-id">self</span>.<span class="tok-id">parent</span>[<span class="tok-id">x</span>] != <span class="tok-id">x</span>:
+            <span class="tok-id">self</span>.<span class="tok-id">parent</span>[<span class="tok-id">x</span>] = <span class="tok-id">self</span>.<span class="tok-id">parent</span>[<span class="tok-id">self</span>.<span class="tok-id">parent</span>[<span class="tok-id">x</span>]]
+            <span class="tok-id">x</span> = <span class="tok-id">self</span>.<span class="tok-id">parent</span>[<span class="tok-id">x</span>]
+        <span class="tok-kw">return</span> <span class="tok-id">x</span>
+
+    <span class="tok-kw">def</span> <span class="tok-id">union</span>(<span class="tok-id">self</span>, <span class="tok-id">a</span>, <span class="tok-id">b</span>):
+        <span class="tok-str">"""Union by rank; returns False if a and b were already connected."""</span>
+        <span class="tok-id">ra</span>, <span class="tok-id">rb</span> = <span class="tok-id">self</span>.<span class="tok-id">find</span>(<span class="tok-id">a</span>), <span class="tok-id">self</span>.<span class="tok-id">find</span>(<span class="tok-id">b</span>)
+        <span class="tok-kw">if</span> <span class="tok-id">ra</span> == <span class="tok-id">rb</span>:
+            <span class="tok-kw">return</span> <span class="tok-kw">False</span>
+        <span class="tok-kw">if</span> <span class="tok-id">self</span>.<span class="tok-id">rank</span>[<span class="tok-id">ra</span>] &lt; <span class="tok-id">self</span>.<span class="tok-id">rank</span>[<span class="tok-id">rb</span>]:
+            <span class="tok-id">ra</span>, <span class="tok-id">rb</span> = <span class="tok-id">rb</span>, <span class="tok-id">ra</span>
+        <span class="tok-id">self</span>.<span class="tok-id">parent</span>[<span class="tok-id">rb</span>] = <span class="tok-id">ra</span>
+        <span class="tok-kw">if</span> <span class="tok-id">self</span>.<span class="tok-id">rank</span>[<span class="tok-id">ra</span>] == <span class="tok-id">self</span>.<span class="tok-id">rank</span>[<span class="tok-id">rb</span>]:
+            <span class="tok-id">self</span>.<span class="tok-id">rank</span>[<span class="tok-id">ra</span>] += <span class="tok-num">1</span>
+        <span class="tok-kw">return</span> <span class="tok-kw">True</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">d</span> = <span class="tok-id">DSU</span>(<span class="tok-num">6</span>)
+    <span class="tok-id">d</span>.<span class="tok-id">union</span>(<span class="tok-num">1</span>, <span class="tok-num">2</span>); <span class="tok-id">d</span>.<span class="tok-id">union</span>(<span class="tok-num">3</span>, <span class="tok-num">4</span>); <span class="tok-id">d</span>.<span class="tok-id">union</span>(<span class="tok-num">5</span>, <span class="tok-num">6</span>)
+    <span class="tok-id">t1</span> = <span class="tok-str">"Yes"</span> <span class="tok-kw">if</span> <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">4</span>) <span class="tok-kw">else</span> <span class="tok-str">"No"</span>
+    <span class="tok-id">t2</span> = <span class="tok-str">"Yes"</span> <span class="tok-kw">if</span> <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">1</span>) == <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-num">5</span>) <span class="tok-kw">else</span> <span class="tok-str">"No"</span>
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1: connected(1,4)? {t1} ; connected(1,5)? {t2}"</span>)
+    <span class="tok-id">d</span>.<span class="tok-id">union</span>(<span class="tok-num">2</span>, <span class="tok-num">3</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2: after union(2,3): connected(1,4)? "</span>
+          <span class="tok-id">f</span><span class="tok-str">"{'Yes' if d.find(1) == d.find(4) else 'No'}"</span>)
+    <span class="tok-id">d</span>.<span class="tok-id">union</span>(<span class="tok-num">4</span>, <span class="tok-num">5</span>)
+    <span class="tok-id">sets</span> = <span class="tok-id">sum</span>(<span class="tok-num">1</span> <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-num">1</span>, <span class="tok-num">7</span>) <span class="tok-kw">if</span> <span class="tok-id">d</span>.<span class="tok-id">find</span>(<span class="tok-id">i</span>) == <span class="tok-id">i</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3: distinct sets after union(4,5): {sets}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 4: union(1,3) merged anything? "</span>
+          <span class="tok-id">f</span><span class="tok-str">"{'Yes' if d.union(1, 3) else 'No'} (already one set)"</span>)
+
+    <span class="tok-id">e</span> = <span class="tok-id">DSU</span>(<span class="tok-num">3</span>)
+    <span class="tok-id">e</span>.<span class="tok-id">union</span>(<span class="tok-num">1</span>, <span class="tok-num">2</span>); <span class="tok-id">e</span>.<span class="tok-id">union</span>(<span class="tok-num">2</span>, <span class="tok-num">3</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 5: adding edge (3,1) creates a cycle? "</span>
+          <span class="tok-id">f</span><span class="tok-str">"{'No' if e.union(3, 1) else 'Yes'}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1: connected(1,4)? No ; connected(1,5)? No
+Test 2: after union(2,3): connected(1,4)? Yes
+Test 3: distinct sets after union(4,5): 1
+Test 4: union(1,3) merged anything? No (already one set)
+Test 5: adding edge (3,1) creates a cycle? Yes</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1: connected(1,4)? No ; connected(1,5)? No
+Test 2: after union(2,3): connected(1,4)? Yes
+Test 3: distinct sets after union(4,5): 1
+Test 4: union(1,3) merged anything? No (already one set)
+Test 5: adding edge (3,1) creates a cycle? Yes</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1: connected(1,4)? No ; connected(1,5)? No
+Test 2: after union(2,3): connected(1,4)? Yes
+Test 3: distinct sets after union(4,5): 1
+Test 4: union(1,3) merged anything? No (already one set)
+Test 5: adding edge (3,1) creates a cycle? Yes</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Kruskal's MST</h4><p class="card-content" style="margin:0;">Sort edges, then accept each edge only if its endpoints have different DSU roots.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Social-network merging</h4><p class="card-content" style="margin:0;">Merging accounts, deduplicating records, or unioning users who share an email/phone.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Image segmentation</h4><p class="card-content" style="margin:0;">Connected-component labelling pixels by adjacency is a DSU sweep in raster order.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Percolation and maze generation</h4><p class="card-content" style="margin:0;">Grids open cells one by one and DSU tests whether top connects to bottom; mazes carve walls the same way.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/union-find/" target="_blank" rel="noopener">GeeksforGeeks — Union-Find Algorithm (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "normal"}, {"id": 2, "value": 2, "parent": 2, "state": "normal"}, {"id": 3, "value": 3, "parent": 3, "state": "normal"}, {"id": 4, "value": 4, "parent": 4, "state": "normal"}, {"id": 5, "value": 5, "parent": 5, "state": "normal"}, {"id": 6, "value": 6, "parent": 6, "state": "normal"}], "edges": [], "caption": "Six elements, each its own set \u2014 parent[i] = i", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 3, "state": "normal"}, {"id": 4, "value": 4, "parent": 4, "state": "normal"}, {"id": 5, "value": 5, "parent": 5, "state": "normal"}, {"id": 6, "value": 6, "parent": 6, "state": "normal"}], "edges": [], "caption": "union(1, 2): find(1) = 1, find(2) = 2 \u2192 attach 2 under 1", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 3, "state": "done"}, {"id": 4, "value": 4, "parent": 3, "state": "done"}, {"id": 5, "value": 5, "parent": 5, "state": "normal"}, {"id": 6, "value": 6, "parent": 6, "state": "normal"}], "edges": [], "caption": "union(3, 4): find(3) = 3, find(4) = 4 \u2192 attach 4 under 3", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 3, "state": "normal"}, {"id": 4, "value": 4, "parent": 3, "state": "normal"}, {"id": 5, "value": 5, "parent": 5, "state": "done"}, {"id": 6, "value": 6, "parent": 5, "state": "done"}], "edges": [], "caption": "union(5, 6): find(5) = 5, find(6) = 6 \u2192 attach 6 under 5", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "done"}, {"id": 3, "value": 3, "parent": 1, "state": "done"}, {"id": 4, "value": 4, "parent": 3, "state": "normal"}, {"id": 5, "value": 5, "parent": 5, "state": "normal"}, {"id": 6, "value": 6, "parent": 5, "state": "normal"}], "edges": [], "caption": "union(2, 3): find(2) = 1, find(3) = 3 \u2192 equal ranks, attach 3 under 1 and raise rank(1)", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "done"}, {"id": 4, "value": 4, "parent": 1, "state": "done"}, {"id": 5, "value": 5, "parent": 5, "state": "normal"}, {"id": 6, "value": 6, "parent": 5, "state": "normal"}], "edges": [], "caption": "find(4): climbs 4 \u2192 3 \u2192 1, then compresses 4 straight to the root 1 \u2014 future finds get shorter", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 1, "state": "normal"}, {"id": 5, "value": 5, "parent": 1, "state": "done"}, {"id": 6, "value": 6, "parent": 5, "state": "normal"}], "edges": [], "caption": "union(5, 1): find(5) = 5, find(1) = 1 \u2192 rank(1) is higher, so 5 hangs under 1 (union by rank keeps trees shallow)", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "done"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 1, "state": "normal"}, {"id": 5, "value": 5, "parent": 1, "state": "done"}, {"id": 6, "value": 6, "parent": 1, "state": "done"}], "edges": [], "caption": "find(6): climbs 6 \u2192 5 \u2192 1 and compresses 6 to root 1", "done": false}, {"kind": "graph", "nodes": [{"id": 1, "value": 1, "parent": 1, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 1, "state": "normal"}, {"id": 5, "value": 5, "parent": 1, "state": "normal"}, {"id": 6, "value": 6, "parent": 1, "state": "normal"}], "edges": [], "caption": "All six elements share root 1 \u2014 one connected component; with path compression + union by rank, amortised find is nearly O(1)", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Backtracking is a systematic walk over a state-space tree: at every step you make one choice, recurse to explore everything that choice makes possible, and then undo the choice before trying the next one" />
+  <title>Backtracking Fundamentals | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🧩</div><h1>Backtracking Fundamentals</h1><p class="subtitle">🔁 Backtracking · <span style="color:#dc2626;font-weight:600;">Must Know</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case Exponential in the decision depth</span><span class="stat-badge">Priority 5/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="counting-radix-sort.html">← Counting Sort &amp; Radix Sort</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="n-queens.html">N-Queens →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">Backtracking is a systematic walk over a state-space tree: at every step you make one choice, recurse to explore everything that choice makes possible, and then undo the choice before trying the next one. The undo step is what makes it backtracking — the search reuses one small piece of state instead of copying it at every branch. Pruning rules kill whole subtrees as soon as they become impossible, which is where the real speedup over brute force comes from.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Many problems — generating every subset, permutation, puzzle solution, or exact cover — have exponentially many answers, so no polynomial algorithm can enumerate them all. Backtracking is the cleanest correct framework for that: it produces every candidate exactly once, spends O(depth) memory instead of copying paths, and its prune-early discipline often cuts practical runtimes by orders of magnitude even when the worst case stays exponential.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>The task asks for all solutions (all subsets, permutations, combinations, boards).</li><li>A feasibility problem where any valid assignment will do (Sudoku, N-Queens).</li><li>The search space is a tree of decisions and choices can be checked incrementally.</li><li>Exponential output is inherent — no polynomial algorithm can list every answer.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Draw the state-space tree first: what is a 'level', what are the 'choices' at each level?</li><li>Prune as early as possible — reject a partial state the moment a constraint breaks.</li><li>Order candidates (sorted order, most-constrained first) so good branches are found early.</li><li>Count only distinct solutions: enforce an ordering rule (e.g., non-decreasing candidate index).</li><li>Estimate the tree size before coding — 2ⁿ for subsets, n·n! for permutations, T/M branching for combination sums.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Only one optimal value is needed and the problem has optimal substructure — DP usually beats it.</li><li>The problem is polynomial (sorting, shortest path) — direct algorithms are far simpler.</li><li>n is large and no effective pruning exists — exponential time will not finish.</li><li>An approximation or heuristic answer is acceptable — local search or greedy may suffice.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(2ⁿ) subsets (n decisions)</td></tr><tr><td>Average case</td><td>O(n · n!) permutations</td></tr><tr><td>Worst case</td><td>Exponential in the decision depth</td></tr><tr><td>Space</td><td>O(n) recursion depth (excluding output)</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Yes (state is undone in place)</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-kw">void</span> <span class="tok-id">swap_int</span>(<span class="tok-kw">int</span> *<span class="tok-id">x</span>, <span class="tok-kw">int</span> *<span class="tok-id">y</span>) { <span class="tok-kw">int</span> <span class="tok-id">t</span> = *<span class="tok-id">x</span>; *<span class="tok-id">x</span> = *<span class="tok-id">y</span>; *<span class="tok-id">y</span> = <span class="tok-id">t</span>; }
+
+<span class="tok-kw">void</span> <span class="tok-id">print_sel</span>(<span class="tok-kw">const</span> <span class="tok-kw">int</span> <span class="tok-id">sel</span>[], <span class="tok-kw">int</span> <span class="tok-id">k</span>) {
+    <span class="tok-id">printf</span>(<span class="tok-str">"["</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">k</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-id">i</span> ? <span class="tok-str">" %d"</span> : <span class="tok-str">"%d"</span>, <span class="tok-id">sel</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"]"</span>);
+}
+
+<span class="tok-cmt">/* 1) All subsets: at each index choose "include" or "skip". O(2^n) leaves. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">subsets_rec</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">int</span> <span class="tok-id">idx</span>, <span class="tok-kw">int</span> <span class="tok-id">sel</span>[], <span class="tok-kw">int</span> <span class="tok-id">k</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">idx</span> == <span class="tok-id">n</span>) {
+        <span class="tok-id">print_sel</span>(<span class="tok-id">sel</span>, <span class="tok-id">k</span>);
+        <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+        <span class="tok-kw">return</span>;
+    }
+    <span class="tok-id">sel</span>[<span class="tok-id">k</span>] = <span class="tok-id">a</span>[<span class="tok-id">idx</span>];                            <span class="tok-cmt">/* include a[idx] */</span>
+    <span class="tok-id">subsets_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">n</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>, <span class="tok-id">sel</span>, <span class="tok-id">k</span> + <span class="tok-num">1</span>);
+    <span class="tok-id">subsets_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">n</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>, <span class="tok-id">sel</span>, <span class="tok-id">k</span>);         <span class="tok-cmt">/* skip a[idx] (implicit undo) */</span>
+}
+
+<span class="tok-cmt">/* 2) All permutations: try every candidate in the remaining suffix for slot
+ * idx, recurse, then swap back to restore state. O(n * n!) total. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">perms_rec</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">int</span> <span class="tok-id">idx</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">idx</span> == <span class="tok-id">n</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">tmp</span>[<span class="tok-num">16</span>];
+        <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">tmp</span>[<span class="tok-id">i</span>] = <span class="tok-id">a</span>[<span class="tok-id">i</span>];
+        <span class="tok-id">print_sel</span>(<span class="tok-id">tmp</span>, <span class="tok-id">n</span>);
+        <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+        <span class="tok-kw">return</span>;
+    }
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">idx</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) {
+        <span class="tok-id">swap_int</span>(&amp;<span class="tok-id">a</span>[<span class="tok-id">idx</span>], &amp;<span class="tok-id">a</span>[<span class="tok-id">i</span>]);               <span class="tok-cmt">/* choose a[i] for slot idx */</span>
+        <span class="tok-id">perms_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">n</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>);
+        <span class="tok-id">swap_int</span>(&amp;<span class="tok-id">a</span>[<span class="tok-id">idx</span>], &amp;<span class="tok-id">a</span>[<span class="tok-id">i</span>]);               <span class="tok-cmt">/* undo (backtrack) */</span>
+    }
+}
+
+<span class="tok-cmt">/* 3) Combination sum (reuse allowed): pick candidates in non-decreasing
+ * index order so each combination is produced exactly once. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">combo_rec</span>(<span class="tok-kw">int</span> <span class="tok-id">cand</span>[], <span class="tok-kw">int</span> <span class="tok-id">m</span>, <span class="tok-kw">int</span> <span class="tok-id">idx</span>, <span class="tok-kw">int</span> <span class="tok-id">rem</span>, <span class="tok-kw">int</span> <span class="tok-id">sel</span>[], <span class="tok-kw">int</span> <span class="tok-id">k</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">rem</span> == <span class="tok-num">0</span>) {
+        <span class="tok-id">print_sel</span>(<span class="tok-id">sel</span>, <span class="tok-id">k</span>);
+        <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+        <span class="tok-kw">return</span>;
+    }
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">idx</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">m</span>; <span class="tok-id">i</span>++) {
+        <span class="tok-kw">if</span> (<span class="tok-id">cand</span>[<span class="tok-id">i</span>] &gt; <span class="tok-id">rem</span>) <span class="tok-kw">continue</span>;            <span class="tok-cmt">/* prune: would overshoot */</span>
+        <span class="tok-id">sel</span>[<span class="tok-id">k</span>] = <span class="tok-id">cand</span>[<span class="tok-id">i</span>];
+        <span class="tok-id">combo_rec</span>(<span class="tok-id">cand</span>, <span class="tok-id">m</span>, <span class="tok-id">i</span>, <span class="tok-id">rem</span> - <span class="tok-id">cand</span>[<span class="tok-id">i</span>], <span class="tok-id">sel</span>, <span class="tok-id">k</span> + <span class="tok-num">1</span>);  <span class="tok-cmt">/* i reused */</span>
+    }
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">a</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>}, <span class="tok-id">sel</span>[<span class="tok-num">16</span>];
+
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1 (subsets of [1 2 3]):\n"</span>);
+    <span class="tok-id">subsets_rec</span>(<span class="tok-id">a</span>, <span class="tok-num">3</span>, <span class="tok-num">0</span>, <span class="tok-id">sel</span>, <span class="tok-num">0</span>);
+
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2 (permutations of [1 2 3]):\n"</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">p</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>};
+    <span class="tok-id">perms_rec</span>(<span class="tok-id">p</span>, <span class="tok-num">3</span>, <span class="tok-num">0</span>);
+
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3 (combination sum 7 from [2 3 6 7]):\n"</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">cand</span>[] = {<span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">6</span>, <span class="tok-num">7</span>};
+    <span class="tok-id">combo_rec</span>(<span class="tok-id">cand</span>, <span class="tok-num">4</span>, <span class="tok-num">0</span>, <span class="tok-num">7</span>, <span class="tok-id">sel</span>, <span class="tok-num">0</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">printSel</span>(<span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">sel</span>) {
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"["</span>;
+    <span class="tok-kw">for</span> (<span class="tok-id">size_t</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">sel</span>.<span class="tok-id">size</span>(); <span class="tok-id">i</span>++) {
+        <span class="tok-kw">if</span> (<span class="tok-id">i</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">" "</span>;
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">sel</span>[<span class="tok-id">i</span>];
+    }
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"]"</span>;
+}
+
+<span class="tok-cmt">/* 1) All subsets: include-or-skip decision per index. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">subsetsRec</span>(<span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">idx</span>, <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">sel</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">idx</span> == (<span class="tok-kw">int</span>)<span class="tok-id">a</span>.<span class="tok-id">size</span>()) {
+        <span class="tok-id">printSel</span>(<span class="tok-id">sel</span>);
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+        <span class="tok-kw">return</span>;
+    }
+    <span class="tok-id">sel</span>.<span class="tok-id">push_back</span>(<span class="tok-id">a</span>[<span class="tok-id">idx</span>]);          <span class="tok-cmt">/* include a[idx] */</span>
+    <span class="tok-id">subsetsRec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>, <span class="tok-id">sel</span>);
+    <span class="tok-id">sel</span>.<span class="tok-id">pop_back</span>();                 <span class="tok-cmt">/* undo, then skip */</span>
+    <span class="tok-id">subsetsRec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>, <span class="tok-id">sel</span>);
+}
+
+<span class="tok-cmt">/* 2) All permutations: swap each suffix candidate into slot idx, recurse,
+ * swap back. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">permsRec</span>(<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">idx</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">idx</span> == (<span class="tok-kw">int</span>)<span class="tok-id">a</span>.<span class="tok-id">size</span>()) {
+        <span class="tok-id">printSel</span>(<span class="tok-id">a</span>);
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+        <span class="tok-kw">return</span>;
+    }
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">idx</span>; <span class="tok-id">i</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">a</span>.<span class="tok-id">size</span>(); <span class="tok-id">i</span>++) {
+        <span class="tok-id">swap</span>(<span class="tok-id">a</span>[<span class="tok-id">idx</span>], <span class="tok-id">a</span>[<span class="tok-id">i</span>]);         <span class="tok-cmt">/* choose */</span>
+        <span class="tok-id">permsRec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>);
+        <span class="tok-id">swap</span>(<span class="tok-id">a</span>[<span class="tok-id">idx</span>], <span class="tok-id">a</span>[<span class="tok-id">i</span>]);         <span class="tok-cmt">/* undo (backtrack) */</span>
+    }
+}
+
+<span class="tok-cmt">/* 3) Combination sum (reuse allowed), DFS in non-decreasing index order. */</span>
+<span class="tok-kw">void</span> <span class="tok-id">comboRec</span>(<span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">cand</span>, <span class="tok-kw">int</span> <span class="tok-id">idx</span>, <span class="tok-kw">int</span> <span class="tok-id">rem</span>, <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">sel</span>) {
+    <span class="tok-kw">if</span> (<span class="tok-id">rem</span> == <span class="tok-num">0</span>) {
+        <span class="tok-id">printSel</span>(<span class="tok-id">sel</span>);
+        <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+        <span class="tok-kw">return</span>;
+    }
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-id">idx</span>; <span class="tok-id">i</span> &lt; (<span class="tok-kw">int</span>)<span class="tok-id">cand</span>.<span class="tok-id">size</span>(); <span class="tok-id">i</span>++) {
+        <span class="tok-kw">if</span> (<span class="tok-id">cand</span>[<span class="tok-id">i</span>] &gt; <span class="tok-id">rem</span>) <span class="tok-kw">continue</span>;   <span class="tok-cmt">/* prune: would overshoot */</span>
+        <span class="tok-id">sel</span>.<span class="tok-id">push_back</span>(<span class="tok-id">cand</span>[<span class="tok-id">i</span>]);
+        <span class="tok-id">comboRec</span>(<span class="tok-id">cand</span>, <span class="tok-id">i</span>, <span class="tok-id">rem</span> - <span class="tok-id">cand</span>[<span class="tok-id">i</span>], <span class="tok-id">sel</span>);   <span class="tok-cmt">/* i reused */</span>
+        <span class="tok-id">sel</span>.<span class="tok-id">pop_back</span>();                          <span class="tok-cmt">/* undo */</span>
+    }
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a</span> = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>}, <span class="tok-id">sel</span>;
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1 (subsets of [1 2 3]):\n"</span>;
+    <span class="tok-id">subsetsRec</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">sel</span>);
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2 (permutations of [1 2 3]):\n"</span>;
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">p</span> = {<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>};
+    <span class="tok-id">permsRec</span>(<span class="tok-id">p</span>, <span class="tok-num">0</span>);
+
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3 (combination sum 7 from [2 3 6 7]):\n"</span>;
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">cand</span> = {<span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">6</span>, <span class="tok-num">7</span>};
+    <span class="tok-id">comboRec</span>(<span class="tok-id">cand</span>, <span class="tok-num">0</span>, <span class="tok-num">7</span>, <span class="tok-id">sel</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">def</span> <span class="tok-id">print_sel</span>(<span class="tok-id">sel</span>):
+    <span class="tok-id">print</span>(<span class="tok-str">"["</span> + <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">map</span>(<span class="tok-id">str</span>, <span class="tok-id">sel</span>)) + <span class="tok-str">"]"</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">subsets_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span>, <span class="tok-id">sel</span>):
+    <span class="tok-str">"""All subsets: include-or-skip decision per index."""</span>
+    <span class="tok-kw">if</span> <span class="tok-id">idx</span> == <span class="tok-id">len</span>(<span class="tok-id">a</span>):
+        <span class="tok-id">print_sel</span>(<span class="tok-id">sel</span>)
+        <span class="tok-kw">return</span>
+    <span class="tok-id">sel</span>.<span class="tok-id">append</span>(<span class="tok-id">a</span>[<span class="tok-id">idx</span>])          <span class="tok-cmt"># include a[idx]</span>
+    <span class="tok-id">subsets_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>, <span class="tok-id">sel</span>)
+    <span class="tok-id">sel</span>.<span class="tok-id">pop</span>()                   <span class="tok-cmt"># undo, then skip</span>
+    <span class="tok-id">subsets_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>, <span class="tok-id">sel</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">perms_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span>):
+    <span class="tok-str">"""All permutations: swap each suffix candidate into slot idx, recurse,
+    swap back to restore state."""</span>
+    <span class="tok-kw">if</span> <span class="tok-id">idx</span> == <span class="tok-id">len</span>(<span class="tok-id">a</span>):
+        <span class="tok-id">print_sel</span>(<span class="tok-id">a</span>)
+        <span class="tok-kw">return</span>
+    <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">idx</span>, <span class="tok-id">len</span>(<span class="tok-id">a</span>)):
+        <span class="tok-id">a</span>[<span class="tok-id">idx</span>], <span class="tok-id">a</span>[<span class="tok-id">i</span>] = <span class="tok-id">a</span>[<span class="tok-id">i</span>], <span class="tok-id">a</span>[<span class="tok-id">idx</span>]     <span class="tok-cmt"># choose</span>
+        <span class="tok-id">perms_rec</span>(<span class="tok-id">a</span>, <span class="tok-id">idx</span> + <span class="tok-num">1</span>)
+        <span class="tok-id">a</span>[<span class="tok-id">idx</span>], <span class="tok-id">a</span>[<span class="tok-id">i</span>] = <span class="tok-id">a</span>[<span class="tok-id">i</span>], <span class="tok-id">a</span>[<span class="tok-id">idx</span>]     <span class="tok-cmt"># undo (backtrack)</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">combo_rec</span>(<span class="tok-id">cand</span>, <span class="tok-id">idx</span>, <span class="tok-id">rem</span>, <span class="tok-id">sel</span>):
+    <span class="tok-str">"""Combination sum (reuse allowed), DFS in non-decreasing index order."""</span>
+    <span class="tok-kw">if</span> <span class="tok-id">rem</span> == <span class="tok-num">0</span>:
+        <span class="tok-id">print_sel</span>(<span class="tok-id">sel</span>)
+        <span class="tok-kw">return</span>
+    <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-id">idx</span>, <span class="tok-id">len</span>(<span class="tok-id">cand</span>)):
+        <span class="tok-kw">if</span> <span class="tok-id">cand</span>[<span class="tok-id">i</span>] &gt; <span class="tok-id">rem</span>:               <span class="tok-cmt"># prune: would overshoot</span>
+            <span class="tok-kw">continue</span>
+        <span class="tok-id">sel</span>.<span class="tok-id">append</span>(<span class="tok-id">cand</span>[<span class="tok-id">i</span>])
+        <span class="tok-id">combo_rec</span>(<span class="tok-id">cand</span>, <span class="tok-id">i</span>, <span class="tok-id">rem</span> - <span class="tok-id">cand</span>[<span class="tok-id">i</span>], <span class="tok-id">sel</span>)   <span class="tok-cmt"># i reused</span>
+        <span class="tok-id">sel</span>.<span class="tok-id">pop</span>()                                <span class="tok-cmt"># undo</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">a</span> = [<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>]
+    <span class="tok-id">sel</span> = []
+
+    <span class="tok-id">print</span>(<span class="tok-str">"Test 1 (subsets of [1 2 3]):"</span>)
+    <span class="tok-id">subsets_rec</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-id">sel</span>)
+
+    <span class="tok-id">print</span>(<span class="tok-str">"Test 2 (permutations of [1 2 3]):"</span>)
+    <span class="tok-id">perms_rec</span>([<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>], <span class="tok-num">0</span>)
+
+    <span class="tok-id">print</span>(<span class="tok-str">"Test 3 (combination sum 7 from [2 3 6 7]):"</span>)
+    <span class="tok-id">combo_rec</span>([<span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">6</span>, <span class="tok-num">7</span>], <span class="tok-num">0</span>, <span class="tok-num">7</span>, <span class="tok-id">sel</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1 (subsets of [1 2 3]):
+[1 2 3]
+[1 2]
+[1 3]
+[1]
+[2 3]
+[2]
+[3]
+[]
+Test 2 (permutations of [1 2 3]):
+[1 2 3]
+[1 3 2]
+[2 1 3]
+[2 3 1]
+[3 2 1]
+[3 1 2]
+Test 3 (combination sum 7 from [2 3 6 7]):
+[2 2 3]
+[7]</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1 (subsets of [1 2 3]):
+[1 2 3]
+[1 2]
+[1 3]
+[1]
+[2 3]
+[2]
+[3]
+[]
+Test 2 (permutations of [1 2 3]):
+[1 2 3]
+[1 3 2]
+[2 1 3]
+[2 3 1]
+[3 2 1]
+[3 1 2]
+Test 3 (combination sum 7 from [2 3 6 7]):
+[2 2 3]
+[7]</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1 (subsets of [1 2 3]):
+[1 2 3]
+[1 2]
+[1 3]
+[1]
+[2 3]
+[2]
+[3]
+[]
+Test 2 (permutations of [1 2 3]):
+[1 2 3]
+[1 3 2]
+[2 1 3]
+[2 3 1]
+[3 2 1]
+[3 1 2]
+Test 3 (combination sum 7 from [2 3 6 7]):
+[2 2 3]
+[7]</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Puzzle and game solvers</h4><p class="card-content" style="margin:0;">Sudoku, crosswords, and constraint games are solved with exactly this include/test/undo loop.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Combinatorial test generation</h4><p class="card-content" style="margin:0;">Covering arrays and test-case enumeration walk a state-space tree with constraint pruning.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Compiler register allocation</h4><p class="card-content" style="margin:0;">Precise allocation can be phrased as backtracking over interference-graph colourings.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Scheduling and packing</h4><p class="card-content" style="margin:0;">Exact solvers for small job-shop and bin-packing instances branch, bound, and backtrack.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/backtracking-algorithms/" target="_blank" rel="noopener">GeeksforGeeks — Backtracking Algorithms (reference) ↗</a></li><li><a href="https://www.geeksforgeeks.org/combinational-sum/" target="_blank" rel="noopener">GeeksforGeeks — Combinational Sum (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Start \u2014 every subset of [1, 2, 3]: at each index decide include or skip", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0], "compare": [], "swap": [], "markers": {"hi": 0}, "caption": "Include A[0] = 1 -\u003e chosen so far [1]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 1], "compare": [], "swap": [], "markers": {"hi": 1}, "caption": "Include A[1] = 2 -\u003e chosen so far [1 2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 1, 2], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Include A[2] = 3 -\u003e chosen so far [1 2 3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 1, 2], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset [1 2 3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 1], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Backtrack: undo the include of A[2] -\u003e chosen [1 2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 1], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Skip A[2] -\u003e chosen stays [1 2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 1], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset [1 2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0], "compare": [], "swap": [], "markers": {"hi": 1}, "caption": "Backtrack: undo the include of A[1] -\u003e chosen [1]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0], "compare": [], "swap": [], "markers": {"hi": 1}, "caption": "Skip A[1] -\u003e chosen stays [1]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 2], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Include A[2] = 3 -\u003e chosen so far [1 3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0, 2], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset [1 3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Backtrack: undo the include of A[2] -\u003e chosen [1]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Skip A[2] -\u003e chosen stays [1]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [0], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset [1]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {"hi": 0}, "caption": "Backtrack: undo the include of A[0] -\u003e chosen []", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {"hi": 0}, "caption": "Skip A[0] -\u003e chosen stays []", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [1], "compare": [], "swap": [], "markers": {"hi": 1}, "caption": "Include A[1] = 2 -\u003e chosen so far [2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [1, 2], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Include A[2] = 3 -\u003e chosen so far [2 3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [1, 2], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset [2 3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [1], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Backtrack: undo the include of A[2] -\u003e chosen [2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [1], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Skip A[2] -\u003e chosen stays [2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [1], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset [2]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {"hi": 1}, "caption": "Backtrack: undo the include of A[1] -\u003e chosen []", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {"hi": 1}, "caption": "Skip A[1] -\u003e chosen stays []", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [2], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Include A[2] = 3 -\u003e chosen so far [3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [2], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset [3]", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Backtrack: undo the include of A[2] -\u003e chosen []", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {"hi": 2}, "caption": "Skip A[2] -\u003e chosen stays []", "done": false}, {"kind": "array", "data": [1, 2, 3], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Decision made for every element -\u003e record subset []", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

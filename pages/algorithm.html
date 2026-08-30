@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Algorithms & Data Structures — an interactive learning hub covering sorting, searching, backtracking, trees, graphs, greedy and dynamic programming, with topics, simulations, multi-language implementations and verified test results." />
+  <title>Algorithms & Data Structures | Uttam Kumar Mondol</title>
+  <link rel="stylesheet" href="../style.css?v=2">
+  <link rel="stylesheet" href="../assets/css/algorithm.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="publications.html">Publications</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="algorithm.html" class="active">Algorithms</a></li>
+        <li><a href="gre_vocab.html">GRE Vocab</a></li>
+        <li><a href="gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Header Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>Algorithms &amp; Data Structures</h1>
+        <p class="subtitle">Core concepts, simulations, multi-language implementations &amp; verified test results</p>
+        <div class="hero-stats" id="heroStats" style="margin-top: 1.5rem;">
+          <span class="stat-badge">Loading...</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Controls -->
+      <section class="algo-controls">
+        <div class="search-bar-container">
+          <input type="text" id="algoSearch" class="algo-search" placeholder="Search algorithms (name, type, outline)..." />
+          <button id="clearSearch" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">✕</button>
+        </div>
+        <div class="algo-filters">
+          <label>Type
+            <select id="algoType" class="algo-select">
+              <option value="all">All Types</option>
+            </select>
+          </label>
+          <label>Sort by
+            <select id="algoSort" class="algo-select">
+              <option value="priority">Priority (high → low)</option>
+              <option value="type">Type (A–Z)</option>
+              <option value="name">Name (A–Z)</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <!-- Results Counter -->
+      <div class="results-info" id="resultsInfo" style="display: none;">
+        Showing <span id="resultCount">0</span> topics
+      </div>
+
+      <!-- Topic List -->
+      <div id="contentArea">
+        <div class="loading-message">Loading algorithms...</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> ·
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> ·
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+
+  <!-- Back to top -->
+  <button type="button" id="backToTop" class="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+  <script src="../assets/js/algorithm.js"></script>
+</body>
+</html>

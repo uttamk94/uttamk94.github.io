@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="An AVL tree is a self-balancing binary search tree: after every insertion or deletion it checks each ancestor's balance factor (left height minus right height) and, whenever the factor leaves [-1, +1], repairs the shape with local rotations" />
+  <title>AVL Tree | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">⚖️</div><h1>AVL Tree</h1><p class="subtitle">🌳 Tree · <span style="color:#ea580c;font-weight:600;">Important</span> · Hard</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(log n) — guaranteed by strict balancing</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="binary-heap-priority-queue.html">← Binary Heap &amp; Priority Queue</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="lca-tree-diameter.html">LCA &amp; Tree Diameter →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">An AVL tree is a self-balancing binary search tree: after every insertion or deletion it checks each ancestor's balance factor (left height minus right height) and, whenever the factor leaves [-1, +1], repairs the shape with local rotations. The four imbalance cases (LL, RR, LR, RL) map to a single or a double rotation, keeping the height within about 1.44 log n at all times.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">A plain BST gives O(log n) lookups only for well-shaped input — insert sorted keys and it collapses into a linked list with O(n) operations. AVL removes that risk deterministically: worst-case logarithmic operations without amortisation or randomness, which is exactly what lookup-heavy workloads such as indexes and language runtimes need.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Read-heavy workloads: many lookups, few updates — AVL's stricter balance beats Red-Black's.</li><li>Worst-case latency matters (real-time-ish queries over dynamic sorted data).</li><li>Ordered iteration, successor/predecessor queries, or range scans between updates.</li><li>Teaching or implementing balanced trees from first principles.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Need guaranteed O(log n) with simple code? AVL — rotations are easier to reason about than Red-Black rules.</li><li>Write-heavy mixed workload? Red-Black (fewer rotations per update) or a B-tree for disk locality.</li><li>Keys arrive nearly sorted? AVL immediately rebalances where a plain BST degenerates.</li><li>Need ordered statistics (rank/select)? Augment nodes with subtree sizes while rotating.</li><li>For pure key-value lookups without order needs, hash tables are O(1) average — no balancing needed.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Write-heavy or append-only workloads — Red-Black trees rebalance less often.</li><li>Data lives on disk — B-trees match the page structure and cut I/O.</li><li>Only dictionary-style lookups — a hash table is simpler and faster on average.</li><li>The dataset is tiny or static — a sorted array with binary search wins on simplicity.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(log n) search / insert / delete</td></tr><tr><td>Average case</td><td>O(log n)</td></tr><tr><td>Worst case</td><td>O(log n) — guaranteed by strict balancing</td></tr><tr><td>Space</td><td>O(n) nodes + O(log n) recursion</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Mutates the tree in place</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+<span class="tok-pre">#include &lt;stdlib.h&gt;</span>
+
+<span class="tok-kw">typedef</span> <span class="tok-kw">struct</span> <span class="tok-id">Node</span> {
+    <span class="tok-kw">int</span> <span class="tok-id">key</span>, <span class="tok-id">height</span>;
+    <span class="tok-kw">struct</span> <span class="tok-id">Node</span> *<span class="tok-id">left</span>, *<span class="tok-id">right</span>;
+} <span class="tok-id">Node</span>;
+
+<span class="tok-kw">int</span> <span class="tok-id">height</span>(<span class="tok-id">Node</span> *<span class="tok-id">n</span>) { <span class="tok-kw">return</span> <span class="tok-id">n</span> ? <span class="tok-id">n</span>-&gt;<span class="tok-id">height</span> : <span class="tok-num">0</span>; }
+
+<span class="tok-kw">int</span> <span class="tok-id">maxi</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">b</span>) { <span class="tok-kw">return</span> <span class="tok-id">a</span> &gt; <span class="tok-id">b</span> ? <span class="tok-id">a</span> : <span class="tok-id">b</span>; }
+
+<span class="tok-id">Node</span> *<span class="tok-id">new_node</span>(<span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+    <span class="tok-id">Node</span> *<span class="tok-id">n</span> = (<span class="tok-id">Node</span> *)<span class="tok-kw">malloc</span>(<span class="tok-kw">sizeof</span>(<span class="tok-id">Node</span>));
+    <span class="tok-id">n</span>-&gt;<span class="tok-id">key</span> = <span class="tok-id">key</span>;
+    <span class="tok-id">n</span>-&gt;<span class="tok-id">height</span> = <span class="tok-num">1</span>;
+    <span class="tok-id">n</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">n</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">NULL</span>;
+    <span class="tok-kw">return</span> <span class="tok-id">n</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">update</span>(<span class="tok-id">Node</span> *<span class="tok-id">n</span>) { <span class="tok-id">n</span>-&gt;<span class="tok-id">height</span> = <span class="tok-num">1</span> + <span class="tok-id">maxi</span>(<span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">left</span>), <span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">right</span>)); }
+
+<span class="tok-kw">int</span> <span class="tok-id">balance</span>(<span class="tok-id">Node</span> *<span class="tok-id">n</span>) { <span class="tok-kw">return</span> <span class="tok-id">n</span> ? <span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">left</span>) - <span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">right</span>) : <span class="tok-num">0</span>; }
+
+<span class="tok-id">Node</span> *<span class="tok-id">rotate_right</span>(<span class="tok-id">Node</span> *<span class="tok-id">y</span>) {
+    <span class="tok-id">Node</span> *<span class="tok-id">x</span> = <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span>;
+    <span class="tok-id">Node</span> *<span class="tok-id">b</span> = <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span>;
+    <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">y</span>;
+    <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">b</span>;
+    <span class="tok-id">update</span>(<span class="tok-id">y</span>);
+    <span class="tok-id">update</span>(<span class="tok-id">x</span>);
+    <span class="tok-kw">return</span> <span class="tok-id">x</span>;
+}
+
+<span class="tok-id">Node</span> *<span class="tok-id">rotate_left</span>(<span class="tok-id">Node</span> *<span class="tok-id">x</span>) {
+    <span class="tok-id">Node</span> *<span class="tok-id">y</span> = <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span>;
+    <span class="tok-id">Node</span> *<span class="tok-id">b</span> = <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span>;
+    <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">x</span>;
+    <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">b</span>;
+    <span class="tok-id">update</span>(<span class="tok-id">x</span>);
+    <span class="tok-id">update</span>(<span class="tok-id">y</span>);
+    <span class="tok-kw">return</span> <span class="tok-id">y</span>;
+}
+
+<span class="tok-cmt">/* BST insert, then rebalance every node on the way back up. */</span>
+<span class="tok-id">Node</span> *<span class="tok-id">insert</span>(<span class="tok-id">Node</span> *<span class="tok-id">node</span>, <span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">node</span>) <span class="tok-kw">return</span> <span class="tok-id">new_node</span>(<span class="tok-id">key</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">key</span> &lt; <span class="tok-id">node</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>  = <span class="tok-id">insert</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">else</span> <span class="tok-kw">if</span> (<span class="tok-id">key</span> &gt; <span class="tok-id">node</span>-&gt;<span class="tok-id">key</span>) <span class="tok-id">node</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">insert</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">right</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">else</span> <span class="tok-kw">return</span> <span class="tok-id">node</span>;                          <span class="tok-cmt">/* no duplicates */</span>
+
+    <span class="tok-id">update</span>(<span class="tok-id">node</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">b</span> = <span class="tok-id">balance</span>(<span class="tok-id">node</span>);
+
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &gt; <span class="tok-num">1</span> &amp;&amp; <span class="tok-id">key</span> &lt; <span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>-&gt;<span class="tok-id">key</span>)        <span class="tok-cmt">/* LL */</span>
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_right</span>(<span class="tok-id">node</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &gt; <span class="tok-num">1</span>) {                               <span class="tok-cmt">/* LR */</span>
+        <span class="tok-id">node</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">rotate_left</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>);
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_right</span>(<span class="tok-id">node</span>);
+    }
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &lt; -<span class="tok-num">1</span> &amp;&amp; <span class="tok-id">key</span> &gt; <span class="tok-id">node</span>-&gt;<span class="tok-id">right</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-cmt">/* RR */</span>
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_left</span>(<span class="tok-id">node</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &lt; -<span class="tok-num">1</span>) {                              <span class="tok-cmt">/* RL */</span>
+        <span class="tok-id">node</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">rotate_right</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">right</span>);
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_left</span>(<span class="tok-id">node</span>);
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">node</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">preorder</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>);
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">inorder</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"%d "</span>, <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span>);
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">free_tree</span>(<span class="tok-id">Node</span> *<span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">free_tree</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">free_tree</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+    <span class="tok-kw">free</span>(<span class="tok-id">r</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-id">Node</span> *<span class="tok-id">t1</span> = <span class="tok-id">NULL</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">vals</span>[] = {<span class="tok-num">30</span>, <span class="tok-num">20</span>, <span class="tok-num">10</span>, <span class="tok-num">40</span>, <span class="tok-num">50</span>, <span class="tok-num">25</span>};
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-num">6</span>; <span class="tok-id">i</span>++) <span class="tok-id">t1</span> = <span class="tok-id">insert</span>(<span class="tok-id">t1</span>, <span class="tok-id">vals</span>[<span class="tok-id">i</span>]);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1 (preorder after 30 20 10 40 50 25): "</span>);
+    <span class="tok-id">preorder</span>(<span class="tok-id">t1</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2 (inorder, must be sorted):          "</span>);
+    <span class="tok-id">inorder</span>(<span class="tok-id">t1</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3 (root key): %d\n"</span>, <span class="tok-id">t1</span>-&gt;<span class="tok-id">key</span>);
+
+    <span class="tok-id">Node</span> *<span class="tok-id">t2</span> = <span class="tok-id">NULL</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">1</span>; <span class="tok-id">i</span> &lt;= <span class="tok-num">7</span>; <span class="tok-id">i</span>++) <span class="tok-id">t2</span> = <span class="tok-id">insert</span>(<span class="tok-id">t2</span>, <span class="tok-id">i</span>);  <span class="tok-cmt">/* forces rebalances */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 4 (preorder after inserting 1..7):    "</span>);
+    <span class="tok-id">preorder</span>(<span class="tok-id">t2</span>); <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 5 (height of 7-node AVL): %d\n"</span>, <span class="tok-id">height</span>(<span class="tok-id">t2</span>));
+    <span class="tok-id">free_tree</span>(<span class="tok-id">t1</span>);
+    <span class="tok-id">free_tree</span>(<span class="tok-id">t2</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">struct</span> <span class="tok-id">Node</span> {
+    <span class="tok-kw">int</span> <span class="tok-id">key</span>, <span class="tok-id">height</span>;
+    <span class="tok-id">Node</span> *<span class="tok-id">left</span>, *<span class="tok-id">right</span>;
+    <span class="tok-id">explicit</span> <span class="tok-id">Node</span>(<span class="tok-kw">int</span> <span class="tok-id">k</span>) : <span class="tok-id">key</span>(<span class="tok-id">k</span>), <span class="tok-id">height</span>(<span class="tok-num">1</span>), <span class="tok-id">left</span>(<span class="tok-id">nullptr</span>), <span class="tok-id">right</span>(<span class="tok-id">nullptr</span>) {}
+};
+
+<span class="tok-kw">int</span> <span class="tok-id">height</span>(<span class="tok-id">Node</span>* <span class="tok-id">n</span>) { <span class="tok-kw">return</span> <span class="tok-id">n</span> ? <span class="tok-id">n</span>-&gt;<span class="tok-id">height</span> : <span class="tok-num">0</span>; }
+
+<span class="tok-kw">void</span> <span class="tok-id">update</span>(<span class="tok-id">Node</span>* <span class="tok-id">n</span>) { <span class="tok-id">n</span>-&gt;<span class="tok-id">height</span> = <span class="tok-num">1</span> + <span class="tok-id">max</span>(<span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">left</span>), <span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">right</span>)); }
+
+<span class="tok-kw">int</span> <span class="tok-id">balance</span>(<span class="tok-id">Node</span>* <span class="tok-id">n</span>) { <span class="tok-kw">return</span> <span class="tok-id">n</span> ? <span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">left</span>) - <span class="tok-id">height</span>(<span class="tok-id">n</span>-&gt;<span class="tok-id">right</span>) : <span class="tok-num">0</span>; }
+
+<span class="tok-id">Node</span>* <span class="tok-id">rotateRight</span>(<span class="tok-id">Node</span>* <span class="tok-id">y</span>) {
+    <span class="tok-id">Node</span>* <span class="tok-id">x</span> = <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span>;
+    <span class="tok-id">Node</span>* <span class="tok-id">b</span> = <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span>;
+    <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">y</span>;
+    <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">b</span>;
+    <span class="tok-id">update</span>(<span class="tok-id">y</span>);
+    <span class="tok-id">update</span>(<span class="tok-id">x</span>);
+    <span class="tok-kw">return</span> <span class="tok-id">x</span>;
+}
+
+<span class="tok-id">Node</span>* <span class="tok-id">rotateLeft</span>(<span class="tok-id">Node</span>* <span class="tok-id">x</span>) {
+    <span class="tok-id">Node</span>* <span class="tok-id">y</span> = <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span>;
+    <span class="tok-id">Node</span>* <span class="tok-id">b</span> = <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span>;
+    <span class="tok-id">y</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">x</span>;
+    <span class="tok-id">x</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">b</span>;
+    <span class="tok-id">update</span>(<span class="tok-id">x</span>);
+    <span class="tok-id">update</span>(<span class="tok-id">y</span>);
+    <span class="tok-kw">return</span> <span class="tok-id">y</span>;
+}
+
+<span class="tok-cmt">/* BST insert, then rebalance every node on the way back up. */</span>
+<span class="tok-id">Node</span>* <span class="tok-id">insert</span>(<span class="tok-id">Node</span>* <span class="tok-id">node</span>, <span class="tok-kw">int</span> <span class="tok-id">key</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">node</span>) <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-id">Node</span>(<span class="tok-id">key</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">key</span> &lt; <span class="tok-id">node</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>  = <span class="tok-id">insert</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">else</span> <span class="tok-kw">if</span> (<span class="tok-id">key</span> &gt; <span class="tok-id">node</span>-&gt;<span class="tok-id">key</span>) <span class="tok-id">node</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">insert</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">right</span>, <span class="tok-id">key</span>);
+    <span class="tok-kw">else</span> <span class="tok-kw">return</span> <span class="tok-id">node</span>;                          <span class="tok-cmt">/* no duplicates */</span>
+
+    <span class="tok-id">update</span>(<span class="tok-id">node</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">b</span> = <span class="tok-id">balance</span>(<span class="tok-id">node</span>);
+
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &gt; <span class="tok-num">1</span> &amp;&amp; <span class="tok-id">key</span> &lt; <span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>-&gt;<span class="tok-id">key</span>)        <span class="tok-cmt">/* LL */</span>
+        <span class="tok-kw">return</span> <span class="tok-id">rotateRight</span>(<span class="tok-id">node</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &gt; <span class="tok-num">1</span>) {                               <span class="tok-cmt">/* LR */</span>
+        <span class="tok-id">node</span>-&gt;<span class="tok-id">left</span> = <span class="tok-id">rotateLeft</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">left</span>);
+        <span class="tok-kw">return</span> <span class="tok-id">rotateRight</span>(<span class="tok-id">node</span>);
+    }
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &lt; -<span class="tok-num">1</span> &amp;&amp; <span class="tok-id">key</span> &gt; <span class="tok-id">node</span>-&gt;<span class="tok-id">right</span>-&gt;<span class="tok-id">key</span>)      <span class="tok-cmt">/* RR */</span>
+        <span class="tok-kw">return</span> <span class="tok-id">rotateLeft</span>(<span class="tok-id">node</span>);
+    <span class="tok-kw">if</span> (<span class="tok-id">b</span> &lt; -<span class="tok-num">1</span>) {                              <span class="tok-cmt">/* RL */</span>
+        <span class="tok-id">node</span>-&gt;<span class="tok-id">right</span> = <span class="tok-id">rotateRight</span>(<span class="tok-id">node</span>-&gt;<span class="tok-id">right</span>);
+        <span class="tok-kw">return</span> <span class="tok-id">rotateLeft</span>(<span class="tok-id">node</span>);
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">node</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">preorder</span>(<span class="tok-id">Node</span>* <span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span> &lt;&lt; <span class="tok-str">" "</span>;
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">preorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">inorder</span>(<span class="tok-id">Node</span>* <span class="tok-id">r</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-id">r</span>) <span class="tok-kw">return</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">left</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-id">r</span>-&gt;<span class="tok-id">key</span> &lt;&lt; <span class="tok-str">" "</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">r</span>-&gt;<span class="tok-id">right</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">Node</span>* <span class="tok-id">t1</span> = <span class="tok-id">nullptr</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> : {<span class="tok-num">30</span>, <span class="tok-num">20</span>, <span class="tok-num">10</span>, <span class="tok-num">40</span>, <span class="tok-num">50</span>, <span class="tok-num">25</span>}) <span class="tok-id">t1</span> = <span class="tok-id">insert</span>(<span class="tok-id">t1</span>, <span class="tok-id">v</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1 (preorder after 30 20 10 40 50 25): "</span>;
+    <span class="tok-id">preorder</span>(<span class="tok-id">t1</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2 (inorder, must be sorted):          "</span>;
+    <span class="tok-id">inorder</span>(<span class="tok-id">t1</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3 (root key): "</span> &lt;&lt; <span class="tok-id">t1</span>-&gt;<span class="tok-id">key</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+
+    <span class="tok-id">Node</span>* <span class="tok-id">t2</span> = <span class="tok-id">nullptr</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">1</span>; <span class="tok-id">i</span> &lt;= <span class="tok-num">7</span>; <span class="tok-id">i</span>++) <span class="tok-id">t2</span> = <span class="tok-id">insert</span>(<span class="tok-id">t2</span>, <span class="tok-id">i</span>);  <span class="tok-cmt">/* forces rebalances */</span>
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 4 (preorder after inserting 1..7):    "</span>;
+    <span class="tok-id">preorder</span>(<span class="tok-id">t2</span>); <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 5 (height of 7-node AVL): "</span> &lt;&lt; <span class="tok-id">height</span>(<span class="tok-id">t2</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">class</span> <span class="tok-id">Node</span>:
+    <span class="tok-kw">def</span> <span class="tok-id">__init__</span>(<span class="tok-id">self</span>, <span class="tok-id">key</span>):
+        <span class="tok-id">self</span>.<span class="tok-id">key</span> = <span class="tok-id">key</span>
+        <span class="tok-id">self</span>.<span class="tok-id">height</span> = <span class="tok-num">1</span>
+        <span class="tok-id">self</span>.<span class="tok-id">left</span> = <span class="tok-kw">None</span>
+        <span class="tok-id">self</span>.<span class="tok-id">right</span> = <span class="tok-kw">None</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">height</span>(<span class="tok-id">n</span>):
+    <span class="tok-kw">return</span> <span class="tok-id">n</span>.<span class="tok-id">height</span> <span class="tok-kw">if</span> <span class="tok-id">n</span> <span class="tok-kw">else</span> <span class="tok-num">0</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">update</span>(<span class="tok-id">n</span>):
+    <span class="tok-id">n</span>.<span class="tok-id">height</span> = <span class="tok-num">1</span> + <span class="tok-id">max</span>(<span class="tok-id">height</span>(<span class="tok-id">n</span>.<span class="tok-id">left</span>), <span class="tok-id">height</span>(<span class="tok-id">n</span>.<span class="tok-id">right</span>))
+
+
+<span class="tok-kw">def</span> <span class="tok-id">balance</span>(<span class="tok-id">n</span>):
+    <span class="tok-kw">return</span> <span class="tok-id">height</span>(<span class="tok-id">n</span>.<span class="tok-id">left</span>) - <span class="tok-id">height</span>(<span class="tok-id">n</span>.<span class="tok-id">right</span>) <span class="tok-kw">if</span> <span class="tok-id">n</span> <span class="tok-kw">else</span> <span class="tok-num">0</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">rotate_right</span>(<span class="tok-id">y</span>):
+    <span class="tok-id">x</span> = <span class="tok-id">y</span>.<span class="tok-id">left</span>
+    <span class="tok-id">b</span> = <span class="tok-id">x</span>.<span class="tok-id">right</span>
+    <span class="tok-id">x</span>.<span class="tok-id">right</span> = <span class="tok-id">y</span>
+    <span class="tok-id">y</span>.<span class="tok-id">left</span> = <span class="tok-id">b</span>
+    <span class="tok-id">update</span>(<span class="tok-id">y</span>)
+    <span class="tok-id">update</span>(<span class="tok-id">x</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">x</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">rotate_left</span>(<span class="tok-id">x</span>):
+    <span class="tok-id">y</span> = <span class="tok-id">x</span>.<span class="tok-id">right</span>
+    <span class="tok-id">b</span> = <span class="tok-id">y</span>.<span class="tok-id">left</span>
+    <span class="tok-id">y</span>.<span class="tok-id">left</span> = <span class="tok-id">x</span>
+    <span class="tok-id">x</span>.<span class="tok-id">right</span> = <span class="tok-id">b</span>
+    <span class="tok-id">update</span>(<span class="tok-id">x</span>)
+    <span class="tok-id">update</span>(<span class="tok-id">y</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">y</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">insert</span>(<span class="tok-id">node</span>, <span class="tok-id">key</span>):
+    <span class="tok-str">"""BST insert, then rebalance every node on the way back up."""</span>
+    <span class="tok-kw">if</span> <span class="tok-id">node</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> <span class="tok-id">Node</span>(<span class="tok-id">key</span>)
+    <span class="tok-kw">if</span> <span class="tok-id">key</span> &lt; <span class="tok-id">node</span>.<span class="tok-id">key</span>:
+        <span class="tok-id">node</span>.<span class="tok-id">left</span> = <span class="tok-id">insert</span>(<span class="tok-id">node</span>.<span class="tok-id">left</span>, <span class="tok-id">key</span>)
+    <span class="tok-kw">elif</span> <span class="tok-id">key</span> &gt; <span class="tok-id">node</span>.<span class="tok-id">key</span>:
+        <span class="tok-id">node</span>.<span class="tok-id">right</span> = <span class="tok-id">insert</span>(<span class="tok-id">node</span>.<span class="tok-id">right</span>, <span class="tok-id">key</span>)
+    <span class="tok-kw">else</span>:
+        <span class="tok-kw">return</span> <span class="tok-id">node</span>                      <span class="tok-cmt"># no duplicates</span>
+
+    <span class="tok-id">update</span>(<span class="tok-id">node</span>)
+    <span class="tok-id">b</span> = <span class="tok-id">balance</span>(<span class="tok-id">node</span>)
+
+    <span class="tok-kw">if</span> <span class="tok-id">b</span> &gt; <span class="tok-num">1</span> <span class="tok-kw">and</span> <span class="tok-id">key</span> &lt; <span class="tok-id">node</span>.<span class="tok-id">left</span>.<span class="tok-id">key</span>:            <span class="tok-cmt"># LL</span>
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_right</span>(<span class="tok-id">node</span>)
+    <span class="tok-kw">if</span> <span class="tok-id">b</span> &gt; <span class="tok-num">1</span>:                                    <span class="tok-cmt"># LR</span>
+        <span class="tok-id">node</span>.<span class="tok-id">left</span> = <span class="tok-id">rotate_left</span>(<span class="tok-id">node</span>.<span class="tok-id">left</span>)
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_right</span>(<span class="tok-id">node</span>)
+    <span class="tok-kw">if</span> <span class="tok-id">b</span> &lt; -<span class="tok-num">1</span> <span class="tok-kw">and</span> <span class="tok-id">key</span> &gt; <span class="tok-id">node</span>.<span class="tok-id">right</span>.<span class="tok-id">key</span>:          <span class="tok-cmt"># RR</span>
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_left</span>(<span class="tok-id">node</span>)
+    <span class="tok-kw">if</span> <span class="tok-id">b</span> &lt; -<span class="tok-num">1</span>:                                   <span class="tok-cmt"># RL</span>
+        <span class="tok-id">node</span>.<span class="tok-id">right</span> = <span class="tok-id">rotate_right</span>(<span class="tok-id">node</span>.<span class="tok-id">right</span>)
+        <span class="tok-kw">return</span> <span class="tok-id">rotate_left</span>(<span class="tok-id">node</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">node</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">preorder</span>(<span class="tok-id">r</span>):
+    <span class="tok-kw">if</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> []
+    <span class="tok-kw">return</span> [<span class="tok-id">r</span>.<span class="tok-id">key</span>] + <span class="tok-id">preorder</span>(<span class="tok-id">r</span>.<span class="tok-id">left</span>) + <span class="tok-id">preorder</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">inorder</span>(<span class="tok-id">r</span>):
+    <span class="tok-kw">if</span> <span class="tok-id">r</span> <span class="tok-kw">is</span> <span class="tok-kw">None</span>:
+        <span class="tok-kw">return</span> []
+    <span class="tok-kw">return</span> <span class="tok-id">inorder</span>(<span class="tok-id">r</span>.<span class="tok-id">left</span>) + [<span class="tok-id">r</span>.<span class="tok-id">key</span>] + <span class="tok-id">inorder</span>(<span class="tok-id">r</span>.<span class="tok-id">right</span>)
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">t1</span> = <span class="tok-kw">None</span>
+    <span class="tok-kw">for</span> <span class="tok-id">v</span> <span class="tok-kw">in</span> (<span class="tok-num">30</span>, <span class="tok-num">20</span>, <span class="tok-num">10</span>, <span class="tok-num">40</span>, <span class="tok-num">50</span>, <span class="tok-num">25</span>):
+        <span class="tok-id">t1</span> = <span class="tok-id">insert</span>(<span class="tok-id">t1</span>, <span class="tok-id">v</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1 (preorder after 30 20 10 40 50 25): {' '.join(map(str, preorder(t1)))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2 (inorder, must be sorted):          {' '.join(map(str, inorder(t1)))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3 (root key): {t1.key}"</span>)
+
+    <span class="tok-id">t2</span> = <span class="tok-kw">None</span>
+    <span class="tok-kw">for</span> <span class="tok-id">i</span> <span class="tok-kw">in</span> <span class="tok-id">range</span>(<span class="tok-num">1</span>, <span class="tok-num">8</span>):
+        <span class="tok-id">t2</span> = <span class="tok-id">insert</span>(<span class="tok-id">t2</span>, <span class="tok-id">i</span>)                       <span class="tok-cmt"># forces rebalances</span>
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 4 (preorder after inserting 1..7):    {' '.join(map(str, preorder(t2)))}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 5 (height of 7-node AVL): {height(t2)}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1 (preorder after 30 20 10 40 50 25): 30 20 10 25 40 50 
+Test 2 (inorder, must be sorted):          10 20 25 30 40 50 
+Test 3 (root key): 30
+Test 4 (preorder after inserting 1..7):    4 2 1 3 6 5 7 
+Test 5 (height of 7-node AVL): 3</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1 (preorder after 30 20 10 40 50 25): 30 20 10 25 40 50 
+Test 2 (inorder, must be sorted):          10 20 25 30 40 50 
+Test 3 (root key): 30
+Test 4 (preorder after inserting 1..7):    4 2 1 3 6 5 7 
+Test 5 (height of 7-node AVL): 3</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1 (preorder after 30 20 10 40 50 25): 30 20 10 25 40 50
+Test 2 (inorder, must be sorted):          10 20 25 30 40 50
+Test 3 (root key): 30
+Test 4 (preorder after inserting 1..7):    4 2 1 3 6 5 7
+Test 5 (height of 7-node AVL): 3</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 In-memory indexes</h4><p class="card-content" style="margin:0;">Databases and file systems use AVL-style balancing for in-memory ordered indexes (on-disk cousins are B-trees).</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Language runtimes</h4><p class="card-content" style="margin:0;">Ordered maps and interval structures in runtime libraries rely on balanced BSTs; AVL is the reference design.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Network routing tables</h4><p class="card-content" style="margin:0;">Longest-prefix lookups over sorted ranges use balanced trees to keep worst-case lookup time bounded.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Computational geometry</h4><p class="card-content" style="margin:0;">Sweep-line algorithms store active events in a balanced tree; AVL guarantees the O(log n) per-event cost.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/introduction-to-avl-tree/" target="_blank" rel="noopener">GeeksforGeeks — AVL Tree (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "frontier", "edgeState": "path"}], "caption": "Insert 30 as a new leaf", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "frontier", "edgeState": "path"}], "caption": "Insert 30 complete \u2014 tree height 1, balance everywhere in [-1, +1]", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "current", "edgeState": "path"}], "caption": "Insert 20: compare with 30 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "frontier", "edgeState": "path"}], "caption": "Insert 20 as a new leaf", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "frontier", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 20 complete \u2014 tree height 2, balance everywhere in [-1, +1]", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 10: compare with 30 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "current", "edgeState": "path"}], "caption": "Insert 10: compare with 20 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "frontier", "edgeState": "path"}], "caption": "Insert 10 as a new leaf", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}], "caption": "Node 30 unbalanced (balance +2) \u2014 LL case: rotate right at 30", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "frontier", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}], "caption": "Right rotation done \u2014 20 is the new subtree root", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "frontier", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}], "caption": "Insert 10 complete \u2014 tree height 2, balance everywhere in [-1, +1]", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": null, "state": "current", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}], "caption": "Insert 40: compare with 20 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}], "caption": "Insert 40: compare with 30 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "frontier", "edgeState": "path"}], "caption": "Insert 40 as a new leaf", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "frontier", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 40 complete \u2014 tree height 3, balance everywhere in [-1, +1]", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": null, "state": "current", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 50: compare with 20 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Insert 50: compare with 30 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "current", "edgeState": "path"}], "caption": "Insert 50: compare with 40 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "frontier", "edgeState": "path"}], "caption": "Insert 50 as a new leaf", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}], "caption": "Node 30 unbalanced (balance -2) \u2014 RR case: rotate left at 30", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 40, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "frontier", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}], "caption": "Left rotation done \u2014 40 is the new subtree root", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 40, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "frontier", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}], "caption": "Insert 50 complete \u2014 tree height 3, balance everywhere in [-1, +1]", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 40, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": null, "state": "current", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}], "caption": "Insert 25: compare with 20 -\u003e go right", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 40, "state": "normal", "edgeState": "normal"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 20, "state": "current", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}], "caption": "Insert 25: compare with 40 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 40, "state": "current", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}], "caption": "Insert 25: compare with 30 -\u003e go left", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 40, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}, {"id": 25, "value": 25, "parent": 30, "state": "frontier", "edgeState": "path"}], "caption": "Insert 25 as a new leaf", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 40, "state": "path", "edgeState": "path"}, {"id": 20, "value": 20, "parent": null, "state": "current", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 20, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}, {"id": 25, "value": 25, "parent": 30, "state": "normal", "edgeState": "normal"}], "caption": "Node 20 unbalanced (balance -2) \u2014 RL case: rotate right at 40, then left at 20", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": 20, "state": "frontier", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}, {"id": 25, "value": 25, "parent": 20, "state": "normal", "edgeState": "normal"}], "caption": "Double rotation done \u2014 30 is the new subtree root", "done": false}, {"kind": "tree", "tree": [{"id": 30, "value": 30, "parent": null, "state": "frontier", "edgeState": "path"}, {"id": 20, "value": 20, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 10, "value": 10, "parent": 20, "state": "normal", "edgeState": "normal"}, {"id": 40, "value": 40, "parent": 30, "state": "path", "edgeState": "path"}, {"id": 50, "value": 50, "parent": 40, "state": "normal", "edgeState": "normal"}, {"id": 25, "value": 25, "parent": 20, "state": "normal", "edgeState": "normal"}], "caption": "Insert 25 complete \u2014 tree height 3, balance everywhere in [-1, +1]", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Binary search is a divide-and-conquer lookup that finds a target in a sorted array by repeatedly comparing it with the middle element and discarding the half that cannot contain the target" />
+  <title>Binary Search | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🎯</div><h1>Binary Search</h1><p class="subtitle">🔍 Sorting &amp; Searching · <span style="color:#dc2626;font-weight:600;">Must Know</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(log n)</span><span class="stat-badge">Priority 5/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><span class="algo-prevnext disabled">← First</span><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="merge-sort.html">Merge Sort →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">Binary search is a divide-and-conquer lookup that finds a target in a sorted array by repeatedly comparing it with the middle element and discarding the half that cannot contain the target. Each step halves the remaining search space, so a million-element array needs at most about twenty comparisons instead of a million.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">Linear scanning costs O(n) per lookup, which is too slow when data is large and lookups are frequent. Much real data is kept sorted (IDs, timestamps, dictionary keys, records in a database), and binary search exploits that ordering to answer a lookup in O(log n). That difference turns an unusable search into one that scales to billions of records.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>The collection is sorted (or can be sorted), and you need to know whether a value exists or where it is.</li><li>You need a boundary rather than an exact match: first/last occurrence, lower or upper bound, or a count of equal values.</li><li>The problem is a minimisation/maximisation with a monotonic feasibility check (search on the answer space).</li><li>Records are large and you cannot afford to read them one by one.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Confirm the input is sorted (or sortable); for unsorted data binary search does not apply directly.</li><li>Use the classic find-any variant when a single match is enough.</li><li>Switch to lower_bound / upper_bound variants when duplicates exist or a boundary index is wanted.</li><li>Use the search-on-answer form when the task is "smallest value where predicate(v) is true" and predicate is monotonic.</li><li>Keep the loop invariant in mind: the search space shrinks each round, and mid = lo + (hi - lo) / 2 avoids overflow.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Data is not sorted and a full sort (O(n log n)) would cost more than one linear scan.</li><li>The collection is tiny — a linear pass is equally fast and simpler to write.</li><li>Random access is expensive, e.g. a linked list, where binary search degrades badly.</li><li>You are searching unstructured text or fuzzy matches where ordering is not meaningful.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(1)</td></tr><tr><td>Average case</td><td>O(log n)</td></tr><tr><td>Worst case</td><td>O(log n)</td></tr><tr><td>Space</td><td>O(1) (iterative)</td></tr><tr><td>Stable</td><td>—</td></tr><tr><td>In-place</td><td>—</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-cmt">/* Binary search: inspect at most log2(n) pivots, halving the space each time.
+ * Returns an index where a[i] == target, or -1. */</span>
+<span class="tok-kw">int</span> <span class="tok-id">binary_search</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">int</span> <span class="tok-id">target</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">lo</span> = <span class="tok-num">0</span>, <span class="tok-id">hi</span> = <span class="tok-id">n</span> - <span class="tok-num">1</span>;
+    <span class="tok-kw">while</span> (<span class="tok-id">lo</span> &lt;= <span class="tok-id">hi</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) / <span class="tok-num">2</span>;   <span class="tok-cmt">/* avoids lo+hi overflow */</span>
+        <span class="tok-kw">if</span> (<span class="tok-id">a</span>[<span class="tok-id">mid</span>] == <span class="tok-id">target</span>) <span class="tok-kw">return</span> <span class="tok-id">mid</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">a</span>[<span class="tok-id">mid</span>] &lt; <span class="tok-id">target</span>) <span class="tok-id">lo</span> = <span class="tok-id">mid</span> + <span class="tok-num">1</span>;
+        <span class="tok-kw">else</span>                 <span class="tok-id">hi</span> = <span class="tok-id">mid</span> - <span class="tok-num">1</span>;
+    }
+    <span class="tok-kw">return</span> -<span class="tok-num">1</span>;
+}
+
+<span class="tok-cmt">/* Lower bound: first index i with a[i] &gt;= target (duplicates / boundary
+ * queries). Returns n when no such index exists. */</span>
+<span class="tok-kw">int</span> <span class="tok-id">lower_bound_idx</span>(<span class="tok-kw">int</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-kw">int</span> <span class="tok-id">target</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">lo</span> = <span class="tok-num">0</span>, <span class="tok-id">hi</span> = <span class="tok-id">n</span>;
+    <span class="tok-kw">while</span> (<span class="tok-id">lo</span> &lt; <span class="tok-id">hi</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) / <span class="tok-num">2</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">a</span>[<span class="tok-id">mid</span>] &lt; <span class="tok-id">target</span>) <span class="tok-id">lo</span> = <span class="tok-id">mid</span> + <span class="tok-num">1</span>;
+        <span class="tok-kw">else</span>                 <span class="tok-id">hi</span> = <span class="tok-id">mid</span>;
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">lo</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">a</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">3</span>, <span class="tok-num">5</span>, <span class="tok-num">7</span>, <span class="tok-num">9</span>, <span class="tok-num">11</span>, <span class="tok-num">13</span>, <span class="tok-num">15</span>};
+    <span class="tok-kw">int</span> <span class="tok-id">b</span>[] = {<span class="tok-num">1</span>, <span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>};
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1: %d\n"</span>, <span class="tok-id">binary_search</span>(<span class="tok-id">a</span>, <span class="tok-num">8</span>, <span class="tok-num">7</span>));       <span class="tok-cmt">/* 3  */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2: %d\n"</span>, <span class="tok-id">binary_search</span>(<span class="tok-id">a</span>, <span class="tok-num">8</span>, <span class="tok-num">10</span>));      <span class="tok-cmt">/* -1 */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3: %d\n"</span>, <span class="tok-id">binary_search</span>(<span class="tok-id">a</span>, <span class="tok-num">8</span>, <span class="tok-num">1</span>));       <span class="tok-cmt">/* 0  */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 4: %d\n"</span>, <span class="tok-id">lower_bound_idx</span>(<span class="tok-id">a</span>, <span class="tok-num">8</span>, <span class="tok-num">8</span>));     <span class="tok-cmt">/* 4  */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 5: %d\n"</span>, <span class="tok-id">binary_search</span>(<span class="tok-id">b</span>, <span class="tok-num">6</span>, <span class="tok-num">2</span>));       <span class="tok-cmt">/* 2  */</span>
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 6: %d\n"</span>, <span class="tok-id">lower_bound_idx</span>(<span class="tok-id">b</span>, <span class="tok-num">6</span>, <span class="tok-num">2</span>));     <span class="tok-cmt">/* 2  */</span>
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-cmt">/* Returns an index holding target, else -1. */</span>
+<span class="tok-kw">int</span> <span class="tok-id">binarySearch</span>(<span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">target</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">lo</span> = <span class="tok-num">0</span>, <span class="tok-id">hi</span> = (<span class="tok-kw">int</span>)<span class="tok-id">a</span>.<span class="tok-id">size</span>() - <span class="tok-num">1</span>;
+    <span class="tok-kw">while</span> (<span class="tok-id">lo</span> &lt;= <span class="tok-id">hi</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) / <span class="tok-num">2</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">a</span>[<span class="tok-id">mid</span>] == <span class="tok-id">target</span>) <span class="tok-kw">return</span> <span class="tok-id">mid</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">a</span>[<span class="tok-id">mid</span>] &lt; <span class="tok-id">target</span>) <span class="tok-id">lo</span> = <span class="tok-id">mid</span> + <span class="tok-num">1</span>;
+        <span class="tok-kw">else</span>                 <span class="tok-id">hi</span> = <span class="tok-id">mid</span> - <span class="tok-num">1</span>;
+    }
+    <span class="tok-kw">return</span> -<span class="tok-num">1</span>;
+}
+
+<span class="tok-cmt">/* First index with value &gt;= target (std::lower_bound behaviour). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">lowerBound</span>(<span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&amp; <span class="tok-id">a</span>, <span class="tok-kw">int</span> <span class="tok-id">target</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">lo</span> = <span class="tok-num">0</span>, <span class="tok-id">hi</span> = (<span class="tok-kw">int</span>)<span class="tok-id">a</span>.<span class="tok-id">size</span>();
+    <span class="tok-kw">while</span> (<span class="tok-id">lo</span> &lt; <span class="tok-id">hi</span>) {
+        <span class="tok-kw">int</span> <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) / <span class="tok-num">2</span>;
+        <span class="tok-kw">if</span> (<span class="tok-id">a</span>[<span class="tok-id">mid</span>] &lt; <span class="tok-id">target</span>) <span class="tok-id">lo</span> = <span class="tok-id">mid</span> + <span class="tok-num">1</span>;
+        <span class="tok-kw">else</span>                 <span class="tok-id">hi</span> = <span class="tok-id">mid</span>;
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">lo</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">a</span> = {<span class="tok-num">1</span>, <span class="tok-num">3</span>, <span class="tok-num">5</span>, <span class="tok-num">7</span>, <span class="tok-num">9</span>, <span class="tok-num">11</span>, <span class="tok-num">13</span>, <span class="tok-num">15</span>};
+    <span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">b</span> = {<span class="tok-num">1</span>, <span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>};
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1: "</span> &lt;&lt; <span class="tok-id">binarySearch</span>(<span class="tok-id">a</span>, <span class="tok-num">7</span>)  &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2: "</span> &lt;&lt; <span class="tok-id">binarySearch</span>(<span class="tok-id">a</span>, <span class="tok-num">10</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3: "</span> &lt;&lt; <span class="tok-id">binarySearch</span>(<span class="tok-id">a</span>, <span class="tok-num">1</span>)  &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 4: "</span> &lt;&lt; <span class="tok-id">lowerBound</span>(<span class="tok-id">a</span>, <span class="tok-num">8</span>)    &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 5: "</span> &lt;&lt; <span class="tok-id">binarySearch</span>(<span class="tok-id">b</span>, <span class="tok-num">2</span>)  &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 6: "</span> &lt;&lt; <span class="tok-id">lowerBound</span>(<span class="tok-id">b</span>, <span class="tok-num">2</span>)    &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">def</span> <span class="tok-id">binary_search</span>(<span class="tok-id">a</span>, <span class="tok-id">target</span>):
+    <span class="tok-str">"""Return an index where a[index] == target, else -1."""</span>
+    <span class="tok-id">lo</span>, <span class="tok-id">hi</span> = <span class="tok-num">0</span>, <span class="tok-id">len</span>(<span class="tok-id">a</span>) - <span class="tok-num">1</span>
+    <span class="tok-kw">while</span> <span class="tok-id">lo</span> &lt;= <span class="tok-id">hi</span>:
+        <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) // <span class="tok-num">2</span>
+        <span class="tok-kw">if</span> <span class="tok-id">a</span>[<span class="tok-id">mid</span>] == <span class="tok-id">target</span>:
+            <span class="tok-kw">return</span> <span class="tok-id">mid</span>
+        <span class="tok-kw">if</span> <span class="tok-id">a</span>[<span class="tok-id">mid</span>] &lt; <span class="tok-id">target</span>:
+            <span class="tok-id">lo</span> = <span class="tok-id">mid</span> + <span class="tok-num">1</span>
+        <span class="tok-kw">else</span>:
+            <span class="tok-id">hi</span> = <span class="tok-id">mid</span> - <span class="tok-num">1</span>
+    <span class="tok-kw">return</span> -<span class="tok-num">1</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">lower_bound</span>(<span class="tok-id">a</span>, <span class="tok-id">target</span>):
+    <span class="tok-str">"""Return the first index with a[index] &gt;= target."""</span>
+    <span class="tok-id">lo</span>, <span class="tok-id">hi</span> = <span class="tok-num">0</span>, <span class="tok-id">len</span>(<span class="tok-id">a</span>)
+    <span class="tok-kw">while</span> <span class="tok-id">lo</span> &lt; <span class="tok-id">hi</span>:
+        <span class="tok-id">mid</span> = <span class="tok-id">lo</span> + (<span class="tok-id">hi</span> - <span class="tok-id">lo</span>) // <span class="tok-num">2</span>
+        <span class="tok-kw">if</span> <span class="tok-id">a</span>[<span class="tok-id">mid</span>] &lt; <span class="tok-id">target</span>:
+            <span class="tok-id">lo</span> = <span class="tok-id">mid</span> + <span class="tok-num">1</span>
+        <span class="tok-kw">else</span>:
+            <span class="tok-id">hi</span> = <span class="tok-id">mid</span>
+    <span class="tok-kw">return</span> <span class="tok-id">lo</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">a</span> = [<span class="tok-num">1</span>, <span class="tok-num">3</span>, <span class="tok-num">5</span>, <span class="tok-num">7</span>, <span class="tok-num">9</span>, <span class="tok-num">11</span>, <span class="tok-num">13</span>, <span class="tok-num">15</span>]
+    <span class="tok-id">b</span> = [<span class="tok-num">1</span>, <span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>]
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1: {binary_search(a, 7)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2: {binary_search(a, 10)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3: {binary_search(a, 1)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 4: {lower_bound(a, 8)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 5: {binary_search(b, 2)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 6: {lower_bound(b, 2)}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1: 3
+Test 2: -1
+Test 3: 0
+Test 4: 4
+Test 5: 2
+Test 6: 2</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1: 3
+Test 2: -1
+Test 3: 0
+Test 4: 4
+Test 5: 2
+Test 6: 2</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1: 3
+Test 2: -1
+Test 3: 0
+Test 4: 4
+Test 5: 2
+Test 6: 2</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Database &amp; library lookups</h4><p class="card-content" style="margin:0;">B-tree and dictionary indexes use bisection to locate keys among millions of entries.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 git bisect</h4><p class="card-content" style="margin:0;">Finds the first "bad" commit in a history by binary-search-style partitioning of the commit range.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Search-on-answer problems</h4><p class="card-content" style="margin:0;">Book allocation, ship capacity, and "smallest feasible X" problems reduce to monotonic binary search.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Standard library building block</h4><p class="card-content" style="margin:0;">bisect in Python, lower_bound in C++, and Arrays.binarySearch in Java rest on this idea.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/binary-search/" target="_blank" rel="noopener">GeeksforGeeks — Binary Search (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "array", "data": [1, 3, 5, 7, 9, 11, 13, 15], "highlights": [], "compare": [], "swap": [], "markers": {"lo": 0, "hi": 7}, "caption": "Start: search space [0, 7], looking for 11", "done": false}, {"kind": "array", "data": [1, 3, 5, 7, 9, 11, 13, 15], "highlights": [3], "compare": [3], "swap": [], "markers": {"lo": 0, "hi": 7, "mid": 3}, "caption": "mid = 3 -\u003e A[3] = 7; compare with 11", "done": false}, {"kind": "array", "data": [1, 3, 5, 7, 9, 11, 13, 15], "highlights": [3], "compare": [3], "swap": [], "markers": {"lo": 4, "hi": 7}, "caption": "A[3] = 7 \u003c 11 -\u003e discard left half, lo = 4", "done": false}, {"kind": "array", "data": [1, 3, 5, 7, 9, 11, 13, 15], "highlights": [5], "compare": [5], "swap": [], "markers": {"lo": 4, "hi": 7, "mid": 5}, "caption": "mid = 5 -\u003e A[5] = 11; compare with 11", "done": false}, {"kind": "array", "data": [1, 3, 5, 7, 9, 11, 13, 15], "highlights": [5], "compare": [5], "swap": [], "markers": {"lo": 4, "hi": 7, "mid": 5}, "caption": "Match! A[5] == 11. Return index 5.", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

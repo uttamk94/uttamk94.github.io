@@ -1,0 +1,504 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-08-29T22:02:34.731244+00:00",
+  "total_topics": 21,
+  "types": {
+    "sorting-searching": {
+      "label": "Sorting & Searching",
+      "icon": "\ud83d\udd0d",
+      "blurb": "Core ordering and lookup algorithms, from O(n\u00b2) sorts to divide-and-conquer and non-comparison sorts."
+    },
+    "backtracking": {
+      "label": "Backtracking",
+      "icon": "\ud83d\udd01",
+      "blurb": "Systematic search over all candidates with pruning for constraint-satisfaction problems."
+    },
+    "tree": {
+      "label": "Tree",
+      "icon": "\ud83c\udf33",
+      "blurb": "Hierarchical data structures and the algorithms that keep them balanced and searchable."
+    },
+    "graph": {
+      "label": "Graph",
+      "icon": "\ud83d\udd78\ufe0f",
+      "blurb": "Traversal, shortest paths, ordering, and connectivity algorithms on networks."
+    },
+    "greedy": {
+      "label": "Greedy",
+      "icon": "\ud83d\udcb0",
+      "blurb": "Algorithms that make the locally optimal choice and provably reach a global optimum."
+    },
+    "dynamic-programming": {
+      "label": "Dynamic Programming",
+      "icon": "\ud83d\udcc8",
+      "blurb": "Breaking problems into overlapping subproblems with memoization and tabulation."
+    }
+  },
+  "topics": [
+    {
+      "id": "binary-search",
+      "name": "Binary Search",
+      "slug": "binary-search",
+      "type": "sorting-searching",
+      "type_label": "Sorting & Searching",
+      "type_icon": "\ud83d\udd0d",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Medium",
+      "icon": "\ud83c\udfaf",
+      "worst_complexity": "O(log n)",
+      "kind": "array",
+      "outline": [
+        "Divide-and-conquer lookup on sorted data: halve the search space every step",
+        "O(log n) time with O(1) extra space when written iteratively",
+        "Lower bound / upper bound variants handle duplicates and boundary queries",
+        "Search-on-answer form solves monotonic optimisation problems"
+      ],
+      "link": "algorithms/binary-search.html"
+    },
+    {
+      "id": "merge-sort",
+      "name": "Merge Sort",
+      "slug": "merge-sort",
+      "type": "sorting-searching",
+      "type_label": "Sorting & Searching",
+      "type_icon": "\ud83d\udd0d",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Medium",
+      "icon": "\ud83e\udde9",
+      "worst_complexity": "O(n log n)",
+      "kind": "array",
+      "outline": [
+        "Divide-and-conquer: split, sort both halves, merge in O(n)",
+        "Worst-case O(n log n) and stable \u2014 no input can break it",
+        "Costs O(n) auxiliary space; merges map directly to external sorting",
+        "Variant \u2014 count inversions while merging"
+      ],
+      "link": "algorithms/merge-sort.html"
+    },
+    {
+      "id": "quick-sort",
+      "name": "Quick Sort",
+      "slug": "quick-sort",
+      "type": "sorting-searching",
+      "type_label": "Sorting & Searching",
+      "type_icon": "\ud83d\udd0d",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Medium",
+      "icon": "\u26a1",
+      "worst_complexity": "O(n\u00b2) \u2014 avoidable with random pivots",
+      "kind": "array",
+      "outline": [
+        "Partition around a pivot: smaller | pivot | larger, pivot locked in place",
+        "Recurse independently on both sides \u2014 O(n log n) on average",
+        "Randomised pivot / median-of-three defeats the O(n\u00b2) worst case",
+        "3-way partition groups duplicates in one pass",
+        "Quickselect reuses the same partition for k-th smallest in average O(n)"
+      ],
+      "link": "algorithms/quick-sort.html"
+    },
+    {
+      "id": "heap-sort",
+      "name": "Heap Sort",
+      "slug": "heap-sort",
+      "type": "sorting-searching",
+      "type_label": "Sorting & Searching",
+      "type_icon": "\ud83d\udd0d",
+      "priority": 3,
+      "priority_label": "Useful",
+      "difficulty": "Medium",
+      "icon": "\ud83c\udfd4\ufe0f",
+      "worst_complexity": "O(n log n)",
+      "kind": "array",
+      "outline": [
+        "Max-heap property: parent >= children, stored implicitly in the array",
+        "Build-heap bottom-up in O(n) (Floyd's method)",
+        "Extract max n-1 times: swap root with last slot, sift down O(log n)",
+        "In-place and worst-case O(n log n) \u2014 but not stable",
+        "Same structure = priority queues, Dijkstra's frontier, streaming top-k"
+      ],
+      "link": "algorithms/heap-sort.html"
+    },
+    {
+      "id": "counting-radix-sort",
+      "name": "Counting Sort & Radix Sort",
+      "slug": "counting-radix-sort",
+      "type": "sorting-searching",
+      "type_label": "Sorting & Searching",
+      "type_icon": "\ud83d\udd0d",
+      "priority": 3,
+      "priority_label": "Useful",
+      "difficulty": "Easy",
+      "icon": "\ud83d\udd22",
+      "worst_complexity": "O(n + k) counting \u00b7 O(d(n+k)) radix",
+      "kind": "array",
+      "outline": [
+        "Count frequencies of each key in one linear scan",
+        "Prefix-sum counts so count[v] = number of elements <= v",
+        "Place elements right-to-left \u2014 the reverse scan guarantees stability",
+        "Radix sort = one stable counting pass per digit, LSD first",
+        "Runs in O(n + k) / O(d(n+k)) \u2014 no element comparison ever happens"
+      ],
+      "link": "algorithms/counting-radix-sort.html"
+    },
+    {
+      "id": "backtracking-fundamentals",
+      "name": "Backtracking Fundamentals",
+      "slug": "backtracking-fundamentals",
+      "type": "backtracking",
+      "type_label": "Backtracking",
+      "type_icon": "\ud83d\udd01",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Medium",
+      "icon": "\ud83e\udde9",
+      "worst_complexity": "Exponential in the decision depth",
+      "kind": "array",
+      "outline": [
+        "Choose \u2192 explore \u2192 undo: the three-line recursion pattern behind every backtracking solution",
+        "Subsets: include-or-skip decision per element, 2\u207f leaves",
+        "Permutations: swap each remaining candidate into the current slot, n\u00b7n! leaves",
+        "Combination sum: reuse allowed, index-order rule keeps combinations distinct",
+        "Pruning: bail out of a branch the instant a constraint is violated"
+      ],
+      "link": "algorithms/backtracking-fundamentals.html"
+    },
+    {
+      "id": "n-queens",
+      "name": "N-Queens",
+      "slug": "n-queens",
+      "type": "backtracking",
+      "type_label": "Backtracking",
+      "type_icon": "\ud83d\udd01",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Hard",
+      "icon": "\ud83d\udc51",
+      "worst_complexity": "O(n!)",
+      "kind": "board",
+      "outline": [
+        "Place one queen per row; check column + both diagonals",
+        "Undo (backtrack) a choice as soon as it leads nowhere",
+        "Worst case O(n!) but pruning makes practical growth much smaller",
+        "First-class template for constraint-satisfaction problems"
+      ],
+      "link": "algorithms/n-queens.html"
+    },
+    {
+      "id": "sudoku-solver",
+      "name": "Sudoku Solver",
+      "slug": "sudoku-solver",
+      "type": "backtracking",
+      "type_label": "Backtracking",
+      "type_icon": "\ud83d\udd01",
+      "priority": 3,
+      "priority_label": "Useful",
+      "difficulty": "Medium",
+      "icon": "\ud83e\uddf7",
+      "worst_complexity": "O(9^m) where m = number of empty cells",
+      "kind": "board",
+      "outline": [
+        "Find the first empty cell in reading order",
+        "Try digits 1-9; a digit is legal only if its row, column and 3\u00d73 box lack it",
+        "Place, recurse, and undo on failure \u2014 the choose/explore/undo triangle",
+        "Dead end: no digit fits the cell, undo the previous choice",
+        "Grid full with no conflict = solution; 9^m worst case but heavily pruned in practice"
+      ],
+      "link": "algorithms/sudoku-solver.html"
+    },
+    {
+      "id": "dijkstra",
+      "name": "Dijkstra's Shortest Path",
+      "slug": "dijkstra",
+      "type": "graph",
+      "type_label": "Graph",
+      "type_icon": "\ud83d\udd78\ufe0f",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Hard",
+      "icon": "\ud83d\uddfa\ufe0f",
+      "worst_complexity": "O((V + E) log V)",
+      "kind": "graph",
+      "outline": [
+        "Single-source shortest paths on non-negative weighted graphs",
+        "Greedy finalisation + priority queue gives O((V + E) log V)",
+        "Fails on negative edges \u2014 Bellman-Ford covers those",
+        "Reconstruct paths via a parent table"
+      ],
+      "link": "algorithms/dijkstra.html"
+    },
+    {
+      "id": "binary-tree-traversals",
+      "name": "Binary Tree & Traversals",
+      "slug": "binary-tree-traversals",
+      "type": "tree",
+      "type_label": "Tree",
+      "type_icon": "\ud83c\udf33",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Easy",
+      "icon": "\ud83c\udf32",
+      "worst_complexity": "O(n)",
+      "kind": "tree",
+      "outline": [
+        "Depth-first recursion: preorder (N-L-R), inorder (L-N-R), postorder (L-R-N)",
+        "Level order: BFS with a queue, processing layers left to right",
+        "All DFS traversals cost O(n) time and O(h) stack; BFS costs O(w) queue width",
+        "Inorder on a BST emits keys in sorted order \u2014 the base of many BST proofs",
+        "Iterative variants use an explicit stack; Morris inorder achieves O(1) extra space"
+      ],
+      "link": "algorithms/binary-tree-traversals.html"
+    },
+    {
+      "id": "binary-search-tree",
+      "name": "Binary Search Tree",
+      "slug": "binary-search-tree",
+      "type": "tree",
+      "type_label": "Tree",
+      "type_icon": "\ud83c\udf33",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Medium",
+      "icon": "\ud83c\udf33",
+      "worst_complexity": "O(n) \u2014 degenerates into a linked list",
+      "kind": "tree",
+      "outline": [
+        "Invariant: left subtree < node < right subtree",
+        "Search/insert walk the root-to-leaf path \u2014 O(h) comparisons",
+        "Delete has three cases: leaf, one child, two children (swap with inorder successor)",
+        "Inorder traversal always yields sorted keys \u2014 the structure is a live sort",
+        "Height h decides everything: log n if balanced, n if skewed \u2014 hence self-balancing trees"
+      ],
+      "link": "algorithms/binary-search-tree.html"
+    },
+    {
+      "id": "binary-heap-priority-queue",
+      "name": "Binary Heap & Priority Queue",
+      "slug": "binary-heap-priority-queue",
+      "type": "tree",
+      "type_label": "Tree",
+      "type_icon": "\ud83c\udf33",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Medium",
+      "icon": "\u2696\ufe0f",
+      "worst_complexity": "O(log n) push/pop; O(1) peek",
+      "kind": "array",
+      "outline": [
+        "Complete tree in an array: parent (i-1)/2, children 2i+1 / 2i+2 \u2014 no pointers needed",
+        "push: append at the end, sift up while smaller than parent",
+        "pop-min: remove index 0, move the last element to the root, sift down",
+        "heapify (Floyd, bottom-up) builds from n items in O(n)",
+        "min-heap vs max-heap is just the comparator; C++ default is max-heap, heapq is min-heap"
+      ],
+      "link": "algorithms/binary-heap-priority-queue.html"
+    },
+    {
+      "id": "avl-tree",
+      "name": "AVL Tree",
+      "slug": "avl-tree",
+      "type": "tree",
+      "type_label": "Tree",
+      "type_icon": "\ud83c\udf33",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Hard",
+      "icon": "\u2696\ufe0f",
+      "worst_complexity": "O(log n) \u2014 guaranteed by strict balancing",
+      "kind": "tree",
+      "outline": [
+        "Balance factor = height(left) - height(right), kept in [-1, +1]",
+        "Insert as in BST, then retrace upward updating heights",
+        "LL and RR cases fix with one rotation; LR and RL with a double rotation",
+        "Rotations are O(1) pointer changes that restore BST order and balance",
+        "Height stays <= 1.44 log n, so every operation is worst-case O(log n)"
+      ],
+      "link": "algorithms/avl-tree.html"
+    },
+    {
+      "id": "lca-tree-diameter",
+      "name": "LCA & Tree Diameter",
+      "slug": "lca-tree-diameter",
+      "type": "tree",
+      "type_label": "Tree",
+      "type_icon": "\ud83c\udf33",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Medium",
+      "icon": "\ud83e\uddec",
+      "worst_complexity": "O(n) per query on a chain; O(n) preprocessing per DFS run",
+      "kind": "tree",
+      "outline": [
+        "One DFS from the root fills parent[] and depth[] for every node",
+        "LCA: lift the deeper node, then climb both together until they meet \u2014 O(h)",
+        "Distance(u, v) = depth[u] + depth[v] \u2212 2\u00b7depth[LCA]",
+        "Diameter endpoint: the farthest node from any start is always an endpoint",
+        "Second DFS from that endpoint measures the diameter and parent[] rebuilds the path",
+        "Binary lifting = the same climbing precomputed in O(n log n) for O(log n) queries"
+      ],
+      "link": "algorithms/lca-tree-diameter.html"
+    },
+    {
+      "id": "bfs-dfs",
+      "name": "BFS & DFS Traversals",
+      "slug": "bfs-dfs",
+      "type": "graph",
+      "type_label": "Graph",
+      "type_icon": "\ud83d\udd78\ufe0f",
+      "priority": 5,
+      "priority_label": "Must Know",
+      "difficulty": "Medium",
+      "icon": "\ud83d\udd78\ufe0f",
+      "worst_complexity": "O(V + E)",
+      "kind": "graph",
+      "outline": [
+        "BFS: queue + visited set; pops front, pushes unvisited neighbors \u2014 level by level",
+        "DFS: recursion/stack; dives into one neighbor fully before trying the next",
+        "Both are O(V + E) time, O(V) extra space with adjacency lists",
+        "BFS gives fewest-edge paths in unweighted graphs; DFS exposes cycles and order",
+        "Connected components: loop the search from every unvisited node",
+        "Multi-source BFS: seed the queue with several starts at once"
+      ],
+      "link": "algorithms/bfs-dfs.html"
+    },
+    {
+      "id": "bellman-ford-floyd-warshall",
+      "name": "Bellman-Ford & Floyd-Warshall",
+      "slug": "bellman-ford-floyd-warshall",
+      "type": "graph",
+      "type_label": "Graph",
+      "type_icon": "\ud83d\udd78\ufe0f",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Medium",
+      "icon": "\u2696\ufe0f",
+      "worst_complexity": "Bellman-Ford O(V\u00b7E); Floyd-Warshall O(V\u00b3)",
+      "kind": "graph",
+      "outline": [
+        "Bellman-Ford: relax all edges, V\u22121 rounds \u2014 dist[v] = min(dist[v], dist[u] + w)",
+        "One extra sweep: any further improvement \u21d2 a negative cycle exists",
+        "Floyd-Warshall: for each k, d[i][j] = min(d[i][j], d[i][k] + d[k][j])",
+        "After pass k, the matrix is exact for paths whose stopovers \u2286 {0..k}",
+        "Complexities: O(V\u00b7E) single-source vs O(V\u00b3) all-pairs, O(V\u00b2) memory",
+        "Both are the fallbacks that make shortest-path questions well-posed under negatives"
+      ],
+      "link": "algorithms/bellman-ford-floyd-warshall.html"
+    },
+    {
+      "id": "topological-sort",
+      "name": "Topological Sort",
+      "slug": "topological-sort",
+      "type": "graph",
+      "type_label": "Graph",
+      "type_icon": "\ud83d\udd78\ufe0f",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Medium",
+      "icon": "\ud83d\udccb",
+      "worst_complexity": "O(V + E)",
+      "kind": "graph",
+      "outline": [
+        "Compute indegree of every node (how many prerequisites it has)",
+        "Queue all indegree-0 nodes; they can start immediately",
+        "Pop a node, append it to the order, decrement each neighbour's indegree",
+        "A neighbour hitting 0 joins the queue; repeat until the queue empties",
+        "Fewer than V nodes emitted \u21d2 a cycle exists (its members never reach indegree 0)",
+        "O(V + E) with adjacency lists \u2014 linear in the graph size"
+      ],
+      "link": "algorithms/topological-sort.html"
+    },
+    {
+      "id": "union-find",
+      "name": "Union-Find (Disjoint Set Union)",
+      "slug": "union-find",
+      "type": "graph",
+      "type_label": "Graph",
+      "type_icon": "\ud83d\udd78\ufe0f",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Medium",
+      "icon": "\ud83e\udde9",
+      "worst_complexity": "O(\u03b1(n)) amortised with union by rank + path compression",
+      "kind": "graph",
+      "outline": [
+        "Each set is a tree in a parent array; the root is the set's representative",
+        "find(x): climb parents until parent[x] = x",
+        "union(a, b): find both roots; if equal, already connected (cycle!)",
+        "Union by rank: attach the shallower tree under the deeper root",
+        "Path compression: re-point climbed nodes to the root, flattening the tree",
+        "Together: O(\u03b1(n)) amortised \u2014 inverse Ackermann, constant in practice"
+      ],
+      "link": "algorithms/union-find.html"
+    },
+    {
+      "id": "minimum-spanning-tree",
+      "name": "Minimum Spanning Tree (Kruskal & Prim)",
+      "slug": "minimum-spanning-tree",
+      "type": "graph",
+      "type_label": "Graph",
+      "type_icon": "\ud83d\udd78\ufe0f",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Medium",
+      "icon": "\ud83e\udea2",
+      "worst_complexity": "Kruskal O(E log E); Prim O(E log V)",
+      "kind": "graph",
+      "outline": [
+        "Spanning tree: V\u22121 edges, all nodes connected, no cycles",
+        "Cut property: the lightest edge crossing any partition belongs to some MST",
+        "Kruskal: sort edges once, accept when union-find says the ends differ",
+        "Prim: keep a heap of frontier edges, pop the cheapest, relax its neighbours",
+        "Complexities: O(E log E) vs O(E log V); both output V\u22121 edges of equal total weight",
+        "Cycle rejection in Kruskal is exactly DSU's union returning false"
+      ],
+      "link": "algorithms/minimum-spanning-tree.html"
+    },
+    {
+      "id": "greedy-fundamentals",
+      "name": "Greedy Fundamentals & Activity Selection",
+      "slug": "greedy-fundamentals",
+      "type": "greedy",
+      "type_label": "Greedy",
+      "type_icon": "\ud83d\udcb0",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Easy",
+      "icon": "\ud83c\udfaf",
+      "worst_complexity": "O(n log n)",
+      "kind": "array",
+      "outline": [
+        "Greedy paradigm: irrevocable local choices, one pass after sorting",
+        "Greedy-choice property + optimal substructure = provable optimality",
+        "Exchange argument: swap any optimal solution to contain the greedy pick",
+        "Activity selection: sort by finish, take if start >= last end \u2014 O(n log n)",
+        "Counterexamples teach the limits: weighted intervals and 0/1 knapsack break naive greedy"
+      ],
+      "link": "algorithms/greedy-fundamentals.html"
+    },
+    {
+      "id": "fractional-knapsack",
+      "name": "Fractional Knapsack",
+      "slug": "fractional-knapsack",
+      "type": "greedy",
+      "type_label": "Greedy",
+      "type_icon": "\ud83d\udcb0",
+      "priority": 4,
+      "priority_label": "Important",
+      "difficulty": "Easy",
+      "icon": "\ud83c\udf92",
+      "worst_complexity": "O(n log n)",
+      "kind": "array",
+      "outline": [
+        "Compute value/weight density for every item",
+        "Sort items by density, descending \u2014 O(n log n)",
+        "Take whole items while capacity allows; track remaining capacity",
+        "For the first item that does not fit, take the fraction capacity/weight and stop",
+        "Proof idea: exchange argument \u2014 any solution not density-ordered can be swapped into one without losing value",
+        "Contrast: the identical greedy fails for indivisible (0/1) items \u2014 that needs DP"
+      ],
+      "link": "algorithms/fractional-knapsack.html"
+    }
+  ]
+}

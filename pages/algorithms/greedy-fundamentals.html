@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A greedy algorithm builds a solution one choice at a time, always taking the option that looks best right now and never revisiting it" />
+  <title>Greedy Fundamentals &amp; Activity Selection | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🎯</div><h1>Greedy Fundamentals &amp; Activity Selection</h1><p class="subtitle">💰 Greedy · <span style="color:#ea580c;font-weight:600;">Important</span> · Easy</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(n log n)</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="minimum-spanning-tree.html">← Minimum Spanning Tree (Kruskal &amp; Prim)</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="fractional-knapsack.html">Fractional Knapsack →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">A greedy algorithm builds a solution one choice at a time, always taking the option that looks best right now and never revisiting it. Activity selection is the canonical example: to fit the most non-overlapping activities, sort by finish time and repeatedly take the first activity that starts at or after the previous one ends. Choosing by earliest finish leaves the most room for everything that follows — a locally optimal move that is also globally safe.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">When a problem has the greedy-choice property, greedy gives provably optimal answers in one linear scan after a sort — dramatically simpler and faster than dynamic programming. Recognising that property (and proving it with the exchange argument: any optimal solution can be swapped to include the greedy choice without loss) is a core algorithm-design skill, and activity selection is the standard first proof.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Scheduling non-overlapping intervals (meetings, jobs, broadcasts, lab equipment).</li><li>The problem offers an exchange argument: keeping the greedy choice never hurts optimality.</li><li>One sorted pass suffices and DP's extra dimension would be wasted effort.</li><li>A reasonably good answer fast is acceptable even where optimality is unproven (heuristics).</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>Sort by the quantity you want to leave maximal room for — earliest FINISH for interval scheduling.</li><li>Prove greedy-choice + optimal substructure before trusting the result; test against brute force on small inputs.</li><li>Ties: any consistent tie-break is fine for activity selection (all maximal sets have equal size).</li><li>If greedy's answer is wrong on some case, look for DP (e.g. weighted intervals need DP, not greedy).</li><li>Watch boundary conditions: touching intervals (start == previous finish) are compatible here.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>Weighted interval scheduling — earliest-finish is not optimal; DP over finish times is.</li><li>0/1 knapsack — greedy by value/weight ratio fails; DP required (fractional knapsack IS greedy-safe).</li><li>Choices interact far in the future with no provable local guarantee — greedy can be arbitrarily bad.</li><li>You must guarantee optimality under adversarial inputs but cannot produce an exchange argument.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(n log n) — dominated by the sort</td></tr><tr><td>Average case</td><td>O(n log n)</td></tr><tr><td>Worst case</td><td>O(n log n)</td></tr><tr><td>Space</td><td>O(1) auxiliary (plus output)</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>Yes</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-kw">typedef</span> <span class="tok-kw">struct</span> { <span class="tok-kw">int</span> <span class="tok-id">start</span>, <span class="tok-id">finish</span>; } <span class="tok-id">Activity</span>;
+
+<span class="tok-cmt">/* Greedy: sort by finish time, take every activity that starts at or
+ * after the previous one's finish. O(n log n). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">activity_selection</span>(<span class="tok-id">Activity</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>, <span class="tok-id">Activity</span> <span class="tok-id">chosen</span>[]) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">1</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) {          <span class="tok-cmt">/* insertion sort by finish */</span>
+        <span class="tok-id">Activity</span> <span class="tok-id">key</span> = <span class="tok-id">a</span>[<span class="tok-id">i</span>];
+        <span class="tok-kw">int</span> <span class="tok-id">j</span> = <span class="tok-id">i</span> - <span class="tok-num">1</span>;
+        <span class="tok-kw">while</span> (<span class="tok-id">j</span> &gt;= <span class="tok-num">0</span> &amp;&amp; <span class="tok-id">a</span>[<span class="tok-id">j</span>].<span class="tok-id">finish</span> &gt; <span class="tok-id">key</span>.<span class="tok-id">finish</span>) { <span class="tok-id">a</span>[<span class="tok-id">j</span> + <span class="tok-num">1</span>] = <span class="tok-id">a</span>[<span class="tok-id">j</span>]; <span class="tok-id">j</span>--; }
+        <span class="tok-id">a</span>[<span class="tok-id">j</span> + <span class="tok-num">1</span>] = <span class="tok-id">key</span>;
+    }
+    <span class="tok-kw">int</span> <span class="tok-id">count</span> = <span class="tok-num">0</span>, <span class="tok-id">last</span> = -<span class="tok-num">1</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) {
+        <span class="tok-kw">if</span> (<span class="tok-id">a</span>[<span class="tok-id">i</span>].<span class="tok-id">start</span> &gt;= <span class="tok-id">last</span>) {
+            <span class="tok-id">chosen</span>[<span class="tok-id">count</span>++] = <span class="tok-id">a</span>[<span class="tok-id">i</span>];
+            <span class="tok-id">last</span> = <span class="tok-id">a</span>[<span class="tok-id">i</span>].<span class="tok-id">finish</span>;
+        }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">count</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">print_acts</span>(<span class="tok-id">Activity</span> <span class="tok-id">a</span>[], <span class="tok-kw">int</span> <span class="tok-id">n</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">n</span>; <span class="tok-id">i</span>++) <span class="tok-id">printf</span>(<span class="tok-str">"(%d,%d) "</span>, <span class="tok-id">a</span>[<span class="tok-id">i</span>].<span class="tok-id">start</span>, <span class="tok-id">a</span>[<span class="tok-id">i</span>].<span class="tok-id">finish</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-id">Activity</span> <span class="tok-id">acts</span>[] = {{<span class="tok-num">1</span>,<span class="tok-num">4</span>},{<span class="tok-num">3</span>,<span class="tok-num">5</span>},{<span class="tok-num">0</span>,<span class="tok-num">6</span>},{<span class="tok-num">5</span>,<span class="tok-num">7</span>},{<span class="tok-num">3</span>,<span class="tok-num">9</span>},{<span class="tok-num">5</span>,<span class="tok-num">9</span>},{<span class="tok-num">6</span>,<span class="tok-num">10</span>},{<span class="tok-num">8</span>,<span class="tok-num">11</span>},{<span class="tok-num">8</span>,<span class="tok-num">12</span>},{<span class="tok-num">2</span>,<span class="tok-num">14</span>},{<span class="tok-num">12</span>,<span class="tok-num">16</span>}};
+    <span class="tok-kw">int</span> <span class="tok-id">n</span> = <span class="tok-num">11</span>;
+    <span class="tok-id">Activity</span> <span class="tok-id">chosen</span>[<span class="tok-id">n</span>];
+    <span class="tok-kw">int</span> <span class="tok-id">m</span> = <span class="tok-id">activity_selection</span>(<span class="tok-id">acts</span>, <span class="tok-id">n</span>, <span class="tok-id">chosen</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1: %d activities: "</span>, <span class="tok-id">m</span>); <span class="tok-id">print_acts</span>(<span class="tok-id">chosen</span>, <span class="tok-id">m</span>);
+
+    <span class="tok-id">Activity</span> <span class="tok-id">acts2</span>[] = {{<span class="tok-num">1</span>,<span class="tok-num">2</span>},{<span class="tok-num">2</span>,<span class="tok-num">3</span>},{<span class="tok-num">3</span>,<span class="tok-num">4</span>}};
+    <span class="tok-id">Activity</span> <span class="tok-id">chosen2</span>[<span class="tok-num">3</span>];
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2: %d activities: "</span>, <span class="tok-id">activity_selection</span>(<span class="tok-id">acts2</span>, <span class="tok-num">3</span>, <span class="tok-id">chosen2</span>));
+    <span class="tok-id">print_acts</span>(<span class="tok-id">chosen2</span>, <span class="tok-num">3</span>);
+
+    <span class="tok-id">Activity</span> <span class="tok-id">acts3</span>[] = {{<span class="tok-num">5</span>,<span class="tok-num">10</span>}};
+    <span class="tok-id">Activity</span> <span class="tok-id">chosen3</span>[<span class="tok-num">1</span>];
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3: %d activities: "</span>, <span class="tok-id">activity_selection</span>(<span class="tok-id">acts3</span>, <span class="tok-num">1</span>, <span class="tok-id">chosen3</span>));
+    <span class="tok-id">print_acts</span>(<span class="tok-id">chosen3</span>, <span class="tok-num">1</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;algorithm&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-kw">struct</span> <span class="tok-id">Activity</span> { <span class="tok-kw">int</span> <span class="tok-id">start</span>, <span class="tok-id">finish</span>; };
+
+<span class="tok-cmt">/* Greedy: sort by finish time; take every activity that starts at or
+ * after the previous finish. O(n log n). Correct by the exchange argument. */</span>
+<span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt; <span class="tok-id">activity_selection</span>(<span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt; <span class="tok-id">a</span>) {
+    <span class="tok-id">sort</span>(<span class="tok-id">a</span>.<span class="tok-id">begin</span>(), <span class="tok-id">a</span>.<span class="tok-id">end</span>(),
+         [](<span class="tok-kw">const</span> <span class="tok-id">Activity</span>&amp; <span class="tok-id">x</span>, <span class="tok-kw">const</span> <span class="tok-id">Activity</span>&amp; <span class="tok-id">y</span>) { <span class="tok-kw">return</span> <span class="tok-id">x</span>.<span class="tok-id">finish</span> &lt; <span class="tok-id">y</span>.<span class="tok-id">finish</span>; });
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt; <span class="tok-id">chosen</span>;
+    <span class="tok-kw">int</span> <span class="tok-id">last</span> = -<span class="tok-num">1</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-id">Activity</span>&amp; <span class="tok-id">act</span> : <span class="tok-id">a</span>) {
+        <span class="tok-kw">if</span> (<span class="tok-id">act</span>.<span class="tok-id">start</span> &gt;= <span class="tok-id">last</span>) {
+            <span class="tok-id">chosen</span>.<span class="tok-id">push_back</span>(<span class="tok-id">act</span>);
+            <span class="tok-id">last</span> = <span class="tok-id">act</span>.<span class="tok-id">finish</span>;
+        }
+    }
+    <span class="tok-kw">return</span> <span class="tok-id">chosen</span>;
+}
+
+<span class="tok-kw">void</span> <span class="tok-id">print_acts</span>(<span class="tok-kw">const</span> <span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt;&amp; <span class="tok-id">a</span>) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-id">Activity</span>&amp; <span class="tok-id">x</span> : <span class="tok-id">a</span>) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"("</span> &lt;&lt; <span class="tok-id">x</span>.<span class="tok-id">start</span> &lt;&lt; <span class="tok-str">","</span> &lt;&lt; <span class="tok-id">x</span>.<span class="tok-id">finish</span> &lt;&lt; <span class="tok-str">") "</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt; <span class="tok-id">acts</span> = {{<span class="tok-num">1</span>,<span class="tok-num">4</span>},{<span class="tok-num">3</span>,<span class="tok-num">5</span>},{<span class="tok-num">0</span>,<span class="tok-num">6</span>},{<span class="tok-num">5</span>,<span class="tok-num">7</span>},{<span class="tok-num">3</span>,<span class="tok-num">9</span>},{<span class="tok-num">5</span>,<span class="tok-num">9</span>},{<span class="tok-num">6</span>,<span class="tok-num">10</span>},{<span class="tok-num">8</span>,<span class="tok-num">11</span>},{<span class="tok-num">8</span>,<span class="tok-num">12</span>},{<span class="tok-num">2</span>,<span class="tok-num">14</span>},{<span class="tok-num">12</span>,<span class="tok-num">16</span>}};
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt; <span class="tok-id">c1</span> = <span class="tok-id">activity_selection</span>(<span class="tok-id">acts</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1: "</span> &lt;&lt; <span class="tok-id">c1</span>.<span class="tok-id">size</span>() &lt;&lt; <span class="tok-str">" activities: "</span>; <span class="tok-id">print_acts</span>(<span class="tok-id">c1</span>);
+
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt; <span class="tok-id">c2</span> = <span class="tok-id">activity_selection</span>({{<span class="tok-num">1</span>,<span class="tok-num">2</span>},{<span class="tok-num">2</span>,<span class="tok-num">3</span>},{<span class="tok-num">3</span>,<span class="tok-num">4</span>}});
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2: "</span> &lt;&lt; <span class="tok-id">c2</span>.<span class="tok-id">size</span>() &lt;&lt; <span class="tok-str">" activities: "</span>; <span class="tok-id">print_acts</span>(<span class="tok-id">c2</span>);
+
+    <span class="tok-id">vector</span>&lt;<span class="tok-id">Activity</span>&gt; <span class="tok-id">c3</span> = <span class="tok-id">activity_selection</span>({{<span class="tok-num">5</span>,<span class="tok-num">10</span>}});
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3: "</span> &lt;&lt; <span class="tok-id">c3</span>.<span class="tok-id">size</span>() &lt;&lt; <span class="tok-str">" activities: "</span>; <span class="tok-id">print_acts</span>(<span class="tok-id">c3</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">def</span> <span class="tok-id">activity_selection</span>(<span class="tok-id">activities</span>):
+    <span class="tok-str">"""Greedy: sort by finish time; take every activity whose start is at or
+    after the previous finish. O(n log n); optimal by the exchange argument."""</span>
+    <span class="tok-id">chosen</span> = []
+    <span class="tok-id">last</span> = -<span class="tok-num">1</span>
+    <span class="tok-kw">for</span> <span class="tok-id">s</span>, <span class="tok-id">f</span> <span class="tok-kw">in</span> <span class="tok-id">sorted</span>(<span class="tok-id">activities</span>, <span class="tok-id">key</span>=<span class="tok-kw">lambda</span> <span class="tok-id">a</span>: <span class="tok-id">a</span>[<span class="tok-num">1</span>]):
+        <span class="tok-kw">if</span> <span class="tok-id">s</span> &gt;= <span class="tok-id">last</span>:
+            <span class="tok-id">chosen</span>.<span class="tok-id">append</span>((<span class="tok-id">s</span>, <span class="tok-id">f</span>))
+            <span class="tok-id">last</span> = <span class="tok-id">f</span>
+    <span class="tok-kw">return</span> <span class="tok-id">chosen</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">fmt</span>(<span class="tok-id">chosen</span>):
+    <span class="tok-kw">return</span> <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">f</span><span class="tok-str">"({s},{f})"</span> <span class="tok-kw">for</span> <span class="tok-id">s</span>, <span class="tok-id">f</span> <span class="tok-kw">in</span> <span class="tok-id">chosen</span>) + <span class="tok-str">" "</span>
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">c1</span> = <span class="tok-id">activity_selection</span>([(<span class="tok-num">1</span>, <span class="tok-num">4</span>), (<span class="tok-num">3</span>, <span class="tok-num">5</span>), (<span class="tok-num">0</span>, <span class="tok-num">6</span>), (<span class="tok-num">5</span>, <span class="tok-num">7</span>), (<span class="tok-num">3</span>, <span class="tok-num">9</span>), (<span class="tok-num">5</span>, <span class="tok-num">9</span>),
+                             (<span class="tok-num">6</span>, <span class="tok-num">10</span>), (<span class="tok-num">8</span>, <span class="tok-num">11</span>), (<span class="tok-num">8</span>, <span class="tok-num">12</span>), (<span class="tok-num">2</span>, <span class="tok-num">14</span>), (<span class="tok-num">12</span>, <span class="tok-num">16</span>)])
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1: {len(c1)} activities: {fmt(c1)}"</span>)
+
+    <span class="tok-id">c2</span> = <span class="tok-id">activity_selection</span>([(<span class="tok-num">1</span>, <span class="tok-num">2</span>), (<span class="tok-num">2</span>, <span class="tok-num">3</span>), (<span class="tok-num">3</span>, <span class="tok-num">4</span>)])
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2: {len(c2)} activities: {fmt(c2)}"</span>)
+
+    <span class="tok-id">c3</span> = <span class="tok-id">activity_selection</span>([(<span class="tok-num">5</span>, <span class="tok-num">10</span>)])
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3: {len(c3)} activities: {fmt(c3)}"</span>)
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1: 4 activities: (1,4) (5,7) (8,11) (12,16) 
+Test 2: 3 activities: (1,2) (2,3) (3,4) 
+Test 3: 1 activities: (5,10)</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1: 4 activities: (1,4) (5,7) (8,11) (12,16) 
+Test 2: 3 activities: (1,2) (2,3) (3,4) 
+Test 3: 1 activities: (5,10)</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1: 4 activities: (1,4) (5,7) (8,11) (12,16) 
+Test 2: 3 activities: (1,2) (2,3) (3,4) 
+Test 3: 1 activities: (5,10)</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Meeting-room and lab scheduling</h4><p class="card-content" style="margin:0;">Calendar tools and booking systems fit the most sessions into shared rooms with exactly this sweep.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Broadcast &amp; advertisement slots</h4><p class="card-content" style="margin:0;">Maximising aired spots in fixed windows uses interval scheduling (or its weighted DP variant).</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Task scheduling in OS/CI runners</h4><p class="card-content" style="margin:0;">Greedy ordering heuristics decide job placement before more expensive optimisers run.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Foundation for other greedy proofs</h4><p class="card-content" style="margin:0;">Huffman, MST (cut property), and fractional knapsack all lean on the same exchange-argument technique.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/activity-selection-problem-greedy-algo-1/" target="_blank" rel="noopener">GeeksforGeeks — Activity Selection Problem (reference) ↗</a></li><li><a href="https://www.geeksforgeeks.org/greedy-algorithms/" target="_blank" rel="noopener">GeeksforGeeks — Greedy Algorithms (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [], "compare": [], "swap": [], "markers": {}, "caption": "Activities sorted by finish time (bars = finish). Greedy: always take the next one that starts at or after the last end", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [0], "compare": [], "swap": [0], "markers": {}, "caption": "Activity 0 (1,4): start 1 \u003e= last end \u2014 -\u003e SELECT (last end now 4)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [1], "compare": [], "swap": [0], "markers": {}, "caption": "Activity 1 (3,5): start 3 \u003c last end 4 -\u003e skip (would overlap)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [2], "compare": [], "swap": [0], "markers": {}, "caption": "Activity 2 (0,6): start 0 \u003c last end 4 -\u003e skip (would overlap)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [3], "compare": [], "swap": [0, 3], "markers": {}, "caption": "Activity 3 (5,7): start 5 \u003e= last end 4 -\u003e SELECT (last end now 7)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [4], "compare": [], "swap": [0, 3], "markers": {}, "caption": "Activity 4 (3,9): start 3 \u003c last end 7 -\u003e skip (would overlap)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [5], "compare": [], "swap": [0, 3], "markers": {}, "caption": "Activity 5 (5,9): start 5 \u003c last end 7 -\u003e skip (would overlap)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [6], "compare": [], "swap": [0, 3], "markers": {}, "caption": "Activity 6 (6,10): start 6 \u003c last end 7 -\u003e skip (would overlap)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [7], "compare": [], "swap": [0, 3, 7], "markers": {}, "caption": "Activity 7 (8,11): start 8 \u003e= last end 7 -\u003e SELECT (last end now 11)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [8], "compare": [], "swap": [0, 3, 7], "markers": {}, "caption": "Activity 8 (8,12): start 8 \u003c last end 11 -\u003e skip (would overlap)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [9], "compare": [], "swap": [0, 3, 7], "markers": {}, "caption": "Activity 9 (2,14): start 2 \u003c last end 11 -\u003e skip (would overlap)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [10], "compare": [], "swap": [0, 3, 7, 10], "markers": {}, "caption": "Activity 10 (12,16): start 12 \u003e= last end 11 -\u003e SELECT (last end now 16)", "done": false}, {"kind": "array", "data": [4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16], "highlights": [], "compare": [], "swap": [0, 3, 7, 10], "markers": {}, "caption": "Done \u2014 4 non-overlapping activities selected: (1,4), (5,7), (8,11), (12,16)", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

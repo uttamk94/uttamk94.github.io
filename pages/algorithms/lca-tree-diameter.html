@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Two classic tree workhorses" />
+  <title>LCA &amp; Tree Diameter | Algorithms &amp; Data Structures</title>
+  <link rel="stylesheet" href="../../style.css?v=2">
+  <link rel="stylesheet" href="../../assets/css/algorithm_topic.css?v=1">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="../../index.html" class="nav-brand">UKM</a>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+<li><a href="../index.html">Home</a></li>
+<li><a href="../publications.html">Publications</a></li>
+<li><a href="../courses.html">Courses</a></li>
+<li><a href="../projects.html">Projects</a></li>
+<li><a href="../about.html">About</a></li>
+<li><a href="../algorithm.html" class="active">Algorithms</a></li>
+<li><a href="../gre_vocab.html">GRE Vocab</a></li>
+<li><a href="../gre_verbal_test.html">Verbal Test</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero"><div class="container"><div class="algo-hero-icon">🧬</div><h1>LCA &amp; Tree Diameter</h1><p class="subtitle">🌳 Tree · <span style="color:#ea580c;font-weight:600;">Important</span> · Medium</p><div class="hero-stats" style="margin-top:0.5rem;"><span class="stat-badge">Worst case O(n) per query on a chain; O(n) preprocessing per DFS run</span><span class="stat-badge">Priority 4/5</span></div></div></section>
+    <div class="container">
+      <div class="algo-breadcrumb"><a href="../algorithm.html">← All Algorithms</a><span class="algo-pn"><a class="algo-prevnext" href="avl-tree.html">← AVL Tree</a><span class="algo-pn-sep"> · </span><a class="algo-prevnext" href="bfs-dfs.html">BFS &amp; DFS Traversals →</a></span></div>
+      <section class="section"><h2 class="section-title">1 · What is it?</h2><p class="algo-lead">Two classic tree workhorses. The lowest common ancestor (LCA) of two nodes is the deepest node that has both as descendants — found here by equalising depths and climbing both nodes upward in lockstep. The diameter is the length of the longest path between any two nodes, computed by the two-DFS trick: the farthest node from any starting point is always a diameter endpoint, so one DFS finds an endpoint and a second DFS from it measures the path.</p></section><section class="section"><h2 class="section-title">2 · Why, When &amp; How to select</h2><div class="grid grid-2" style="align-items:start;"><div class="card"><h4 class="algo-sec-title">Why we need it</h4><p class="card-content">LCA is the hub of tree queries: distance between any two nodes is depth[u] + depth[v] − 2·depth[LCA], which makes it the base for routing in hierarchies, org-chart questions, and phylogenetic trees. The two-DFS diameter is a one-minute algorithm with a subtle one-line proof, and both routines train the parent/depth-table thinking that binary lifting generalises.</p></div><div class="card"><h4 class="algo-sec-title">When it is needed</h4><ul class="algo-list"><li>Any 'distance or relationship between two nodes in a tree' question starts with the LCA.</li><li>Distance queries repeated many times — compute LCA per query, or upgrade to binary lifting.</li><li>The longest chain of dependencies or widest spread in a hierarchy — the diameter.</li><li>Network design: a tree's diameter bounds worst-case latency between any two hosts.</li></ul></div><div class="card"><h4 class="algo-sec-title">How to select it</h4><ul class="algo-list"><li>A few queries on a static tree: parent tables + O(h) climbing is simplest.</li><li>Many queries: preprocess binary lifting in O(n log n), then each LCA is O(log n).</li><li>Dynamic trees with updates need link-cut trees — a different (heavy) toolbox.</li><li>For the diameter, the two-DFS method is O(n); the alternative single-DFS DP on children works when you also need the path.</li><li>Always run DFS from a known root and store parent/depth in one pass — it feeds every other routine.</li></ul></div><div class="card"><h4 class="algo-sec-title" style="color:#dc2626;">When NOT to use it</h4><ul class="algo-list"><li>The graph has cycles — it is no longer a tree; LCA is undefined and BFS/DFS distances apply instead.</li><li>Only one distance is ever needed — a single DFS/BFS from u to v is cheaper than LCA machinery.</li><li>Nodes are updated (insertions/deletions) between queries — parent tables go stale; use an LCT or rebuild.</li><li>You need the diameter PATH, not just its length — carry parent tables and reconstruct, as the code does.</li></ul></div></div></section><section class="section"><h2 class="section-title">3 · Complexity</h2><table class="algo-cx-table"><tbody><tr><td>Best case</td><td>O(h) per LCA query (parent climbing)</td></tr><tr><td>Average case</td><td>O(h) per query</td></tr><tr><td>Worst case</td><td>O(n) per query on a chain; O(n) preprocessing per DFS run</td></tr><tr><td>Space</td><td>O(n) parent/depth tables</td></tr><tr><td>Stable</td><td>n/a</td></tr><tr><td>In-place</td><td>n/a</td></tr></tbody></table></section><section class="section"><h2 class="section-title">4 · Simulation</h2><p style="max-width:760px;">Watch this algorithm run. Use <strong>Step</strong> to advance one operation, <strong>▶ Play</strong> to animate, <strong>↺ Reset</strong> to restart, and the slider to change speed.</p><div class="algo-sim" id="simApp"><div class="algo-sim-legend" id="simLegend" style="display:none;"></div><div class="algo-sim-stage" id="simStage"></div><div class="algo-sim-caption" id="simCaption">Press ▶ Play or click Step to begin.</div><div class="algo-sim-controls"><button type="button" id="simPrev">⏮</button><button type="button" id="simStep" class="btn">Step ▸</button><button type="button" id="simPlay" class="btn btn-secondary">▶ Play</button><button type="button" id="simReset" class="btn btn-secondary">↺ Reset</button><span class="sim-counter">Step <span id="simCounter">0/0</span></span><label class="sim-speed">Speed <input type="range" id="simSpeed" min="1" max="10" value="4"></label></div></div></section><section class="section"><h2 class="section-title">5 · Implementation (C / C++ / Python)</h2><div class="algo-tabs" id="implTabs"><button type="button" class="algo-tab active" data-lang="c">C</button><button type="button" class="algo-tab" data-lang="cpp">C++</button><button type="button" class="algo-tab" data-lang="py">Python</button></div><div class="algo-code" id="codeC"><pre><code><span class="tok-pre">#include &lt;stdio.h&gt;</span>
+
+<span class="tok-pre">#define N 12   /* nodes 1..11 */</span>
+
+<span class="tok-kw">int</span> <span class="tok-id">adj</span>[<span class="tok-id">N</span>][<span class="tok-id">N</span>], <span class="tok-id">deg</span>[<span class="tok-id">N</span>];
+<span class="tok-kw">int</span> <span class="tok-id">parent</span>[<span class="tok-id">N</span>], <span class="tok-id">depth</span>[<span class="tok-id">N</span>];
+<span class="tok-kw">int</span> <span class="tok-id">far_node</span> = <span class="tok-num">1</span>, <span class="tok-id">far_dist</span> = -<span class="tok-num">1</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">add_edge</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">v</span>) { <span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">deg</span>[<span class="tok-id">u</span>]++] = <span class="tok-id">v</span>; }
+
+<span class="tok-kw">void</span> <span class="tok-id">dfs</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">p</span>, <span class="tok-kw">int</span> <span class="tok-id">d</span>) {
+    <span class="tok-id">parent</span>[<span class="tok-id">u</span>] = <span class="tok-id">p</span>;
+    <span class="tok-id">depth</span>[<span class="tok-id">u</span>] = <span class="tok-id">d</span>;
+    <span class="tok-kw">if</span> (<span class="tok-id">d</span> &gt; <span class="tok-id">far_dist</span>) { <span class="tok-id">far_dist</span> = <span class="tok-id">d</span>; <span class="tok-id">far_node</span> = <span class="tok-id">u</span>; }
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-id">deg</span>[<span class="tok-id">u</span>]; <span class="tok-id">i</span>++) {
+        <span class="tok-kw">int</span> <span class="tok-id">v</span> = <span class="tok-id">adj</span>[<span class="tok-id">u</span>][<span class="tok-id">i</span>];
+        <span class="tok-kw">if</span> (<span class="tok-id">v</span> != <span class="tok-id">p</span>) <span class="tok-id">dfs</span>(<span class="tok-id">v</span>, <span class="tok-id">u</span>, <span class="tok-id">d</span> + <span class="tok-num">1</span>);
+    }
+}
+
+<span class="tok-cmt">/* LCA by equalising depths, then climbing both nodes together. O(h). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">lca</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">v</span>) {
+    <span class="tok-kw">while</span> (<span class="tok-id">depth</span>[<span class="tok-id">u</span>] &gt; <span class="tok-id">depth</span>[<span class="tok-id">v</span>]) <span class="tok-id">u</span> = <span class="tok-id">parent</span>[<span class="tok-id">u</span>];
+    <span class="tok-kw">while</span> (<span class="tok-id">depth</span>[<span class="tok-id">v</span>] &gt; <span class="tok-id">depth</span>[<span class="tok-id">u</span>]) <span class="tok-id">v</span> = <span class="tok-id">parent</span>[<span class="tok-id">v</span>];
+    <span class="tok-kw">while</span> (<span class="tok-id">u</span> != <span class="tok-id">v</span>) { <span class="tok-id">u</span> = <span class="tok-id">parent</span>[<span class="tok-id">u</span>]; <span class="tok-id">v</span> = <span class="tok-id">parent</span>[<span class="tok-id">v</span>]; }
+    <span class="tok-kw">return</span> <span class="tok-id">u</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">dist</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">v</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">w</span> = <span class="tok-id">lca</span>(<span class="tok-id">u</span>, <span class="tok-id">v</span>);
+    <span class="tok-kw">return</span> <span class="tok-id">depth</span>[<span class="tok-id">u</span>] + <span class="tok-id">depth</span>[<span class="tok-id">v</span>] - <span class="tok-num">2</span> * <span class="tok-id">depth</span>[<span class="tok-id">w</span>];
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>(<span class="tok-kw">void</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">edges</span>[][<span class="tok-num">2</span>] = {{<span class="tok-num">1</span>,<span class="tok-num">2</span>},{<span class="tok-num">1</span>,<span class="tok-num">3</span>},{<span class="tok-num">2</span>,<span class="tok-num">4</span>},{<span class="tok-num">2</span>,<span class="tok-num">5</span>},{<span class="tok-num">3</span>,<span class="tok-num">6</span>},{<span class="tok-num">3</span>,<span class="tok-num">7</span>},{<span class="tok-num">4</span>,<span class="tok-num">8</span>},{<span class="tok-num">4</span>,<span class="tok-num">9</span>},{<span class="tok-num">6</span>,<span class="tok-num">10</span>}};
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">i</span> = <span class="tok-num">0</span>; <span class="tok-id">i</span> &lt; <span class="tok-num">9</span>; <span class="tok-id">i</span>++) { <span class="tok-id">add_edge</span>(<span class="tok-id">edges</span>[<span class="tok-id">i</span>][<span class="tok-num">0</span>], <span class="tok-id">edges</span>[<span class="tok-id">i</span>][<span class="tok-num">1</span>]); <span class="tok-id">add_edge</span>(<span class="tok-id">edges</span>[<span class="tok-id">i</span>][<span class="tok-num">1</span>], <span class="tok-id">edges</span>[<span class="tok-id">i</span>][<span class="tok-num">0</span>]); }
+
+    <span class="tok-id">far_dist</span> = -<span class="tok-num">1</span>; <span class="tok-id">far_node</span> = <span class="tok-num">1</span>;
+    <span class="tok-id">dfs</span>(<span class="tok-num">1</span>, <span class="tok-num">0</span>, <span class="tok-num">0</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 1 (LCA of 8 and 9): %d\n"</span>, <span class="tok-id">lca</span>(<span class="tok-num">8</span>, <span class="tok-num">9</span>));
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 2 (LCA of 8 and 10): %d\n"</span>, <span class="tok-id">lca</span>(<span class="tok-num">8</span>, <span class="tok-num">10</span>));
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 3 (LCA of 5 and 7): %d\n"</span>, <span class="tok-id">lca</span>(<span class="tok-num">5</span>, <span class="tok-num">7</span>));
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 4 (distance 8 to 10): %d\n"</span>, <span class="tok-id">dist</span>(<span class="tok-num">8</span>, <span class="tok-num">10</span>));
+
+    <span class="tok-cmt">/* Diameter: farthest node a from the root, then farthest b from a. */</span>
+    <span class="tok-kw">int</span> <span class="tok-id">a</span> = <span class="tok-id">far_node</span>;
+    <span class="tok-id">far_dist</span> = -<span class="tok-num">1</span>;
+    <span class="tok-id">dfs</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-num">0</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">b</span> = <span class="tok-id">far_node</span>;
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 5 (diameter endpoints): %d %d\n"</span>, <span class="tok-id">a</span>, <span class="tok-id">b</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 6 (diameter in edges): %d\n"</span>, <span class="tok-id">far_dist</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"Test 7 (path from %d to %d):"</span>, <span class="tok-id">b</span>, <span class="tok-id">a</span>);
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">x</span> = <span class="tok-id">b</span>; <span class="tok-id">x</span> != <span class="tok-num">0</span>; <span class="tok-id">x</span> = <span class="tok-id">parent</span>[<span class="tok-id">x</span>]) <span class="tok-id">printf</span>(<span class="tok-str">" %d"</span>, <span class="tok-id">x</span>);
+    <span class="tok-id">printf</span>(<span class="tok-str">"\n"</span>);
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codeCpp"><pre><code><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-id">std</span>;
+
+<span class="tok-id">vector</span>&lt;<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt;&gt; <span class="tok-id">adj</span>;
+<span class="tok-id">vector</span>&lt;<span class="tok-kw">int</span>&gt; <span class="tok-id">parent_</span>, <span class="tok-id">depth_</span>;
+<span class="tok-kw">int</span> <span class="tok-id">farNode</span> = <span class="tok-num">1</span>, <span class="tok-id">farDist</span> = -<span class="tok-num">1</span>;
+
+<span class="tok-kw">void</span> <span class="tok-id">dfs</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">p</span>, <span class="tok-kw">int</span> <span class="tok-id">d</span>) {
+    <span class="tok-id">parent_</span>[<span class="tok-id">u</span>] = <span class="tok-id">p</span>;
+    <span class="tok-id">depth_</span>[<span class="tok-id">u</span>] = <span class="tok-id">d</span>;
+    <span class="tok-kw">if</span> (<span class="tok-id">d</span> &gt; <span class="tok-id">farDist</span>) { <span class="tok-id">farDist</span> = <span class="tok-id">d</span>; <span class="tok-id">farNode</span> = <span class="tok-id">u</span>; }
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">v</span> : <span class="tok-id">adj</span>[<span class="tok-id">u</span>])
+        <span class="tok-kw">if</span> (<span class="tok-id">v</span> != <span class="tok-id">p</span>) <span class="tok-id">dfs</span>(<span class="tok-id">v</span>, <span class="tok-id">u</span>, <span class="tok-id">d</span> + <span class="tok-num">1</span>);
+}
+
+<span class="tok-cmt">/* LCA by equalising depths, then climbing both nodes together. O(h). */</span>
+<span class="tok-kw">int</span> <span class="tok-id">lca</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">v</span>) {
+    <span class="tok-kw">while</span> (<span class="tok-id">depth_</span>[<span class="tok-id">u</span>] &gt; <span class="tok-id">depth_</span>[<span class="tok-id">v</span>]) <span class="tok-id">u</span> = <span class="tok-id">parent_</span>[<span class="tok-id">u</span>];
+    <span class="tok-kw">while</span> (<span class="tok-id">depth_</span>[<span class="tok-id">v</span>] &gt; <span class="tok-id">depth_</span>[<span class="tok-id">u</span>]) <span class="tok-id">v</span> = <span class="tok-id">parent_</span>[<span class="tok-id">v</span>];
+    <span class="tok-kw">while</span> (<span class="tok-id">u</span> != <span class="tok-id">v</span>) { <span class="tok-id">u</span> = <span class="tok-id">parent_</span>[<span class="tok-id">u</span>]; <span class="tok-id">v</span> = <span class="tok-id">parent_</span>[<span class="tok-id">v</span>]; }
+    <span class="tok-kw">return</span> <span class="tok-id">u</span>;
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">dist</span>(<span class="tok-kw">int</span> <span class="tok-id">u</span>, <span class="tok-kw">int</span> <span class="tok-id">v</span>) {
+    <span class="tok-kw">int</span> <span class="tok-id">w</span> = <span class="tok-id">lca</span>(<span class="tok-id">u</span>, <span class="tok-id">v</span>);
+    <span class="tok-kw">return</span> <span class="tok-id">depth_</span>[<span class="tok-id">u</span>] + <span class="tok-id">depth_</span>[<span class="tok-id">v</span>] - <span class="tok-num">2</span> * <span class="tok-id">depth_</span>[<span class="tok-id">w</span>];
+}
+
+<span class="tok-kw">int</span> <span class="tok-id">main</span>() {
+    <span class="tok-kw">int</span> <span class="tok-id">n</span> = <span class="tok-num">11</span>;
+    <span class="tok-id">adj</span>.<span class="tok-id">assign</span>(<span class="tok-id">n</span>, {});
+    <span class="tok-id">parent_</span>.<span class="tok-id">assign</span>(<span class="tok-id">n</span>, <span class="tok-num">0</span>);
+    <span class="tok-id">depth_</span>.<span class="tok-id">assign</span>(<span class="tok-id">n</span>, <span class="tok-num">0</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">edges</span>[][<span class="tok-num">2</span>] = {{<span class="tok-num">1</span>,<span class="tok-num">2</span>},{<span class="tok-num">1</span>,<span class="tok-num">3</span>},{<span class="tok-num">2</span>,<span class="tok-num">4</span>},{<span class="tok-num">2</span>,<span class="tok-num">5</span>},{<span class="tok-num">3</span>,<span class="tok-num">6</span>},{<span class="tok-num">3</span>,<span class="tok-num">7</span>},{<span class="tok-num">4</span>,<span class="tok-num">8</span>},{<span class="tok-num">4</span>,<span class="tok-num">9</span>},{<span class="tok-num">6</span>,<span class="tok-num">10</span>}};
+    <span class="tok-kw">for</span> (<span class="tok-kw">auto</span>&amp; <span class="tok-id">e</span> : <span class="tok-id">edges</span>) { <span class="tok-id">adj</span>[<span class="tok-id">e</span>[<span class="tok-num">0</span>]].<span class="tok-id">push_back</span>(<span class="tok-id">e</span>[<span class="tok-num">1</span>]); <span class="tok-id">adj</span>[<span class="tok-id">e</span>[<span class="tok-num">1</span>]].<span class="tok-id">push_back</span>(<span class="tok-id">e</span>[<span class="tok-num">0</span>]); }
+
+    <span class="tok-id">farDist</span> = -<span class="tok-num">1</span>; <span class="tok-id">farNode</span> = <span class="tok-num">1</span>;
+    <span class="tok-id">dfs</span>(<span class="tok-num">1</span>, <span class="tok-num">0</span>, <span class="tok-num">0</span>);
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 1 (LCA of 8 and 9): "</span> &lt;&lt; <span class="tok-id">lca</span>(<span class="tok-num">8</span>, <span class="tok-num">9</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 2 (LCA of 8 and 10): "</span> &lt;&lt; <span class="tok-id">lca</span>(<span class="tok-num">8</span>, <span class="tok-num">10</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 3 (LCA of 5 and 7): "</span> &lt;&lt; <span class="tok-id">lca</span>(<span class="tok-num">5</span>, <span class="tok-num">7</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 4 (distance 8 to 10): "</span> &lt;&lt; <span class="tok-id">dist</span>(<span class="tok-num">8</span>, <span class="tok-num">10</span>) &lt;&lt; <span class="tok-str">"\n"</span>;
+
+    <span class="tok-cmt">/* Diameter: farthest node a from the root, then farthest b from a. */</span>
+    <span class="tok-kw">int</span> <span class="tok-id">a</span> = <span class="tok-id">farNode</span>;
+    <span class="tok-id">farDist</span> = -<span class="tok-num">1</span>;
+    <span class="tok-id">dfs</span>(<span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-num">0</span>);
+    <span class="tok-kw">int</span> <span class="tok-id">b</span> = <span class="tok-id">farNode</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 5 (diameter endpoints): "</span> &lt;&lt; <span class="tok-id">a</span> &lt;&lt; <span class="tok-str">" "</span> &lt;&lt; <span class="tok-id">b</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 6 (diameter in edges): "</span> &lt;&lt; <span class="tok-id">farDist</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"Test 7 (path from "</span> &lt;&lt; <span class="tok-id">b</span> &lt;&lt; <span class="tok-str">" to "</span> &lt;&lt; <span class="tok-id">a</span> &lt;&lt; <span class="tok-str">"):"</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">int</span> <span class="tok-id">x</span> = <span class="tok-id">b</span>; <span class="tok-id">x</span> != <span class="tok-num">0</span>; <span class="tok-id">x</span> = <span class="tok-id">parent_</span>[<span class="tok-id">x</span>]) <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">" "</span> &lt;&lt; <span class="tok-id">x</span>;
+    <span class="tok-id">cout</span> &lt;&lt; <span class="tok-str">"\n"</span>;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+</code></pre></div><div class="algo-code hidden" id="codePy"><pre><code><span class="tok-kw">import</span> <span class="tok-id">sys</span>
+<span class="tok-kw">from</span> <span class="tok-id">collections</span> <span class="tok-kw">import</span> <span class="tok-id">defaultdict</span>
+
+<span class="tok-id">sys</span>.<span class="tok-id">setrecursionlimit</span>(<span class="tok-num">10000</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">build</span>(<span class="tok-id">n</span>, <span class="tok-id">edges</span>):
+    <span class="tok-id">adj</span> = <span class="tok-id">defaultdict</span>(<span class="tok-id">list</span>)
+    <span class="tok-kw">for</span> <span class="tok-id">u</span>, <span class="tok-id">v</span> <span class="tok-kw">in</span> <span class="tok-id">edges</span>:
+        <span class="tok-id">adj</span>[<span class="tok-id">u</span>].<span class="tok-id">append</span>(<span class="tok-id">v</span>)
+        <span class="tok-id">adj</span>[<span class="tok-id">v</span>].<span class="tok-id">append</span>(<span class="tok-id">u</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">adj</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">dfs</span>(<span class="tok-id">adj</span>, <span class="tok-id">parent</span>, <span class="tok-id">depth</span>, <span class="tok-id">u</span>, <span class="tok-id">p</span>, <span class="tok-id">d</span>, <span class="tok-id">far</span>):
+    <span class="tok-id">parent</span>[<span class="tok-id">u</span>] = <span class="tok-id">p</span>
+    <span class="tok-id">depth</span>[<span class="tok-id">u</span>] = <span class="tok-id">d</span>
+    <span class="tok-kw">if</span> <span class="tok-id">d</span> &gt; <span class="tok-id">far</span>[<span class="tok-num">1</span>]:
+        <span class="tok-id">far</span>[<span class="tok-num">0</span>], <span class="tok-id">far</span>[<span class="tok-num">1</span>] = <span class="tok-id">u</span>, <span class="tok-id">d</span>
+    <span class="tok-kw">for</span> <span class="tok-id">v</span> <span class="tok-kw">in</span> <span class="tok-id">adj</span>[<span class="tok-id">u</span>]:
+        <span class="tok-kw">if</span> <span class="tok-id">v</span> != <span class="tok-id">p</span>:
+            <span class="tok-id">dfs</span>(<span class="tok-id">adj</span>, <span class="tok-id">parent</span>, <span class="tok-id">depth</span>, <span class="tok-id">v</span>, <span class="tok-id">u</span>, <span class="tok-id">d</span> + <span class="tok-num">1</span>, <span class="tok-id">far</span>)
+
+
+<span class="tok-kw">def</span> <span class="tok-id">lca</span>(<span class="tok-id">parent</span>, <span class="tok-id">depth</span>, <span class="tok-id">u</span>, <span class="tok-id">v</span>):
+    <span class="tok-str">"""Equalise depths, then climb both nodes together. O(h)."""</span>
+    <span class="tok-kw">while</span> <span class="tok-id">depth</span>[<span class="tok-id">u</span>] &gt; <span class="tok-id">depth</span>[<span class="tok-id">v</span>]:
+        <span class="tok-id">u</span> = <span class="tok-id">parent</span>[<span class="tok-id">u</span>]
+    <span class="tok-kw">while</span> <span class="tok-id">depth</span>[<span class="tok-id">v</span>] &gt; <span class="tok-id">depth</span>[<span class="tok-id">u</span>]:
+        <span class="tok-id">v</span> = <span class="tok-id">parent</span>[<span class="tok-id">v</span>]
+    <span class="tok-kw">while</span> <span class="tok-id">u</span> != <span class="tok-id">v</span>:
+        <span class="tok-id">u</span>, <span class="tok-id">v</span> = <span class="tok-id">parent</span>[<span class="tok-id">u</span>], <span class="tok-id">parent</span>[<span class="tok-id">v</span>]
+    <span class="tok-kw">return</span> <span class="tok-id">u</span>
+
+
+<span class="tok-kw">def</span> <span class="tok-id">dist</span>(<span class="tok-id">parent</span>, <span class="tok-id">depth</span>, <span class="tok-id">u</span>, <span class="tok-id">v</span>):
+    <span class="tok-id">w</span> = <span class="tok-id">lca</span>(<span class="tok-id">parent</span>, <span class="tok-id">depth</span>, <span class="tok-id">u</span>, <span class="tok-id">v</span>)
+    <span class="tok-kw">return</span> <span class="tok-id">depth</span>[<span class="tok-id">u</span>] + <span class="tok-id">depth</span>[<span class="tok-id">v</span>] - <span class="tok-num">2</span> * <span class="tok-id">depth</span>[<span class="tok-id">w</span>]
+
+
+<span class="tok-kw">if</span> <span class="tok-id">__name__</span> == <span class="tok-str">"__main__"</span>:
+    <span class="tok-id">n</span> = <span class="tok-num">11</span>
+    <span class="tok-id">edges</span> = [(<span class="tok-num">1</span>, <span class="tok-num">2</span>), (<span class="tok-num">1</span>, <span class="tok-num">3</span>), (<span class="tok-num">2</span>, <span class="tok-num">4</span>), (<span class="tok-num">2</span>, <span class="tok-num">5</span>), (<span class="tok-num">3</span>, <span class="tok-num">6</span>), (<span class="tok-num">3</span>, <span class="tok-num">7</span>), (<span class="tok-num">4</span>, <span class="tok-num">8</span>), (<span class="tok-num">4</span>, <span class="tok-num">9</span>), (<span class="tok-num">6</span>, <span class="tok-num">10</span>)]
+    <span class="tok-id">adj</span> = <span class="tok-id">build</span>(<span class="tok-id">n</span>, <span class="tok-id">edges</span>)
+    <span class="tok-id">parent</span> = {<span class="tok-num">1</span>: <span class="tok-num">0</span>}
+    <span class="tok-id">depth</span> = {}
+    <span class="tok-id">far</span> = [<span class="tok-num">1</span>, -<span class="tok-num">1</span>]                       <span class="tok-cmt"># [farthest node, its distance]</span>
+    <span class="tok-id">dfs</span>(<span class="tok-id">adj</span>, <span class="tok-id">parent</span>, <span class="tok-id">depth</span>, <span class="tok-num">1</span>, <span class="tok-num">0</span>, <span class="tok-num">0</span>, <span class="tok-id">far</span>)
+
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 1 (LCA of 8 and 9): {lca(parent, depth, 8, 9)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 2 (LCA of 8 and 10): {lca(parent, depth, 8, 10)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 3 (LCA of 5 and 7): {lca(parent, depth, 5, 7)}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 4 (distance 8 to 10): {dist(parent, depth, 8, 10)}"</span>)
+
+    <span class="tok-cmt"># Diameter: farthest node a from the root, then farthest b from a.</span>
+    <span class="tok-id">a</span> = <span class="tok-id">far</span>[<span class="tok-num">0</span>]
+    <span class="tok-id">far</span>[<span class="tok-num">0</span>], <span class="tok-id">far</span>[<span class="tok-num">1</span>] = <span class="tok-num">1</span>, -<span class="tok-num">1</span>
+    <span class="tok-id">dfs</span>(<span class="tok-id">adj</span>, <span class="tok-id">parent</span>, <span class="tok-id">depth</span>, <span class="tok-id">a</span>, <span class="tok-num">0</span>, <span class="tok-num">0</span>, <span class="tok-id">far</span>)
+    <span class="tok-id">b</span> = <span class="tok-id">far</span>[<span class="tok-num">0</span>]
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 5 (diameter endpoints): {a} {b}"</span>)
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 6 (diameter in edges): {far[1]}"</span>)
+    <span class="tok-id">path</span> = []
+    <span class="tok-id">x</span> = <span class="tok-id">b</span>
+    <span class="tok-kw">while</span> <span class="tok-id">x</span> != <span class="tok-num">0</span>:
+        <span class="tok-id">path</span>.<span class="tok-id">append</span>(<span class="tok-id">x</span>)
+        <span class="tok-id">x</span> = <span class="tok-id">parent</span>[<span class="tok-id">x</span>]
+    <span class="tok-id">print</span>(<span class="tok-id">f</span><span class="tok-str">"Test 7 (path from {b} to {a}): "</span> + <span class="tok-str">" "</span>.<span class="tok-id">join</span>(<span class="tok-id">map</span>(<span class="tok-id">str</span>, <span class="tok-id">path</span>)))
+</code></pre></div></section><section class="section"><h2 class="section-title">6 · Test Result</h2><div class="algo-verdict">✓ <strong>Verified:</strong> the C, C++ and Python implementations above were compiled and run by the build pipeline, and all three produced identical output.</div><div class="grid grid-3" style="align-items:start;"><div><h4 class="algo-sec-title">C output (gcc)</h4><pre class="algo-out">Test 1 (LCA of 8 and 9): 4
+Test 2 (LCA of 8 and 10): 1
+Test 3 (LCA of 5 and 7): 1
+Test 4 (distance 8 to 10): 6
+Test 5 (diameter endpoints): 8 10
+Test 6 (diameter in edges): 6
+Test 7 (path from 10 to 8): 10 6 3 1 2 4 8</pre></div><div><h4 class="algo-sec-title">C++ output (g++)</h4><pre class="algo-out">Test 1 (LCA of 8 and 9): 4
+Test 2 (LCA of 8 and 10): 1
+Test 3 (LCA of 5 and 7): 1
+Test 4 (distance 8 to 10): 6
+Test 5 (diameter endpoints): 8 10
+Test 6 (diameter in edges): 6
+Test 7 (path from 10 to 8): 10 6 3 1 2 4 8</pre></div><div><h4 class="algo-sec-title">Python output</h4><pre class="algo-out">Test 1 (LCA of 8 and 9): 4
+Test 2 (LCA of 8 and 10): 1
+Test 3 (LCA of 5 and 7): 1
+Test 4 (distance 8 to 10): 6
+Test 5 (diameter endpoints): 8 10
+Test 6 (diameter in edges): 6
+Test 7 (path from 10 to 8): 10 6 3 1 2 4 8</pre></div></div></section><section class="section"><h2 class="section-title">7 · Real-world applications</h2><div class="grid grid-2"><div class="card algo-app"><h4 class="algo-app-title">📌 Organisation and taxonomy hierarchies</h4><p class="card-content" style="margin:0;">Reporting lines, species classification, and product categories all ask 'closest common parent' questions.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Network routing on tree topologies</h4><p class="card-content" style="margin:0;">Spanning-tree LANs and hierarchical networks use LCA to route between branches; diameter bounds latency.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Version control</h4><p class="card-content" style="margin:0;">Git merges compute the best common ancestor of two commits — an LCA query on the commit DAG's spanning structure.</p></div><div class="card algo-app"><h4 class="algo-app-title">📌 Distributed systems</h4><p class="card-content" style="margin:0;">Overlay networks size their worst-case message hops by the diameter of the topology tree.</p></div></div></section><section class="section"><h2 class="section-title">Further reading</h2><p class="algo-note">References are plain citations for deeper study; all text and code on this page are original to this project.</p><ul class="algo-refs"><li><a href="https://www.geeksforgeeks.org/lowest-common-ancestor-binary-tree-set-1/" target="_blank" rel="noopener">GeeksforGeeks — Lowest Common Ancestor in a Binary Tree (reference) ↗</a></li><li><a href="https://www.geeksforgeeks.org/diameter-of-a-binary-tree/" target="_blank" rel="noopener">GeeksforGeeks — Diameter of a Binary Tree (reference) ↗</a></li></ul></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p style="margin: 0;">© 2024 Uttam Kumar Mondol. All rights reserved.</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.875rem;">
+        <a href="https://github.com/uttamk94" style="color: var(--text-light);">GitHub</a> · 
+        <a href="https://linkedin.com/in/uttamk94" style="color: var(--text-light);">LinkedIn</a> · 
+        <a href="mailto:uttam.cuet@gmail.com" style="color: var(--text-light);">Email</a>
+      </p>
+    </div>
+  </footer>
+
+  <script id="simData" type="application/json">[{"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "A tree with 11 nodes \u2014 goal 1: the lowest common ancestor of 8 and 9", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "current"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "Climb from 8 toward the root \u2014 at node 8", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "current"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "Climb from 8 toward the root \u2014 at node 4", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "current"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "path"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "Climb from 8 toward the root \u2014 at node 2", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "current"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "path"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "Climb from 8 toward the root \u2014 at node 1", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "path"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "current"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "Climb from 9 toward the root \u2014 node 9 is not on 8's path yet", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "frontier"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "path"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "Climb from 9 \u2014 node 4 is already on 8's path -\u003e LCA(8, 9) = 4", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "frontier"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "path"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "LCA(8, 9) = 4 \u2014 the deepest node both climbs share", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "Goal 2: the diameter \u2014 the longest path between any two nodes", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "frontier"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "normal"}], "caption": "DFS from the root shows depth 3 is deepest \u2014 start from a deepest leaf: node 8 (any of 8, 9, 10 works)", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "path"}, {"id": 4, "value": 4, "parent": 2, "state": "path"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "path"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "frontier"}], "caption": "DFS from node 8: the farthest node is 10, 6 edges away \u2014 that distance IS the diameter", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "normal"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "current"}], "caption": "Walk the diameter path \u2014 node 10", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "normal"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "current"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "path"}], "caption": "Walk the diameter path \u2014 node 6", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "normal"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "current"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "path"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "path"}], "caption": "Walk the diameter path \u2014 node 3", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "current"}, {"id": 2, "value": 2, "parent": 1, "state": "normal"}, {"id": 3, "value": 3, "parent": 1, "state": "path"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "path"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "path"}], "caption": "Walk the diameter path \u2014 node 1", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "current"}, {"id": 3, "value": 3, "parent": 1, "state": "path"}, {"id": 4, "value": 4, "parent": 2, "state": "normal"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "path"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "path"}], "caption": "Walk the diameter path \u2014 node 2", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "path"}, {"id": 4, "value": 4, "parent": 2, "state": "current"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "path"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "normal"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "path"}], "caption": "Walk the diameter path \u2014 node 4", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "path"}, {"id": 4, "value": 4, "parent": 2, "state": "path"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "path"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "current"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "path"}], "caption": "Walk the diameter path \u2014 node 8", "done": false}, {"kind": "tree", "tree": [{"id": 1, "value": 1, "parent": null, "state": "path"}, {"id": 2, "value": 2, "parent": 1, "state": "path"}, {"id": 3, "value": 3, "parent": 1, "state": "path"}, {"id": 4, "value": 4, "parent": 2, "state": "path"}, {"id": 5, "value": 5, "parent": 2, "state": "normal"}, {"id": 6, "value": 6, "parent": 3, "state": "path"}, {"id": 7, "value": 7, "parent": 3, "state": "normal"}, {"id": 8, "value": 8, "parent": 4, "state": "path"}, {"id": 9, "value": 9, "parent": 4, "state": "normal"}, {"id": 10, "value": 10, "parent": 6, "state": "path"}], "caption": "Diameter = 6 edges \u2014 the path 10-6-3-1-2-4-8", "done": true}]</script>
+  <script src="../../assets/js/algo_sim.js"></script>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabs = document.getElementById('implTabs');
+      if (tabs) tabs.addEventListener('click', function (e) {
+        const btn = e.target.closest('.algo-tab');
+        if (!btn) return;
+        tabs.querySelectorAll('.algo-tab').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['c','cpp','py'].forEach(function(l){
+          var id = l === 'py' ? 'codePy' : (l === 'c' ? 'codeC' : 'codeCpp');
+          var el = document.getElementById(id);
+          if (el) el.classList.toggle('hidden', l !== btn.dataset.lang);
+        });
+      });
+      if (window.AlgoSim) window.AlgoSim.init();
+    });
+    document.addEventListener('click', function(event) {
+      const nav = document.querySelector('.nav');
+      const navLinks = document.getElementById('navLinks');
+      if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
