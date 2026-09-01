@@ -145,8 +145,8 @@
   }
 
   function toSet(arr) {
-    var s = {};
-    (arr || []).forEach(function (x) { s['' + x] = true; });
+    var s = new Set();
+    (arr || []).forEach(function (x) { s.add('' + x); });
     return s;
   }
 
